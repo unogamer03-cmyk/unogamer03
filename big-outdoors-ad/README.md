@@ -26,9 +26,19 @@ In a container without Chrome, set `REMOTION_CHROME=/path/to/chrome-headless-she
 
 ## Voice-over
 
-The voice-over lines appear as kinetic captions. To add a recorded deep male voice-over:
-1. Record or produce the three lines at the timings above as one 15s file and save it to `public/voiceover.mp3`.
-2. Render with `npx remotion render src/index.ts BigOutdoorsCommercial out/final-4k.mp4 --scale=2 --props='{"withVoiceover":true}'`.
+A deep American male narrator reads the script, made with the open-source [Kokoro](https://github.com/thewh1teagle/kokoro-onnx) text-to-speech model (voice `am_onyx`). The music dips under each line.
+
+| Time | Line |
+|---|---|
+| 0.45s | Shipment delayed? Every second counts! |
+| 3.15s | Big Outdoors Expedite LLC is ready to move! |
+| 6.5s | From Chicago to Texas, delivering in record time! |
+| 13.2s | Your shipment. Our priority. |
+
+- The cue times are in `src/theme.ts` (`VO_CUES`) and the audio files are in `public/vo/`.
+- To regenerate the lines, run `scripts/make-voiceover.sh <kokoro-model-dir>`.
+- To use a professional recording instead, replace `public/vo/line1-4.wav` and adjust `VO_CUES` to match.
+- To render without narration, pass `--props='{"withVoiceover":false}'`.
 
 ## Notes
 
