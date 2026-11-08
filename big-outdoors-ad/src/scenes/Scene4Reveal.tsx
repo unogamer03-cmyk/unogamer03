@@ -1,5 +1,5 @@
 import React from 'react';
-import {AbsoluteFill, interpolate, spring, useCurrentFrame, useVideoConfig, Easing} from 'remotion';
+import {AbsoluteFill, Img, interpolate, spring, staticFile, useCurrentFrame, useVideoConfig, Easing} from 'remotion';
 import {BRAND, C, FONT_BODY, FONT_DISPLAY, GOLD_GRADIENT} from '../theme';
 import {clamp, GoldFlash, GoldDust} from '../components/Common';
 import {Truck} from '../components/Truck';
@@ -59,51 +59,37 @@ const Arrival: React.FC<{frame: number}> = ({frame}) => {
   );
 };
 
+// Brand logo (beaver mascot badge) — public/logo-beaver.jpg, shown as supplied.
+const LOGO_SIZE = 300;
 const Emblem: React.FC<{p: number; frame: number}> = ({p, frame}) => {
-  const draw = interpolate(p, [0, 1], [1, 0]);
-  const shine = interpolate(frame % 90, [0, 40], [-120, 220], clamp);
+  const shine = interpolate(frame, [12, 42], [-60, 160], clamp);
   return (
-    <svg width={240} height={240} viewBox="0 0 240 240" style={{overflow: 'visible'}}>
-      <defs>
-        <linearGradient id="emb" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0" stopColor="#fff3b0" />
-          <stop offset="0.35" stopColor="#f6e27a" />
-          <stop offset="0.65" stopColor={C.gold} />
-          <stop offset="1" stopColor={C.goldDeep} />
-        </linearGradient>
-        <linearGradient id="embShine" x1="0" y1="0" x2="1" y2="0">
-          <stop offset="0" stopColor="#fff" stopOpacity={0} />
-          <stop offset="0.5" stopColor="#fff" stopOpacity={0.8} />
-          <stop offset="1" stopColor="#fff" stopOpacity={0} />
-        </linearGradient>
-        <clipPath id="embClip">
-          <path d="M120 8 L222 64 L222 176 L120 232 L18 176 L18 64 Z" />
-        </clipPath>
-      </defs>
-      <path d="M120 8 L222 64 L222 176 L120 232 L18 176 L18 64 Z" fill="#0b0b0b" stroke="url(#emb)" strokeWidth={8} strokeDasharray={700} strokeDashoffset={700 * draw} />
-      <path d="M120 30 L202 76 L202 164 L120 210 L38 164 L38 76 Z" fill="none" stroke={C.gold} strokeWidth={2} opacity={0.5 * p} />
-      <g opacity={p}>
-        {/* stylised truck mark */}
-        <rect x={52} y={102} width={92} height={46} rx={3} fill="url(#emb)" />
-        <path d="M148 112 L174 112 L190 132 L190 148 L148 148 Z" fill="url(#emb)" />
-        <rect x={160} y={118} width={14} height={12} fill="#0b0b0b" />
-        <circle cx={78} cy={156} r={11} fill="#0b0b0b" stroke="url(#emb)" strokeWidth={5} />
-        <circle cx={168} cy={156} r={11} fill="#0b0b0b" stroke="url(#emb)" strokeWidth={5} />
-        <text x={98} y={135} textAnchor="middle" fontFamily={FONT_DISPLAY} fontWeight={700} fontSize={30} fill="#0b0b0b">
-          BO
-        </text>
-        {/* speed marks */}
-        {[0, 1, 2].map((i) => (
-          <rect key={i} x={24 + i * 4} y={108 + i * 14} width={20 - i * 4} height={5} fill={C.gold} />
-        ))}
-        <text x={120} y={86} textAnchor="middle" fontFamily={FONT_BODY} fontWeight={800} fontSize={13} letterSpacing={5} fill={C.gold}>
-          EXPEDITE
-        </text>
-        <g clipPath="url(#embClip)">
-          <rect x={shine} y={0} width={60} height={240} fill="url(#embShine)" transform="skewX(-20)" opacity={0.6} />
-        </g>
-      </g>
-    </svg>
+    <div
+      style={{
+        position: 'relative',
+        width: LOGO_SIZE,
+        height: LOGO_SIZE,
+        borderRadius: '50%',
+        overflow: 'hidden',
+        transform: `rotate(${(1 - p) * -25}deg)`,
+        boxShadow: `0 0 0 4px rgba(212,175,55,${0.9 * p}), 0 0 60px rgba(212,175,55,${0.45 * p}), 0 20px 60px rgba(0,0,0,0.8)`,
+        background: '#000',
+      }}
+    >
+      {/* crop to just inside the badge's own outer edge so no square corners show */}
+      <Img
+        src={staticFile('logo-beaver.jpg')}
+        style={{position: 'absolute', left: -LOGO_SIZE * 0.012, top: -LOGO_SIZE * 0.012, width: LOGO_SIZE * 1.024, height: LOGO_SIZE * 1.024}}
+      />
+      <div
+        style={{
+          position: 'absolute',
+          inset: 0,
+          background: `linear-gradient(115deg, transparent ${shine - 14}%, rgba(255,255,255,0.45) ${shine}%, transparent ${shine + 14}%)`,
+          mixBlendMode: 'screen',
+        }}
+      />
+    </div>
   );
 };
 
@@ -124,7 +110,7 @@ const Reveal: React.FC<{frame: number}> = ({frame}) => {
       <div style={{position: 'absolute', left: 260, right: 260, bottom: 0, height: 260, background: 'radial-gradient(ellipse at 50% 100%, rgba(212,175,55,0.22), transparent 70%)'}} />
       <AbsoluteFill style={{justifyContent: 'center', alignItems: 'center', transform: `scale(${push})`}}>
         <div style={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
-          <div style={{transform: `scale(${0.6 + emb * 0.4})`, opacity: emb, marginBottom: 6}}>
+          <div style={{transform: `scale(${0.6 + emb * 0.4})`, opacity: emb, marginBottom: 22}}>
             <Emblem p={emb} frame={frame} />
           </div>
 

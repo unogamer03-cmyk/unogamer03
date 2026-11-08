@@ -42,5 +42,6 @@ A deep American male narrator reads the script, made with the open-source [Kokor
 
 ## Notes
 
-- Everything is vector or procedural (SVG trucks, map, particles, synthesized audio), so there are no stock-asset licenses to clear.
+- The end-card logo is the supplied beaver mascot badge (`public/logo-beaver.jpg`); replace that file to update it.
+- Everything else is vector or procedural (SVG trucks, map, particles, synthesized audio).
 - State geometry comes from `us-atlas` (US Census Bureau shapes), drawn with an Albers USA projection.
