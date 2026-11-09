@@ -1,6 +1,12 @@
 {
   "version": 1,
   "skills": {
+    "product-film": {
+      "source": "Rieranthony/product-film-skill",
+      "sourceType": "github",
+      "skillPath": "plugins/product-film/skills/product-film/SKILL.md",
+      "computedHash": "d459357d3986dfe674ff858638b1851f7ac24270fb329762e1a74effcd046c68"
+    },
     "session-story": {
       "source": "heygen-com/hyperframes-community-skills",
       "sourceType": "github",
