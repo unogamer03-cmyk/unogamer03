@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="20 20 170 160" role="img" aria-label="صبّة — رمز خط الصبّة">
+  <title>صبّة — خط الصبّة</title>
+  <!-- Pour line: right-to-left, tapering from the dallah spout into the finjal -->
+  <path fill="#1E1B18" d="M172,38 C118,26 66,52 60,124 C76,66 120,50 170,54 Z"/>
+  <!-- Finjal (handleless cup) -->
+  <path fill="#1E1B18" d="M34,134 H86 C85,153 76,166 60,166 C44,166 35,153 34,134 Z"/>
+</svg>

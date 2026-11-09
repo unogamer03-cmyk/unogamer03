@@ -1,0 +1,314 @@
+<title>هوية صبّة</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Bodoni+Moda:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Sans+Arabic:wght@400;500&family=Noto+Naskh+Arabic:wght@400;500;600&display=swap">
+<style>
+/* Layout: RTL brand book on a porcelain ground; one column of chapters, each opened by a hairline and an Arabic chapter word, specimens break wider than the text measure. */
+:root{
+  /* Brand palette — identical in both themes (these are the specimens) */
+  --qahwa:#C9A46A;      /* قهوة شقراء */
+  --hail:#9FA77F;       /* هيل */
+  --zafaran:#B4472B;    /* زعفران */
+  --porcelain:#F4EFE6;  /* خزف الفنجان */
+  --ink:#1E1B18;        /* حبر */
+  /* Page tokens — light */
+  --bg:#F4EFE6; --surface:#FBF8F2; --fg:#1E1B18; --muted:#6B6259; --line:#DDD3C4;
+  --accent:#B4472B; --mark:#1E1B18;
+  /* Type */
+  --ar-display:"Amiri","Noto Naskh Arabic","Times New Roman",serif;
+  --ar-text:"Noto Naskh Arabic","Amiri",serif;
+  --ar-ui:"IBM Plex Sans Arabic",system-ui,sans-serif;
+  --lat-display:"Bodoni Moda","Didot","Times New Roman",serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#191613; --surface:#221E1A; --fg:#EFE8DC; --muted:#A99E90; --line:#3A332C;
+  --accent:#D9744F; --mark:#EFE8DC; color-scheme:dark }}
+:root[data-theme="dark"]{
+  --bg:#191613; --surface:#221E1A; --fg:#EFE8DC; --muted:#A99E90; --line:#3A332C;
+  --accent:#D9744F; --mark:#EFE8DC; color-scheme:dark }
+
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font-family:var(--ar-text);font-size:17px;line-height:1.85;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.wrap{max-width:1080px;margin-inline:auto;padding-block:clamp(32px,6vw,72px)}
+.measure{max-width:62ch}
+h1,h2,h3{font-family:var(--ar-display);font-weight:700;line-height:1.3;text-wrap:balance;margin:0}
+h2{font-size:clamp(1.9rem,4vw,2.6rem)}
+h3{font-size:1.35rem}
+p{margin:0}
+.lat{font-family:var(--lat-display);direction:ltr;unicode-bidi:isolate}
+.label{font-family:var(--ar-ui);font-size:.8rem;letter-spacing:.02em;color:var(--muted)}
+.lat-label{font-family:var(--ar-ui);font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);direction:ltr;unicode-bidi:isolate}
+.stack{display:flex;flex-direction:column;gap:20px}
+section{border-top:1px solid var(--line);padding-block:clamp(40px,6vw,72px);display:flex;flex-direction:column;gap:28px}
+.chapter{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap}
+.chapter .lat-label{margin-inline-start:auto}
+.note{font-family:var(--ar-ui);font-size:.88rem;line-height:1.7;color:var(--muted);border-inline-start:2px solid var(--accent);padding-inline-start:14px}
+svg.mark{display:block;color:var(--mark)}
+
+/* Hero */
+.hero{display:grid;grid-template-columns:auto 1fr;gap:clamp(20px,4vw,48px);align-items:center;padding-block:clamp(16px,4vw,40px) clamp(40px,6vw,64px)}
+.hero svg{width:clamp(110px,20vw,200px);height:auto}
+.wordmark{font-family:var(--ar-display);font-weight:700;font-size:clamp(4.5rem,15vw,9.5rem);line-height:1.35;letter-spacing:0}
+.hero .tag{font-size:clamp(1.1rem,2.2vw,1.4rem);margin-top:14px}
+.hero .lat,.pair .lat,.v-lock small{text-align:right}
+.hero .lat{font-style:italic;color:var(--muted);font-size:1.05rem;margin-top:4px}
+.badge{display:table;font-family:var(--ar-ui);font-size:.75rem;color:var(--accent);border:1px solid var(--accent);border-radius:2px;padding:2px 10px;margin-bottom:14px}
+
+/* Logo */
+.lockups{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:16px}
+.tile{background:var(--surface);border:1px solid var(--line);padding:32px 24px 18px;display:flex;flex-direction:column;gap:22px;min-width:0}
+.tile .stage{flex:1;display:flex;align-items:center;justify-content:center;min-height:190px}
+.tile.dark{background:var(--ink);border-color:var(--ink);--mark:#F4EFE6}
+.tile.dark .label{color:#B9AE9F}
+.tile.zaf{background:var(--zafaran);border-color:var(--zafaran);--mark:#F4EFE6}
+.tile.zaf .label{color:#F4D9CC}
+.h-lock{display:flex;align-items:center;gap:18px;color:var(--mark)}
+.h-lock svg{width:70px;height:auto}
+.h-lock span{font-family:var(--ar-display);font-weight:700;font-size:3.6rem;line-height:1}
+.v-lock{display:flex;flex-direction:column;align-items:center;gap:6px;color:var(--mark)}
+.v-lock svg{width:84px;height:auto}
+.v-lock span{font-family:var(--ar-display);font-weight:700;font-size:2.8rem;line-height:1.1}
+.v-lock small{font-family:var(--lat-display);font-size:.8rem;letter-spacing:.42em;direction:ltr;margin-inline-start:-.42em}
+.rules{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,240px),1fr));gap:24px}
+.rules div{display:flex;flex-direction:column;gap:6px;min-width:0}
+.rules h3{font-size:1.1rem}
+.rules p{font-family:var(--ar-ui);font-size:.92rem;line-height:1.7;color:var(--muted)}
+.donts{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,240px),1fr));gap:10px 24px;font-family:var(--ar-ui);font-size:.92rem}
+.donts li{display:flex;gap:10px}
+.donts li::before{content:"✕";color:var(--accent);font-size:.8rem;line-height:1.9}
+.construct{background:var(--surface);border:1px solid var(--line);padding:24px;display:flex;justify-content:center;overflow-x:auto}
+.construct svg{width:min(100%,420px);height:auto;color:var(--mark)}
+
+/* Color */
+.swatches{display:grid;grid-template-columns:2.4fr 1.4fr 1fr .7fr .5fr;min-height:300px;border:1px solid var(--line)}
+.sw{padding:18px 16px;display:flex;flex-direction:column;justify-content:flex-end;gap:2px;min-width:0;font-family:var(--ar-ui);font-size:.82rem;line-height:1.5}
+.sw b{font-family:var(--ar-display);font-size:1.3rem;font-weight:700}
+.sw code{font-family:ui-monospace,Menlo,monospace;font-size:.78rem;direction:ltr;unicode-bidi:isolate}
+.sw.porcelain{background:var(--porcelain);color:var(--ink)}
+.sw.qahwa{background:var(--qahwa);color:var(--ink)}
+.sw.hail{background:var(--hail);color:var(--ink)}
+.sw.zafaran{background:var(--zafaran);color:#FBF3EC}
+.sw.ink{background:var(--ink);color:#F4EFE6}
+.sw .pct{font-variant-numeric:tabular-nums;opacity:.75}
+@media (max-width:700px){.swatches{grid-template-columns:1fr 1fr;min-height:0}.sw{min-height:120px}.sw.porcelain{grid-column:1 / -1}}
+.combos{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,200px),1fr));gap:12px}
+.combo{padding:18px;font-family:var(--ar-display);font-size:1.4rem;font-weight:700;display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+.combo small{font-family:var(--ar-ui);font-size:.74rem;font-weight:400}
+
+/* Type */
+.specimen{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr));gap:16px}
+.spec{background:var(--surface);border:1px solid var(--line);padding:28px 24px;display:flex;flex-direction:column;gap:14px;min-width:0}
+.spec .big{font-family:var(--ar-display);font-size:clamp(3rem,7vw,4.6rem);line-height:1.15;font-weight:700}
+.spec .big.l{font-family:var(--lat-display);font-weight:400;font-style:italic;direction:ltr;text-align:left}
+.spec .meta{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;border-top:1px solid var(--line);padding-top:12px}
+.scale{display:flex;flex-direction:column;gap:2px;border:1px solid var(--line);background:var(--surface)}
+.row{display:grid;grid-template-columns:110px 1fr;gap:16px;align-items:baseline;padding:14px 20px;border-bottom:1px solid var(--line)}
+.row:last-child{border-bottom:0}
+.row > *{min-width:0}
+.pair{display:flex;flex-direction:column;gap:2px}
+
+/* Tiers + packs */
+.tiers{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,280px),1fr));gap:20px}
+.tier{display:flex;flex-direction:column;gap:16px;min-width:0}
+.pack{position:relative;aspect-ratio:3/4.2;max-width:100%;background:var(--porcelain);color:var(--ink);border:1px solid #D8CDBC;
+  display:flex;flex-direction:column;align-items:center;padding:26px 22px 0;overflow:hidden;
+  box-shadow:0 1px 0 #fff inset, 0 18px 30px -22px rgba(30,27,24,.55)}
+.pack::before{content:"";position:absolute;inset:0 0 auto;height:10px;background:repeating-linear-gradient(90deg,#E6DCCB 0 3px,transparent 3px 6px)}
+.pack .top{width:100%;display:flex;justify-content:space-between;font-family:var(--ar-ui);font-size:.68rem;color:#6B6259;margin-top:6px}
+.pack svg{width:38%;height:auto;margin-top:auto;color:var(--ink)}
+.pack .name{font-family:var(--ar-display);font-weight:700;font-size:clamp(3.2rem,9vw,4.2rem);line-height:1.1;margin-top:8px}
+.pack .sub{font-family:var(--ar-ui);font-size:.75rem;color:#6B6259;text-align:center;line-height:1.6}
+.pack .band{align-self:stretch;margin:auto -22px 0;padding:12px 18px;display:flex;justify-content:space-between;align-items:center;font-family:var(--ar-ui);font-size:.72rem}
+.pack .band .lat{font-size:.82rem;letter-spacing:.3em}
+.b-heif{background:var(--hail);color:var(--ink)}
+.b-kaif{background:var(--qahwa);color:var(--ink)}
+.b-saif{background:var(--ink);color:#F4EFE6;border-top:3px solid var(--zafaran)}
+.tier p{font-family:var(--ar-ui);font-size:.92rem;line-height:1.75;color:var(--muted)}
+.tier h3 .lat{font-weight:400;font-style:italic;color:var(--muted);font-size:1rem;margin-inline-start:8px}
+
+.status{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:24px;font-family:var(--ar-ui);font-size:.92rem;line-height:1.8}
+.status ul{margin:0;padding-inline-start:18px}
+.status h3{font-size:1.15rem;margin-bottom:6px}
+footer{border-top:1px solid var(--line);padding-top:24px;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+
+@media (max-width:560px){.hero{grid-template-columns:1fr}.row{grid-template-columns:1fr;gap:4px}}
+</style>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="pour" viewBox="20 20 170 160">
+      <path fill="currentColor" d="M172,38 C118,26 66,52 60,124 C76,66 120,50 170,54 Z"/>
+      <path fill="currentColor" d="M34,134 H86 C85,153 76,166 60,166 C44,166 35,153 34,134 Z"/>
+    </symbol>
+  </defs>
+</svg>
+
+<div class="wrap" dir="rtl" lang="ar">
+
+  <header class="hero">
+    <svg class="mark" viewBox="20 20 170 160" role="img" aria-label="رمز خط الصبّة"><use href="#pour"/></svg>
+    <div>
+      <span class="badge">اسم مؤقت للعمل، يُستبدل بالاسم النهائي</span>
+      <div class="wordmark">صبّة</div>
+      <p class="tag">قهوة سعودية، تُصبّ على أصولها.</p>
+      <p class="lat">Saudi coffee, poured as it should be.</p>
+    </div>
+  </header>
+
+  <section>
+    <div class="chapter"><h2>الفكرة</h2><span class="lat-label">Concept · The Ritual</span></div>
+    <div class="stack measure">
+      <p>العلامة لا تستعير رموز الفخامة الجاهزة. هي تأخذ من القهوة السعودية ما لا تملكه قهوة أخرى: لونها الأشقر قبل أن يسودّ البن، والهيل والزعفران، وطقس الصبّ من اليمين، قليلاً في كل فنجان، حتى يهزّ الضيف فنجانه.</p>
+      <p>الرمز هو الحركة نفسها: خط واحد ينزل من فم الدلة إلى الفنجال. لا نرسم الدلة، فيكفي أثرها. والتشكيلة مبنية على عُرف الفناجين الثلاثة: الهيف والكيف والسيف.</p>
+    </div>
+  </section>
+
+  <section>
+    <div class="chapter"><h2>الشعار</h2><span class="lat-label">Logo system</span></div>
+
+    <div class="construct">
+      <svg viewBox="0 0 220 200" role="img" aria-label="بناء الرمز: قوس الصبّة يبدأ عريضاً عند فم الدلة ويرقّ حتى يلتقي بالفنجال">
+        <g fill="none" stroke="var(--line)" stroke-width="1">
+          <line x1="0" y1="54" x2="220" y2="54"/><line x1="0" y1="134" x2="220" y2="134"/><line x1="0" y1="166" x2="220" y2="166"/>
+          <line x1="60" y1="0" x2="60" y2="200"/><line x1="172" y1="0" x2="172" y2="200"/>
+          <circle cx="60" cy="150" r="26" stroke-dasharray="3 3"/>
+        </g>
+        <use href="#pour" x="20" y="20" width="170" height="160"/>
+        <g font-family="IBM Plex Sans Arabic, system-ui, sans-serif" font-size="8" fill="var(--accent)" direction="rtl" text-anchor="start">
+          <text x="214" y="26">فم الدلة</text>
+          <text x="214" y="100">الخط يرقّ مع النزول</text>
+          <text x="214" y="156">الفنجال: وحدة المسافة</text>
+        </g>
+      </svg>
+    </div>
+
+    <div class="lockups">
+      <div class="tile">
+        <div class="stage"><div class="h-lock"><svg viewBox="20 20 170 160" aria-hidden="true"><use href="#pour"/></svg><span>صبّة</span></div></div>
+        <span class="label">الشعار الأفقي · الرمز في البداية (يمين) لأن القراءة من اليمين</span>
+      </div>
+      <div class="tile dark">
+        <div class="stage"><div class="v-lock"><svg viewBox="20 20 170 160" aria-hidden="true"><use href="#pour"/></svg><span>صبّة</span><small>SABBA</small></div></div>
+        <span class="label">الشعار العمودي ثنائي اللغة · على الحبر</span>
+      </div>
+      <div class="tile zaf">
+        <div class="stage"><svg class="mark" viewBox="20 20 170 160" style="width:120px;height:auto" aria-hidden="true"><use href="#pour"/></svg></div>
+        <span class="label">الرمز منفرداً · للأختام والأغطية والأيقونات</span>
+      </div>
+    </div>
+
+    <div class="rules">
+      <div><h3>المسافة الآمنة</h3><p>ارتفاع الفنجال في الرمز، من كل الجهات.</p></div>
+      <div><h3>أصغر مقاس</h3><p>الرمز: ١٢ مم في الطباعة و٢٤ بكسل على الشاشة. الشعار الأفقي: ٣٠ مم.</p></div>
+      <div><h3>اتجاه الصبّة ثابت</h3><p>من اليمين إلى اليسار دائماً، مثل اتجاه الصبّ في المجلس. لا يُعكس الرمز.</p></div>
+    </div>
+    <ul class="donts">
+      <li>لا ورق ذهب على الرمز. الفخامة هنا في الخامة والطباعة البارزة</li>
+      <li>لا ظلال ولا تدرجات ولا تأثيرات ثلاثية الأبعاد</li>
+      <li>لا تُضاف دلة أو نخلة أو نقوش إلى جانب الرمز</li>
+      <li>لا يوضع على صور مزدحمة، بل على مساحة لون من لوحة الألوان</li>
+    </ul>
+  </section>
+
+  <section>
+    <div class="chapter"><h2>الألوان</h2><span class="lat-label">Palette · by proportion</span></div>
+    <div class="swatches" role="list">
+      <div class="sw porcelain" role="listitem"><b>خزف</b><span>الأرضية · خزف الفنجال</span><code>#F4EFE6</code><span class="pct">٤٥٪</span></div>
+      <div class="sw qahwa" role="listitem"><b>قهوة شقراء</b><span>اللون الأساسي</span><code>#C9A46A</code><span class="pct">٢٥٪</span></div>
+      <div class="sw hail" role="listitem"><b>هيل</b><span>ثانوي</span><code>#9FA77F</code><span class="pct">١٥٪</span></div>
+      <div class="sw zafaran" role="listitem"><b>زعفران</b><span>لكنة</span><code>#B4472B</code><span class="pct">٥٪</span></div>
+      <div class="sw ink" role="listitem"><b>حبر</b><span>النص</span><code>#1E1B18</code><span class="pct">١٠٪</span></div>
+    </div>
+    <div class="combos">
+      <div class="combo" style="background:var(--porcelain);color:var(--ink);border:1px solid #DDD3C4">هيف <small>حبر على خزف · ١٥:١</small></div>
+      <div class="combo" style="background:var(--porcelain);color:var(--zafaran);border:1px solid #DDD3C4">كيف <small>زعفران على خزف · ٤٫٧:١</small></div>
+      <div class="combo" style="background:var(--ink);color:var(--qahwa)">سيف <small>شقراء على حبر · ٧٫٣:١</small></div>
+      <div class="combo" style="background:var(--qahwa);color:var(--ink)">صبّة <small>حبر على شقراء · ٧٫٣:١</small></div>
+    </div>
+    <p class="note">لون القهوة الشقراء والهيل للمساحات فقط، ولا يُكتب بهما نص على الخزف لأن التباين ضعيف. أكواد HEX هذه للشاشة. أكواد Pantone (نسخة C للورق المصقول ونسخة U لغير المصقول) تُعتمد بعد تجربة طباعة فعلية على الورق المختار، لأن الألوان الترابية تتغير كثيراً على الورق غير المصقول.</p>
+  </section>
+
+  <section>
+    <div class="chapter"><h2>الخطوط</h2><span class="lat-label">Typography</span></div>
+    <div class="specimen">
+      <div class="spec">
+        <span class="label">العربي يقود · نسخ عالي التباين</span>
+        <div class="big">فنجال الكيف</div>
+        <div class="meta"><span class="label">الإنتاج: 29LT Zarid (بترخيص)</span><span class="label">هذه الصفحة: Amiri</span></div>
+      </div>
+      <div class="spec">
+        <span class="label">الإنجليزي يتبع · serif حاد</span>
+        <div class="big l">The second cup</div>
+        <div class="meta"><span class="label">الإنتاج: Canela (بترخيص)</span><span class="label">هذه الصفحة: Bodoni Moda</span></div>
+      </div>
+    </div>
+    <div class="scale">
+      <div class="row"><span class="label">عنوان العبوة</span><div class="pair"><span style="font-family:var(--ar-display);font-weight:700;font-size:2.4rem;line-height:1.2">سيف</span><span class="lat" style="font-style:italic;font-size:1.05rem;color:var(--muted)">Saif — the third cup</span></div></div>
+      <div class="row"><span class="label">عنوان فرعي</span><div class="pair"><span style="font-family:var(--ar-display);font-weight:700;font-size:1.45rem">بن خولاني من جبال جازان</span><span class="lat" style="font-size:.95rem;color:var(--muted)">Khawlani beans from the Jazan highlands</span></div></div>
+      <div class="row"><span class="label">نص</span><span>يُحمّص أشقر ويُطحن مع الهيل، ويُضاف الزعفران في الدلة قبل الصبّ.</span></div>
+      <div class="row"><span class="label">بيانات</span><span style="font-family:var(--ar-ui);font-size:.85rem">التحميص: أشقر · الهيل: مطحون · الوزن الصافي: ٢٥٠ غ</span></div>
+    </div>
+    <p class="note">القاعدة: يُطابَق ارتفاع جسم الحرف الإنجليزي (x-height) مع جسم الحرف العربي، وليس مع الحروف الصاعدة، فيأتي الإنجليزي أصغر بنحو درجة واحدة. الإنجليزي لا يتقدّم على العربي في أي تطبيق.</p>
+  </section>
+
+  <section>
+    <div class="chapter"><h2>التشكيلة: الهيف والكيف والسيف</h2><span class="lat-label">Range architecture</span></div>
+    <div class="tiers">
+      <div class="tier">
+        <div class="pack" aria-label="عبوة هيف">
+          <div class="top"><span>صبّة</span><span>٢٥٠ غ</span></div>
+          <svg viewBox="20 20 170 160" aria-hidden="true"><use href="#pour"/></svg>
+          <div class="name">هيف</div>
+          <div class="sub">الفنجال الأول<br>خلطة يومية · هيل</div>
+          <div class="band b-heif"><span>تحميص أشقر</span><span class="lat">HEIF</span></div>
+        </div>
+        <h3>هيف <span class="lat">Heif</span></h3>
+        <p>الخلطة اليومية للبيت والمكتب. لونها الهيل، وتصميمها الأبسط في التشكيلة.</p>
+      </div>
+      <div class="tier">
+        <div class="pack" aria-label="عبوة كيف">
+          <div class="top"><span>صبّة</span><span>٢٥٠ غ</span></div>
+          <svg viewBox="20 20 170 160" aria-hidden="true"><use href="#pour"/></svg>
+          <div class="name">كيف</div>
+          <div class="sub">الفنجال الثاني<br>محصول مختار · هيل وزعفران</div>
+          <div class="band b-kaif"><span>محصول واحد</span><span class="lat">KAIF</span></div>
+        </div>
+        <h3>كيف <span class="lat">Kaif</span></h3>
+        <p>محاصيل مختارة لمن يعرف قهوته. لونها القهوة الشقراء، ويُذكر عليها مصدر البن.</p>
+      </div>
+      <div class="tier">
+        <div class="pack" aria-label="عبوة سيف">
+          <div class="top"><span>صبّة</span><span>إصدار محدود</span></div>
+          <svg viewBox="20 20 170 160" aria-hidden="true"><use href="#pour"/></svg>
+          <div class="name">سيف</div>
+          <div class="sub">الفنجال الثالث<br>بن خولاني · للهدايا والمجالس</div>
+          <div class="band b-saif"><span>مرقّم يدوياً</span><span class="lat">SAIF</span></div>
+        </div>
+        <h3>سيف <span class="lat">Saif</span></h3>
+        <p>الإصدار المحدود والهدايا. حبر وزعفران، بطباعة بارزة على ورق غير مصقول.</p>
+      </div>
+    </div>
+    <p class="note">عُرف الفناجين الثلاثة تختلف روايته وتفسيره بين المناطق، فيُراجَع مع مختص في التراث قبل استخدامه في التسويق. وذكر «بن خولاني» على عبوة سيف مشروط بأن يكون المصدر فعلياً كذلك.</p>
+  </section>
+
+  <section>
+    <div class="chapter"><h2>حالة العمل</h2><span class="lat-label">Status</span></div>
+    <div class="status">
+      <div><h3>ما تم</h3><ul>
+        <li>الرمز «خط الصبّة» كملف SVG متجه (رسم أولي)</li>
+        <li>ثلاث صيغ للشعار، ولوحة ألوان بالنسب، ومستويات الخطوط، وقواعد الاستخدام</li>
+        <li>تصور أولي لعبوات التشكيلة الثلاث (وليست ملفات إنتاج)</li>
+      </ul></div>
+      <div><h3>ما بقي</h3><ul>
+        <li>الاسم النهائي، ثم رسم الشعار الكتابي بخط مخصص يراجعه خطاط</li>
+        <li>ترخيص الخطين التجاريين، أو اعتماد بديلين مجانيين</li>
+        <li>تجربة طباعة واعتماد أكواد Pantone</li>
+        <li>ملفات إنتاج العبوات (dieline، bleed ٣ مم، CMYK)</li>
+      </ul></div>
+    </div>
+  </section>
+
+  <footer><span class="label">هوية صبّة · الاتجاه الثاني «الهيف والكيف»</span><span class="lat-label">Draft v0.1 · Nov 2026</span></footer>
+</div>
