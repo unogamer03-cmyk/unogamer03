@@ -26,6 +26,8 @@ body{margin:0;background:var(--page);color:var(--white);font-family:var(--body);
 .controls button:focus-visible,#scrub:focus-visible{outline:2px solid var(--lime);outline-offset:2px}
 .controls svg{width:18px;height:18px}
 #scrub{flex:1;min-width:0;accent-color:var(--ui);height:28px}
+#sndHint{position:absolute;left:50%;top:12px;transform:translateX(-50%);z-index:5;font:600 13px/1 var(--body);color:var(--white);background:rgba(6,16,27,.82);border:1px solid #1f3141;border-radius:999px;padding:9px 14px;display:flex;gap:8px;align-items:center;pointer-events:none;white-space:nowrap}
+#sndHint svg{width:15px;height:15px;color:var(--lime)}
 #time{font:500 13px/1 var(--body);color:var(--mute);font-variant-numeric:tabular-nums;flex:none;width:86px;text-align:right}
 
 /* ---------- stage layers ---------- */
@@ -132,6 +134,7 @@ body{margin:0;background:var(--page);color:var(--white);font-family:var(--body);
 
 <div class="player">
   <div id="viewport">
+    <div id="sndHint"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4.7a.7.7 0 0 0-1.2-.5L6.4 7.6A1.4 1.4 0 0 1 5.4 8H3a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1h2.4a1.4 1.4 0 0 1 1 .4l3.4 3.4a.7.7 0 0 0 1.2-.5Z"/><path d="M16 9a5 5 0 0 1 0 6"/><path d="M19.4 18.4a9 9 0 0 0 0-12.8"/></svg>Tap anywhere for sound</div>
     <div id="frame" role="img" aria-label="15-second commercial for Mega Fury TMS: from chaos to control">
       <div id="stage">
         <div class="layer" id="glowTL"></div>
@@ -270,6 +273,7 @@ body{margin:0;background:var(--page);color:var(--white);font-family:var(--body);
   <div class="controls">
     <button id="play" type="button" aria-label="Pause"></button>
     <button id="replay" type="button" aria-label="Replay"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg></button>
+    <button id="snd" type="button" aria-label="Mute sound"></button>
     <input id="scrub" type="range" min="0" max="15" step="0.01" value="0" aria-label="Timeline">
     <span id="time">0.00 / 15.00</span>
   </div>
@@ -740,6 +744,123 @@ function render(t){
   runHL(HL[4],t); runHL(HL[5],t);
 }
 
+/* ---------- SOUND: original score + SFX, synthesized offline into one 15.0s buffer ----------
+   120 BPM (beat = 0.5s) so every scene change (3, 5, 8, 11, 13s) lands on a beat. */
+const AU={ctx:null,buf:null,src:null,gain:null,on:true,ready:false,t0:0};
+function buildScore(){
+  const SR=44100, oc=new OfflineAudioContext(2,Math.ceil(SR*DURATION),SR);
+  let seed=20261109; const rnd=()=>{seed|=0;seed=seed+0x6D2B79F5|0;let x=Math.imul(seed^seed>>>15,1|seed);x=x+Math.imul(x^x>>>7,61|x)^x;return((x^x>>>14)>>>0)/4294967296;};
+  const noise=oc.createBuffer(1,SR*2,SR); {const d=noise.getChannelData(0); for(let i=0;i<d.length;i++) d[i]=rnd()*2-1;}
+  const ir=oc.createBuffer(2,SR*2.6,SR); for(let c=0;c<2;c++){const d=ir.getChannelData(c); for(let i=0;i<d.length;i++) d[i]=(rnd()*2-1)*Math.pow(1-i/d.length,2.4);}
+  // buses
+  const master=oc.createGain(); master.gain.value=.8;
+  const comp=oc.createDynamicsCompressor(); comp.threshold.value=-16; comp.knee.value=8; comp.ratio.value=4; comp.attack.value=.003; comp.release.value=.18;
+  master.connect(comp); comp.connect(oc.destination);
+  const rev=oc.createConvolver(); rev.buffer=ir; const rg=oc.createGain(); rg.gain.value=.3; rev.connect(rg); rg.connect(master);
+  const dly=oc.createDelay(1); dly.delayTime.value=.375; const dfb=oc.createGain(); dfb.gain.value=.33; const dlp=oc.createBiquadFilter(); dlp.type='lowpass'; dlp.frequency.value=2800;
+  dly.connect(dlp); dlp.connect(dfb); dfb.connect(dly); const dg=oc.createGain(); dg.gain.value=.3; dlp.connect(dg); dg.connect(master);
+  const out=(node,{dry=1,wet=0,del=0,pan=0}={})=>{let n=node; if(pan){const p=oc.createStereoPanner(); p.pan.value=pan; node.connect(p); n=p;}
+    const g=oc.createGain(); g.gain.value=dry; n.connect(g); g.connect(master);
+    if(wet){const w=oc.createGain(); w.gain.value=wet; n.connect(w); w.connect(rev);} if(del){const w=oc.createGain(); w.gain.value=del; n.connect(w); w.connect(dly);} };
+  const G=()=>oc.createGain();
+  const ad=(g,t,a,v,d)=>{g.gain.setValueAtTime(0,t); g.gain.linearRampToValueAtTime(v,t+a); g.gain.exponentialRampToValueAtTime(1e-4,t+a+d); g.gain.setValueAtTime(0,t+a+d+.01);};
+  const osc=(type,f,t,dur)=>{const o=oc.createOscillator(); o.type=type; o.frequency.setValueAtTime(f,t); o.start(t); o.stop(t+dur+.05); return o;};
+  const nz=(t,dur)=>{const s=oc.createBufferSource(); s.buffer=noise; s.loop=true; s.start(t,rnd()*1.5); s.stop(t+dur+.05); return s;};
+  const filt=(type,f,q=1)=>{const b=oc.createBiquadFilter(); b.type=type; b.frequency.value=f; b.Q.value=q; return b;};
+  const N={A1:55,F2:87.31,G2:98,A2:110,C3:130.81,D3:146.83,E3:164.81,F3:174.61,G3:196,A3:220,B3:246.94,C4:261.63,D4:293.66,E4:329.63,F4:349.23,G4:392,A4:440,B4:493.88,C5:523.25,E5:659.26,G5:783.99,A5:880};
+
+  // instruments
+  const kick=(t,v=1)=>{const o=osc('sine',160,t,.45); o.frequency.exponentialRampToValueAtTime(42,t+.13); const g=G(); ad(g,t,.002,v,.4); o.connect(g); out(g);
+    const c=nz(t,.02), h=filt('highpass',3000), cg=G(); ad(cg,t,.001,v*.25,.015); c.connect(h); h.connect(cg); out(cg);};
+  const sub=(t,v,dur)=>{const o=osc('sine',56,t,dur); o.frequency.exponentialRampToValueAtTime(30,t+dur); const g=G(); ad(g,t,.006,v,dur); o.connect(g); out(g);};
+  const hat=(t,v=.12,pan=0,open=false)=>{const s=nz(t,.3), h=filt('highpass',7600), g=G(); ad(g,t,.001,v,open?.16:.035); s.connect(h); h.connect(g); out(g,{pan});};
+  const clap=(t,v=.35)=>{const s=nz(t,.3), b=filt('bandpass',1500,.9), g=G();
+    g.gain.setValueAtTime(0,t); [0,.011,.022].forEach(o=>{g.gain.setValueAtTime(v,t+o); g.gain.exponentialRampToValueAtTime(v*.2,t+o+.009);});
+    g.gain.setValueAtTime(v*.6,t+.03); g.gain.exponentialRampToValueAtTime(1e-4,t+.22); s.connect(b); b.connect(g); out(g,{wet:.35});};
+  const bass=(t,f,dur=.21,v=.28)=>{const o=osc('sawtooth',f,t,dur), o2=osc('square',f/2,t,dur), l=filt('lowpass',900,5), g=G();
+    l.frequency.setValueAtTime(900,t); l.frequency.exponentialRampToValueAtTime(220,t+dur); ad(g,t,.004,v,dur); const m=G(); m.gain.value=.5; o2.connect(m); m.connect(l); o.connect(l); l.connect(g); out(g);};
+  const pad=(t,fs,dur,v=.05,cut=1400)=>{const l=filt('lowpass',cut,.7), g=G(); g.gain.setValueAtTime(0,t); g.gain.linearRampToValueAtTime(v,t+.45); g.gain.setValueAtTime(v,t+dur-.35); g.gain.linearRampToValueAtTime(0,t+dur);
+    fs.forEach(f=>[-7,7].forEach(c=>{const o=osc('sawtooth',f,t,dur); o.detune.value=c; o.connect(l);})); l.connect(g); out(g,{wet:.7});};
+  const pluck=(t,f,v=.07,pan=0)=>{const o=osc('square',f,t,.3), l=filt('lowpass',3200,2), g=G(); l.frequency.setValueAtTime(3200,t); l.frequency.exponentialRampToValueAtTime(500,t+.2); ad(g,t,.002,v,.24); o.connect(l); l.connect(g); out(g,{pan,del:.5,wet:.2});};
+  const whoosh=(t,dur,v=.22,f0=300,f1=4200,p0=0,p1=0,peak=.6)=>{const s=nz(t,dur), b=filt('bandpass',f0,1.3), g=G(), p=oc.createStereoPanner();
+    b.frequency.setValueAtTime(f0,t); b.frequency.exponentialRampToValueAtTime(f1,t+dur); g.gain.setValueAtTime(0,t); g.gain.linearRampToValueAtTime(v,t+dur*peak); g.gain.linearRampToValueAtTime(0,t+dur);
+    p.pan.setValueAtTime(p0,t); p.pan.linearRampToValueAtTime(p1,t+dur); s.connect(b); b.connect(g); g.connect(p); out(p,{wet:.3});};
+  const riser=(t,dur,v=.2)=>{const s=nz(t,dur), h=filt('highpass',200), g=G(); h.frequency.setValueAtTime(200,t); h.frequency.exponentialRampToValueAtTime(7000,t+dur);
+    g.gain.setValueAtTime(0,t); g.gain.linearRampToValueAtTime(v,t+dur-.01); g.gain.linearRampToValueAtTime(0,t+dur); s.connect(h); h.connect(g); out(g,{wet:.25});
+    const o=osc('sawtooth',110,t,dur), l=filt('lowpass',1800), og=G(); o.frequency.exponentialRampToValueAtTime(880,t+dur); og.gain.setValueAtTime(0,t); og.gain.linearRampToValueAtTime(v*.25,t+dur-.01); og.gain.linearRampToValueAtTime(0,t+dur); o.connect(l); l.connect(og); out(og);};
+  const zip=(t,dur,f0,f1,v=.06,pan=0)=>{const o=osc('sine',f0,t,dur), g=G(); o.frequency.exponentialRampToValueAtTime(f1,t+dur); g.gain.setValueAtTime(0,t); g.gain.linearRampToValueAtTime(v,t+.02); g.gain.linearRampToValueAtTime(0,t+dur); o.connect(g); out(g,{pan,wet:.3});};
+  const click=(t,v=.1,f=2600,pan=0)=>{const o=osc('sine',f,t,.04), g=G(); ad(g,t,.001,v,.03); o.connect(g); out(g,{pan,wet:.15});
+    const s=nz(t,.02), h=filt('highpass',5000), sg=G(); ad(sg,t,.001,v*.6,.012); s.connect(h); h.connect(sg); out(sg,{pan});};
+  const tick=(t,v=.08,f=1500,pan=0)=>{const o=osc('square',f,t,.05), b=filt('bandpass',f,4), g=G(); ad(g,t,.001,v,.045); o.connect(b); b.connect(g); out(g,{pan,wet:.2});};
+  const ping=(t,f,v=.07,pan=0)=>{const o=osc('sine',f,t,.6), g=G(); ad(g,t,.002,v,.5); o.connect(g); out(g,{pan,wet:.5,del:.3});};
+  const shimmer=(t,v=.05)=>[N.A5,1108.73,1318.5,1760].forEach((f,i)=>{const o=osc('sine',f,t+i*.035,1.8), g=G(); ad(g,t+i*.035,.01,v,1.6); o.connect(g); out(g,{pan:(i%2?.4:-.4),wet:.8,del:.3});});
+  const stab=(t,fs,v=.12,dur=1.4)=>{const l=filt('lowpass',3800,1), g=G(); l.frequency.setValueAtTime(3800,t); l.frequency.exponentialRampToValueAtTime(700,t+dur); ad(g,t,.004,v,dur);
+    fs.forEach(f=>[-9,9].forEach(c=>{const o=osc('sawtooth',f,t,dur); o.detune.value=c; o.connect(l);})); l.connect(g); out(g,{wet:.6});};
+  const impact=(t,v=1)=>{kick(t,v); sub(t,v*.9,1.6); const s=nz(t,.8), l=filt('lowpass',2400), g=G(); ad(g,t,.002,v*.35,.7); s.connect(l); l.connect(g); out(g,{wet:.8});};
+
+  /* 0.0–2.4  CHAOS: dissonant drone, glitch ticks per panel, accelerating clock */
+  {const l=filt('lowpass',180,6), g=G(); l.frequency.setValueAtTime(180,0); l.frequency.exponentialRampToValueAtTime(1600,2.4);
+   g.gain.setValueAtTime(0,0); g.gain.linearRampToValueAtTime(.16,2.38); g.gain.linearRampToValueAtTime(0,2.405);
+   [[N.A1,0],[58.27,0],[N.A2,4],[116.54,-6]].forEach(([f,d])=>{const o=osc('sawtooth',f,0,2.42); o.detune.value=d; o.connect(l);}); l.connect(g); out(g,{wet:.2});
+   const lfo=osc('sine',6,0,2.42), lg=G(); lfo.frequency.linearRampToValueAtTime(14,2.4); lg.gain.value=.05; lfo.connect(lg); lg.connect(g.gain);}
+  [.2,.55,.66,.86,.95,1.12,1.3,1.38,1.6,1.75,1.95].forEach((a,i)=>{tick(a,.09,700+rnd()*2200,(rnd()*2-1)*.7); if(i%3===0) click(a+.03,.05,3400,(rnd()*2-1)*.5);});
+  {let tt=.4, step=.25; while(tt<2.38){click(tt,.035,4200,tt%1>.5?.3:-.3); tt+=step; step=Math.max(.06,step*.88);}}
+  /* 2.4 FREEZE · 2.42–2.8 line · 2.8–3.0 collapse · 3.0 IMPACT */
+  click(2.4,.2,1800); ping(2.4,3520,.06); zip(2.42,.38,500,2600,.07);
+  whoosh(2.72,.3,.28,5000,250,-.3,0,.95);
+  impact(3.0,.95); shimmer(3.02,.035);
+  /* 3.0–5.0 SOLUTION: pad enters, laptop reveal, push through the screen */
+  pad(3.0,[N.A3,N.C4,N.E4],2.1,.045,1100);
+  whoosh(3.1,.7,.1,400,2400,-.6,.6);
+  kick(4.0,.45);
+  riser(4.3,.7,.18);
+  [4.5,4.625,4.75,4.8125,4.875,4.9375].forEach((x,i)=>clap(x,.08+i*.035));
+  whoosh(4.62,.42,.3,600,6000,0,0,.8);
+  /* 5.0–12.5 GROOVE: kick / clap / hats / bass, plucks from 7.0 */
+  const chords=[[5,7,[N.F3,N.A3,N.C4,N.E4],N.F2],[7,9,[N.C4,N.E4,N.G4],65.41],[9,11,[N.G3,N.B3,N.D4],N.G2],[11,12,[N.A3,N.C4,N.E4,N.B4],N.A2],[12,12.74,[N.F3,N.A3,N.C4,N.G4],N.F2]];
+  chords.forEach(([a,b,fs,root])=>{pad(a,fs,b-a+.05,.04,a>=11?2200:1500); for(let x=a;x<b-.01;x+=.25) bass(x,root*(Math.round((x-a)/.25)%4===3?2:1));});
+  for(let x=5;x<12.6;x+=.5) kick(x,x===5?1:.85);
+  sub(5.0,.6,.9);
+  for(let x=5.5;x<12.6;x+=1) clap(x,.3);
+  for(let x=5.25;x<12.8;x+=.5) hat(x,.11,.25,x>=11&&Math.round(x*4)%4===1);
+  for(let x=9;x<10.4;x+=.25) if(Math.round(x*4)%2===0) hat(x,.05,-.3);
+  {const arp=[[7,9,[N.C5,N.G4,N.E4,N.G4]],[9,11,[N.D4,N.G4,N.B4,N.G4]],[11,12,[N.E5,N.C5,N.A4,N.C5]],[12,12.74,[N.C5,N.A4,N.F4,N.A4]]];
+   arp.forEach(([a,b,ns])=>{let i=0; for(let x=a;x<b-.01;x+=.25,i++) pluck(x,ns[i%4],.055,i%2?.35:-.35);});}
+  // UI sound design synced to the picture
+  whoosh(5.4,.45,.08,800,3000,0,0,.5); click(5.85,.07,2200); ping(5.97,1760,.05,.2);
+  whoosh(6.26,.62,.17,300,5200,-.2,.2,.75);
+  click(6.98,.09,2600); [7.02,7.14,7.26].forEach((x,i)=>click(x,.05,3000+i*300,.2)); ping(7.47,2093,.05,-.2);
+  whoosh(8.0,.62,.17,2500,300,0,-.5); whoosh(8.3,.6,.14,500,3000,.8,.3); whoosh(8.45,.6,.12,500,3000,-.6,-.2);
+  zip(9.0,.6,300,1200,.05); [9.03,9.27,9.33,9.57].forEach((x,i)=>click(x,.06,2400,(i<2?-.3:.3)));
+  zip(9.6,.7,880,1760,.035,0);
+  whoosh(10.35,.65,.32,250,7000,-.9,.9,.6); click(10.36,.1,1600,-.8);
+  [0,1,2,3,4,5].forEach(i=>click(11.1+i*.09+.35,.055,2000+i*180,i%2?.3:-.3));
+  ping(12.05,1568,.045,-.2); ping(12.3,2093,.045,.2);
+  /* 12.74–13.12 DROP-OUT riser → 13.12 LOGO HIT → brand tail */
+  riser(12.62,.5,.24); whoosh(12.74,.38,.25,6000,300,0,0,.95);
+  impact(13.12,1); stab(13.12,[N.F3,N.C4,N.G4,N.A4,N.E5],.11,1.9);
+  pad(13.12,[N.F3,N.C4,N.G4,N.A4],1.88,.05,2200);
+  whoosh(13.36,.36,.12,1200,6000,-.5,.5);
+  zip(13.66,.4,1800,900,.03,-.5); zip(13.66,.4,1800,900,.03,.5);
+  shimmer(13.85,.05); ping(14.0,N.C5*2,.04);
+  // gentle master fade so nothing cuts off at 15.0
+  master.gain.setValueAtTime(.8,14.3); master.gain.linearRampToValueAtTime(0,15.0);
+  return oc.startRendering();
+}
+function ensureCtx(){ if(AU.ctx) return AU.ctx; const C=window.AudioContext||window.webkitAudioContext; if(!C) return null;
+  AU.ctx=new C(); AU.ctx.onstatechange=syncSnd; AU.gain=AU.ctx.createGain(); AU.gain.gain.value=AU.on?1:0; AU.gain.connect(AU.ctx.destination); return AU.ctx; }
+function audioStop(){ if(AU.src){ try{AU.src.stop();}catch(e){} AU.src.disconnect(); AU.src=null; } }
+function audioStart(){
+  audioStop();
+  if(!AU.ready||!AU.ctx||AU.ctx.state!=='running'||t>=DURATION-.02) return;
+  const s=AU.ctx.createBufferSource(); s.buffer=AU.buf; s.connect(AU.gain);
+  AU.t0=AU.ctx.currentTime+.02-t; s.start(AU.ctx.currentTime+.02,t); AU.src=s;
+}
+function syncSnd(){ const running=AU.ctx&&AU.ctx.state==='running';
+  $('snd').innerHTML=AU.on&&running?ICO_SND:ICO_MUTE; $('snd').setAttribute('aria-label',AU.on?'Mute sound':'Unmute sound');
+  $('sndHint').hidden=!!running||!AU.on; }
+function unlock(){ const c=ensureCtx(); if(!c) return; if(c.state!=='running') c.resume().then(()=>{ syncSnd(); if(playing&&!AU.src) audioStart(); }).catch(()=>{}); }
+
 /* ---------- player ---------- */
 const stage=$('stage'), frame=$('frame'), vp=$('viewport');
 let scale=1;
@@ -757,11 +878,15 @@ let t=0, playing=false, last=null, dirty=true;
 const ICO_PLAY='<svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 4.5v15a1 1 0 0 0 1.5.86l12-7.5a1 1 0 0 0 0-1.72l-12-7.5A1 1 0 0 0 7 4.5Z"/></svg>';
 const ICO_PAUSE='<svg viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16" rx="1"/><rect x="14" y="4" width="4" height="16" rx="1"/></svg>';
 function syncBtn(){ $('play').innerHTML=playing?ICO_PAUSE:ICO_PLAY; $('play').setAttribute('aria-label',playing?'Pause':'Play'); }
-function play(){ if(t>=DURATION) t=0; playing=true; last=null; syncBtn(); }
-function pause(){ playing=false; syncBtn(); }
-function seek(x){ t=clamp(x,0,DURATION); dirty=true; }
+function play(){ if(t>=DURATION) t=0; playing=true; last=null; syncBtn(); audioStart(); }
+function pause(){ playing=false; syncBtn(); audioStop(); }
+function seek(x){ t=clamp(x,0,DURATION); dirty=true; if(playing) audioStart(); }
 $('play').onclick=()=>playing?pause():play();
 $('replay').onclick=()=>{ seek(0); play(); };
+const ICO_SND='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4.7a.7.7 0 0 0-1.2-.5L6.4 7.6A1.4 1.4 0 0 1 5.4 8H3a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1h2.4a1.4 1.4 0 0 1 1 .4l3.4 3.4a.7.7 0 0 0 1.2-.5Z"/><path d="M16 9a5 5 0 0 1 0 6"/><path d="M19.4 18.4a9 9 0 0 0 0-12.8"/></svg>';
+const ICO_MUTE='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4.7a.7.7 0 0 0-1.2-.5L6.4 7.6A1.4 1.4 0 0 1 5.4 8H3a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1h2.4a1.4 1.4 0 0 1 1 .4l3.4 3.4a.7.7 0 0 0 1.2-.5Z"/><line x1="22" x2="16" y1="9" y2="15"/><line x1="16" x2="22" y1="9" y2="15"/></svg>';
+$('snd').onclick=()=>{ AU.on=!AU.on; if(AU.gain) AU.gain.gain.setTargetAtTime(AU.on?1:0,AU.ctx.currentTime,.02); unlock(); if(AU.on&&playing&&!AU.src) audioStart(); syncSnd(); };
+document.addEventListener('pointerdown',unlock,true); document.addEventListener('keydown',unlock,true);
 const scrub=$('scrub'); let wasPlaying=false, scrubbing=false;
 scrub.addEventListener('pointerdown',()=>{ scrubbing=true; wasPlaying=playing; pause(); });
 scrub.addEventListener('input',()=>{ if(!scrubbing){wasPlaying=false;pause();} seek(+scrub.value); });
@@ -770,18 +895,19 @@ scrub.addEventListener('pointerup',endScrub); scrub.addEventListener('change',en
 document.addEventListener('keydown',e=>{ if(e.code==='Space'&&e.target===document.body){e.preventDefault();playing?pause():play();} });
 
 function tick(now){
-  if(playing){ if(last!=null) t+=Math.min(.25,(now-last)/1000); last=now; if(t>=DURATION){t=DURATION;pause();} dirty=true; }
+  if(playing){ if(AU.src) t=Math.max(t,AU.ctx.currentTime-AU.t0); else if(last!=null) t+=Math.min(.25,(now-last)/1000); last=now; if(t>=DURATION){t=DURATION;pause();} dirty=true; }
   if(dirty){ render(t); if(!scrubbing) scrub.value=t.toFixed(2); $('time').textContent=t.toFixed(2)+' / 15.00'; dirty=false; }
   requestAnimationFrame(tick);
 }
 
-/* hooks for later audio / frame-export work: deterministic seek + render */
-window.MegaFuryAd={duration:DURATION,fps:30,seek:x=>{seek(x);render(t);},play,pause,renderAt:x=>render(x)};
+/* hooks for frame/audio export: deterministic seek + render, and the rendered soundtrack */
+window.MegaFuryAd={duration:DURATION,fps:30,seek:x=>{seek(x);render(t);},play,pause,renderAt:x=>render(x),get audioBuffer(){return AU.buf;}};
 
 function start(){
   initThree();
   if(!S2.ok){ const f=$('fallback'); f.style.cssText='position:absolute;left:0;top:0;width:1080px;height:675px;transform-origin:0 0;border-radius:18px;overflow:hidden;box-shadow:0 0 0 14px #050708,0 0 0 16px #2a3336'; ui.style.width='1080px'; f.appendChild(ui); }
-  measure(); fit(); syncBtn();
+  measure(); fit(); syncBtn(); ensureCtx(); syncSnd();
+  if(window.OfflineAudioContext) buildScore().then(b=>{ AU.buf=b; AU.ready=true; if(playing) audioStart(); }).catch(e=>console.warn('audio unavailable',e));
   const reduce=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
   if(reduce){ seek(DURATION); } else play();
   requestAnimationFrame(tick);
