@@ -1,0 +1,36 @@
+{
+ "record": 1,
+ "kind": "music",
+ "file": "follow_me_home_mixkit.mp3",
+ "sha256": "bafc459d0f08474a779845f61e47d7dfabf533a907e927f9bbb306c2b6828378",
+ "bytes": 2359005,
+ "title": "Follow Me Home",
+ "artist": "Arulo",
+ "source": "Mixkit",
+ "page": "https://mixkit.co/free-stock-music/mood/uplifting/",
+ "file_url": "https://assets.mixkit.co/music/350/350.mp3",
+ "licence": "Mixkit Stock Music Free License",
+ "licence_id": "mixkit-music",
+ "licence_url": "https://mixkit.co/license/#musicFree",
+ "credit_required": false,
+ "credit": "Music: \"Follow Me Home\" by Arulo (Mixkit)",
+ "content_id": "unknown",
+ "ai_generated": false,
+ "vocals": false,
+ "checked": "2026-11-09",
+ "certificate": null,
+ "licence_seen": {
+  "quote": "Items under the Mixkit Stock Music Free License can be used in your commercial and non-commercial projects for free.",
+  "url": "https://mixkit.co/license/modal/musicFree/",
+  "date": "2026-11-09"
+ },
+ "limits": "web, social, ads and VOD; no TV or radio broadcast, CD/DVD or video games; never remix it into a music-only track, redistribute the file or register it with a rights service",
+ "modifications": "edited at bar lines for the film; levels adjusted",
+ "found": {
+  "by": "music.mjs",
+  "query": "uplifting travel upbeat",
+  "listed_notice": "Mixkit Stock Music Free License",
+  "ai_marked": false,
+  "vocal_tags": false
+ }
+}

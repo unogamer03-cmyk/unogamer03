@@ -1,0 +1,14 @@
+node_modules/
+out/*
+!out/cues.json
+out/cache/
+public/audio/*.wav
+audio/music/*
+!audio/music/*.json
+!audio/music/README.md
+.DS_Store
+*.log
+__pycache__/
+
+# stock footage is re-downloadable (assets/licences.json keeps the records)
+public/assets/*.mp4

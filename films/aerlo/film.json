@@ -1,0 +1,17 @@
+{
+  "template": "launch-simple",
+  "started": "2026-11-09T18:30:34.689Z",
+  "devices": {
+    "ground": "",
+    "voice": "",
+    "emphasis": "colour",
+    "signature": "",
+    "moves": [],
+    "seams": [],
+    "end": "",
+    "logo": "",
+    "type": "friendly"
+  },
+  "allow": [],
+  "recent": []
+}
