@@ -1,0 +1,740 @@
+<title>Mega Fury TMS Commercial</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800&family=Barlow:wght@400;500;600&display=swap">
+<style>
+/* Layout: one 1080x1920 stage scaled to fit, all motion driven by one 15.0s master clock. */
+:root{
+  --bg:#071416; --char:#102124; --lime:#70FF24; --white:#F7FAF7; --mute:#AFC4B8;
+  --ui:#3DBA5A; --ui-ink:#05230F; --card:#0F1D21; --card2:#0A1619; --line:#22363A;
+  --uifg:#E3ECE8; --uimute:#8EA49E; --page:#030909;
+  --display:"Barlow Condensed","Arial Narrow","Roboto Condensed",sans-serif;
+  --body:"Barlow","Segoe UI",system-ui,sans-serif;
+  color-scheme:dark;
+}
+html,body{height:100%}
+body{margin:0;background:var(--page);color:var(--white);font-family:var(--body);
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));box-sizing:border-box;overflow:hidden}
+.player{height:100%;display:flex;flex-direction:column;gap:10px;padding-block:12px;box-sizing:border-box}
+#viewport{flex:1;min-height:0;position:relative}
+#frame{position:absolute;top:0;overflow:hidden;border-radius:16px;background:var(--bg);box-shadow:0 0 0 1px #16292c,0 30px 80px rgba(0,0,0,.6)}
+#stage{position:absolute;left:0;top:0;width:1080px;height:1920px;transform-origin:0 0;overflow:hidden;background:var(--bg);font-family:var(--body);color:var(--uifg)}
+.controls{display:flex;align-items:center;gap:10px;margin:0 auto;width:100%;max-width:560px}
+.controls button{width:40px;height:40px;flex:none;border-radius:10px;border:1px solid #1d3236;background:#0b1a1c;color:var(--white);display:grid;place-items:center;cursor:pointer;padding:0}
+.controls button:hover{border-color:var(--ui)}
+.controls button:focus-visible,#scrub:focus-visible{outline:2px solid var(--lime);outline-offset:2px}
+.controls svg{width:18px;height:18px}
+#scrub{flex:1;min-width:0;accent-color:var(--ui);height:28px}
+#time{font:500 13px/1 var(--body);color:var(--mute);font-variant-numeric:tabular-nums;flex:none;width:86px;text-align:right}
+
+/* ---------- stage layers ---------- */
+.layer{position:absolute;inset:0}
+#glowTL{background:radial-gradient(900px 700px at 0% 0%,rgba(61,186,90,.28),transparent 70%)}
+#glowC{background:radial-gradient(700px 600px at 50% 44%,rgba(112,255,36,.16),transparent 70%)}
+#vign{background:radial-gradient(130% 90% at 50% 50%,transparent 55%,rgba(0,0,0,.55));pointer-events:none}
+#gl{position:absolute;left:0;top:0;width:1080px;height:1920px}
+
+/* headlines */
+.hl{position:absolute;left:84px;top:150px;font:800 150px/.9 var(--display);color:var(--white);text-transform:uppercase;letter-spacing:.005em;z-index:20}
+.hl .ln{display:block;white-space:nowrap}
+.hl .w{display:inline-block;overflow:hidden;vertical-align:top;padding:.04em .02em;margin:-.04em 0}
+.hl .w i{display:inline-block;font-style:normal;will-change:transform}
+.hl .acc{color:var(--lime)}
+.hl.md{font-size:124px}
+.scrim{position:absolute;left:0;right:0;top:0;height:640px;background:linear-gradient(var(--bg) 25%,rgba(7,20,22,.85) 55%,transparent);z-index:15}
+
+/* UI reconstruction (from the megafurytms.dev recording) */
+.card{background:var(--card);border:2px solid var(--line);border-radius:22px;padding:26px 32px;color:var(--uifg);box-sizing:border-box;position:relative}
+.step .lbl{font-size:24px;color:var(--uimute)}
+.step .ttl{font-size:34px;font-weight:600;margin-top:4px}
+.step.active{border-color:var(--ui)}
+.data{background:var(--card2)}
+.dh{display:flex;justify-content:space-between;align-items:center;font-size:32px;font-weight:600;margin-bottom:8px;gap:20px}
+.pill{font-size:22px;font-weight:500;border:2px solid #3a4f53;border-radius:10px;padding:4px 14px;color:var(--uifg)}
+.dr{display:flex;justify-content:space-between;gap:24px;padding:16px 0;border-top:2px solid #1c2e32;font-size:28px}
+.dr:first-of-type{border-top:0}
+.m{color:var(--uimute)}
+.badge{display:inline-block;background:var(--ui);color:var(--ui-ink);font-weight:600;font-size:24px;border-radius:9px;padding:4px 14px;margin-top:10px}
+.lrow{padding:18px 0;border-top:2px solid #1c2e32}
+.lrow:first-of-type{border-top:0}
+.lr-top{display:flex;justify-content:space-between;gap:20px;font-size:28px;flex-wrap:wrap}
+.lr-top b{font-weight:600}
+.inv{display:flex;align-items:center;gap:18px;padding:16px 0;border-top:2px solid #1c2e32;font-size:28px}
+.inv:first-of-type{border-top:0}
+.inv .n{flex:1}
+.btn-c{background:var(--ui);color:var(--ui-ink);font-weight:600;font-size:22px;border-radius:8px;padding:4px 14px}
+#s1 .card::after{content:"";position:absolute;inset:-2px;border-radius:22px;border:2px solid var(--lime);opacity:var(--fz,0);pointer-events:none}
+
+/* full panels */
+.panel{position:absolute;left:0;top:0;width:940px;box-sizing:border-box;padding:44px 46px 40px;background:rgba(16,30,34,.96);border:2px solid var(--line);border-radius:30px;color:var(--uifg);transform-origin:50% 50%;will-change:transform;box-shadow:0 40px 90px rgba(0,0,0,.45)}
+.ptag{display:flex;gap:12px;margin-bottom:30px}
+.tab{font-size:26px;font-weight:500;border-radius:11px;padding:8px 20px;border:2px solid var(--line);background:var(--card2)}
+.tab.on{background:var(--ui);border-color:var(--ui);color:var(--ui-ink);font-weight:600}
+.ph{display:flex;gap:28px;align-items:flex-start;margin-bottom:34px}
+.ic{flex:none;width:92px;height:92px;border-radius:18px;background:rgba(61,186,90,.14);display:grid;place-items:center;color:var(--ui)}
+.ic svg{width:48px;height:48px}
+.ph h3{margin:0 0 8px;font:800 62px/1 var(--display);text-transform:uppercase;color:var(--white);letter-spacing:.005em}
+.ph p{margin:0;font-size:30px;line-height:1.4;color:var(--uimute)}
+.nav{display:flex;justify-content:space-between;margin-top:34px}
+.bt{font-size:28px;border-radius:12px;padding:16px 30px;display:flex;gap:12px;align-items:center}
+.bt.ghost{border:2px solid var(--line);color:var(--uimute)}
+.bt.go{background:var(--ui);color:var(--ui-ink);font-weight:600}
+.eql{font-size:24px;color:var(--uimute);margin-bottom:14px}
+.chips{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:30px}
+.chip{font-size:26px;border:2px solid var(--line);border-radius:12px;padding:8px 18px;background:var(--card2)}
+.chip.sel{background:var(--ui);border-color:var(--ui);color:var(--ui-ink);font-weight:600}
+.big .dh{font-size:36px}
+.big .dr,.big .lr-top{font-size:31px}
+.hlrow{position:relative}
+.hlrow::before{content:"";position:absolute;inset:4px -16px;border-radius:12px;border:2px solid var(--lime);background:rgba(112,255,36,.06);opacity:var(--h,0)}
+#r1042{position:relative;border-radius:16px;margin:0 -18px;padding:18px;border:2px solid transparent;will-change:transform}
+#pk{background:linear-gradient(var(--lime),var(--lime)) 0 100%/var(--u,0%) 3px no-repeat;padding-bottom:4px}
+#maskline{position:absolute;border:3px solid var(--lime);border-radius:20px;pointer-events:none;z-index:9}
+
+/* scene 5 tiles */
+.tile{position:absolute;width:455px;height:236px;box-sizing:border-box;padding:28px 30px;background:rgba(16,30,34,.97);border:2px solid var(--line);border-radius:24px;display:flex;flex-direction:column;justify-content:space-between;transform-origin:50% 50%;will-change:transform}
+.tile .th{display:flex;align-items:center;gap:18px}
+.tile .ic{width:70px;height:70px;border-radius:15px}
+.tile .ic svg{width:36px;height:36px}
+.tile .nm{font:700 44px/1 var(--display);color:var(--white);text-transform:uppercase}
+.tile .st{font-size:26px;color:var(--uimute);display:flex;align-items:center;gap:12px}
+.tile .st::before{content:"";width:10px;height:10px;border-radius:50%;background:var(--ui);flex:none}
+
+/* brand */
+.logo{position:absolute;left:430px;top:690px;width:220px;height:220px;border-radius:46px;background:var(--ui);display:grid;place-items:center;color:var(--ui-ink);box-shadow:0 0 0 0 rgba(112,255,36,0)}
+.logo svg{width:126px;height:126px}
+.brand{position:absolute;left:0;right:0;text-align:center}
+.wm{top:965px;font:800 140px/.9 var(--display);text-transform:uppercase;letter-spacing:.01em}
+.wm .w{display:inline-block;overflow:hidden;vertical-align:top;padding:.04em .03em;margin:-.04em 0}
+.wm .w i{display:inline-block;font-style:normal;background:linear-gradient(105deg,var(--white) 0 44%,#E9FFD9 50%,var(--white) 56% 100%);background-size:320% 100%;background-position:var(--sw,100%) 0;-webkit-background-clip:text;background-clip:text;color:transparent}
+.wm .w i.acc{background-image:linear-gradient(105deg,var(--lime) 0 44%,#F3FFEA 50%,var(--lime) 56% 100%)}
+.by{top:1135px;font:600 36px/1 var(--body);letter-spacing:.34em;color:var(--mute);text-transform:uppercase}
+.rule{position:absolute;left:480px;top:1205px;width:120px;height:4px;background:var(--lime);transform-origin:50% 50%}
+.tag{top:1250px;font:700 74px/1 var(--display);text-transform:uppercase;letter-spacing:.02em;color:var(--white)}
+.tag .w{display:inline-block;overflow:hidden;vertical-align:top;padding:.04em .02em;margin:-.04em 0}
+.tag .w i{display:inline-block;font-style:normal}
+.tag .acc{color:var(--lime)}
+.url{top:1740px;font:500 30px/1 var(--body);color:var(--mute);letter-spacing:.06em}
+
+@media (prefers-reduced-motion:reduce){.controls button{transition:none}}
+</style>
+
+<div class="player">
+  <div id="viewport">
+    <div id="frame" role="img" aria-label="15-second commercial for Mega Fury TMS: from chaos to control">
+      <div id="stage">
+        <div class="layer" id="glowTL"></div>
+        <div class="layer" id="glowC"></div>
+
+        <!-- SCENE 1: the problem -->
+        <div class="layer" id="s1wrap">
+          <div class="scrim"></div>
+          <div class="layer" id="s1" style="perspective:1400px;perspective-origin:540px 960px"></div>
+          <svg class="layer" id="s1fx" viewBox="0 0 1080 1920" width="1080" height="1920" style="z-index:16">
+            <polyline id="s1line" fill="none" stroke="#70FF24" stroke-width="3" stroke-linejoin="round" stroke-linecap="round" points=""/>
+            <g id="s1nodes"></g>
+          </svg>
+          <div class="hl" id="h1"><span class="ln"><span class="w"><i>Too</i></span> <span class="w"><i>many</i></span></span><span class="ln"><span class="w"><i class="acc">tasks.</i></span></span></div>
+        </div>
+
+        <!-- SCENE 2: laptop (real 3D) -->
+        <canvas id="gl" width="1080" height="1920"></canvas>
+        <div class="layer" id="fallback" hidden></div>
+        <svg class="layer" id="s2fx" viewBox="0 0 1080 1920" width="1080" height="1920" style="z-index:18">
+          <circle id="halo" cx="540" cy="960" r="0" fill="#70FF24" opacity=".18"/>
+          <circle id="pt" cx="540" cy="960" r="0" fill="#70FF24"/>
+          <polygon id="outline" fill="rgba(112,255,36,.10)" stroke="#70FF24" stroke-width="3" stroke-linejoin="round" points=""/>
+        </svg>
+        <div class="hl" id="h2"><span class="ln"><span class="w"><i>One</i></span> <span class="w"><i class="acc">smart</i></span></span><span class="ln"><span class="w"><i>system.</i></span></span></div>
+
+        <!-- SCENES 3 + 4: loads, rates, connected workflows -->
+        <div class="layer" id="s34">
+          <svg class="layer" id="s4back" viewBox="0 0 1080 1920" width="1080" height="1920">
+            <path id="s4path" d="" fill="none" stroke="#70FF24" stroke-width="4" stroke-linecap="round"/>
+          </svg>
+
+          <div class="panel" id="brokP">
+            <div class="ptag"><span class="tab on">Broker portal</span></div>
+            <div style="display:grid;gap:16px">
+              <div class="card step active"><div class="lbl">Step 1</div><div class="ttl">Brokers see their own loads</div></div>
+              <div class="card step"><div class="lbl">Step 2</div><div class="ttl">Live truck map</div></div>
+              <div class="card step"><div class="lbl">Step 3</div><div class="ttl">Rates, documents and payments</div></div>
+            </div>
+          </div>
+
+          <div class="panel" id="shipP">
+            <div class="ptag"><span class="tab on">Shipper portal</span></div>
+            <div class="ph"><div class="ic" data-ic="calc"></div><div><h3>Request a freight quote</h3><p>Your shippers enter pickup, delivery, equipment and shipment size — dedicated truck or stackable freight.</p></div></div>
+            <div class="card data big"><div class="dh"><span>New quote request</span><span class="pill">Sample</span></div>
+              <div class="dr"><span>Lane</span><span class="m">Peoria, IL → Omaha, NE</span></div>
+              <div class="dr"><span>Equipment</span><span class="m">53 ft dry van</span></div>
+              <div class="dr"><span>Shipment</span><span class="m">12 pallets · stackable</span></div>
+            </div>
+          </div>
+
+          <div class="panel" id="loadsP">
+            <div class="ptag"><span class="tab on">Driver portal</span></div>
+            <div class="ph"><div class="ic" data-ic="truck"></div><div><h3>Loads on the driver's phone</h3><p>Drivers see their assigned loads, stops, PO numbers and on-site contacts.</p></div></div>
+            <div class="card data big" id="myloads"><div class="dh"><span>My loads</span><span class="pill">Sample</span></div>
+              <div class="lrow" id="r1042"><div class="lr-top"><b>#1042 Chicago → Dallas</b><span class="m" id="pk">Pickup Nov 12, 8:00 AM</span></div><span class="badge" id="asg">Assigned</span></div>
+              <div class="lrow"><div class="lr-top"><b>#1038 Dallas → Tulsa</b><span class="m">Delivered Nov 9</span></div><span class="badge">Completed</span></div>
+            </div>
+            <div class="nav"><span class="bt ghost">← Back</span><span class="bt go">Next →</span></div>
+          </div>
+
+          <div class="panel" id="calc">
+            <div class="ptag"><span class="tab on">Brokerage</span></div>
+            <div class="ph"><div class="ic" data-ic="calc"></div><div><h3>Quote with the calculator</h3><p>Pick equipment — box truck, dry van, reefer, hot shot, cargo van — and get a carrier buy rate plus your margin.</p></div></div>
+            <div class="eql">Equipment</div>
+            <div class="chips"><span class="chip" id="chipBox">Box truck</span><span class="chip">Dry van</span><span class="chip">Reefer</span><span class="chip">Hot shot</span><span class="chip">Cargo van</span></div>
+            <div class="card data big"><div class="dh"><span>Quote — 26 ft box truck</span><span class="pill">Sample</span></div>
+              <div class="dr qr"><span>Miles</span><span class="m" id="miles">642</span></div>
+              <div class="dr qr"><span>Carrier buy</span><span class="m">$1,480</span></div>
+              <div class="dr qr hlrow" id="mrg"><span>Customer rate (18% margin)</span><span class="m">$1,805</span></div>
+            </div>
+            <div class="nav"><span class="bt ghost">← Back</span><span class="bt go">Next →</span></div>
+          </div>
+          <div id="maskline"></div>
+
+          <svg class="layer" id="s4front" viewBox="0 0 1080 1920" width="1080" height="1920">
+            <g id="s4nodes"></g>
+            <circle id="sig" r="10" fill="#70FF24"/>
+            <circle id="sigh" r="26" fill="#70FF24" opacity=".2"/>
+          </svg>
+
+          <div class="hl md" id="h3"><span class="ln"><span class="w"><i>Manage.</i></span> <span class="w"><i>Quote.</i></span></span><span class="ln"><span class="w"><i class="acc">Move.</i></span></span></div>
+          <div class="hl md" id="h4"><span class="ln"><span class="w"><i>Every</i></span> <span class="w"><i>workflow.</i></span></span><span class="ln"><span class="w"><i class="acc">Connected.</i></span></span></div>
+        </div>
+
+        <!-- SCENES 5 + 6: total control, brand -->
+        <div class="layer" id="s56">
+          <div class="layer" id="s5cam" style="transform-origin:540px 1000px">
+            <div class="panel" id="invP" style="width:940px">
+              <div class="ptag"><span class="tab on">Owner &amp; Finance</span></div>
+              <div class="ph" style="margin-bottom:26px"><div class="ic" data-ic="file"></div><div><h3>Invoices in one click</h3><p>Completed loads become ready-to-send invoice PDFs.</p></div></div>
+              <div class="card data big"><div class="dh"><span>Ready to invoice</span><span class="pill">Sample</span></div>
+                <div class="inv"><span class="n">#1038 · Sample Logistics</span><span class="m">$1,150</span><span class="btn-c" id="cr1">Create</span></div>
+                <div class="inv"><span class="n">#1035 · Sample Brokers</span><span class="m">$2,300</span><span class="btn-c" id="cr2">Create</span></div>
+              </div>
+            </div>
+            <div id="tiles"></div>
+          </div>
+          <div class="hl" id="h5" style="font-size:136px"><span class="ln"><span class="w"><i>Total</i></span> <span class="w"><i class="acc">control.</i></span></span></div>
+
+          <div id="brand">
+            <div class="logo" id="logo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" id="logoTruck"></svg></div>
+            <div class="brand wm" id="wm"><span class="w"><i>Mega</i></span> <span class="w"><i>Fury</i></span> <span class="w"><i class="acc">TMS</i></span></div>
+            <div class="brand by" id="by">By Mega Fury Services</div>
+            <div class="rule" id="rule"></div>
+            <div class="brand tag" id="tag"><span class="w"><i>One</i></span> <span class="w"><i>system.</i></span> <span class="w"><i class="acc">Total</i></span> <span class="w"><i class="acc">control.</i></span></div>
+            <div class="brand url" id="url">megafurytms.dev</div>
+          </div>
+        </div>
+
+        <div class="layer" id="beam" style="width:8px;left:0;right:auto;background:var(--lime);box-shadow:0 0 30px 8px rgba(112,255,36,.45);z-index:40"></div>
+        <div class="layer" id="vign" style="z-index:45"></div>
+      </div>
+    </div>
+  </div>
+  <div class="controls">
+    <button id="play" type="button" aria-label="Pause"></button>
+    <button id="replay" type="button" aria-label="Replay"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg></button>
+    <input id="scrub" type="range" min="0" max="15" step="0.01" value="0" aria-label="Timeline">
+    <span id="time">0.00 / 15.00</span>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+(()=>{
+"use strict";
+const DURATION = 15.0;
+const $ = id => document.getElementById(id);
+const clamp = (x,a=0,b=1) => Math.min(b,Math.max(a,x));
+const rng = (t,a,b) => clamp((t-a)/(b-a));
+const lerp = (a,b,k) => a+(b-a)*k;
+const E = {
+  inC:x=>x*x*x, inQ:x=>x*x, outC:x=>1-Math.pow(1-x,3), outQ:x=>1-Math.pow(1-x,4),
+  ioC:x=>x<.5?4*x*x*x:1-Math.pow(-2*x+2,3)/2, ioS:x=>-(Math.cos(Math.PI*x)-1)/2,
+  outB:x=>{const c1=1.45,c3=c1+1;return 1+c3*Math.pow(x-1,3)+c1*Math.pow(x-1,2);}
+};
+
+/* ---------- icons (same set the product UI uses) ---------- */
+const ICON = {
+  truck:'<path d="M14 18V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v11a1 1 0 0 0 1 1h2"/><path d="M15 18H9"/><path d="M19 18h2a1 1 0 0 0 1-1v-3.65a1 1 0 0 0-.22-.624l-3.48-4.35A1 1 0 0 0 17.52 8H14"/><circle cx="17" cy="18" r="2"/><circle cx="7" cy="18" r="2"/>',
+  calc:'<rect width="16" height="20" x="4" y="2" rx="2"/><line x1="8" x2="16" y1="6" y2="6"/><line x1="16" x2="16" y1="14" y2="18"/><path d="M16 10h.01"/><path d="M12 10h.01"/><path d="M8 10h.01"/><path d="M12 14h.01"/><path d="M8 14h.01"/><path d="M12 18h.01"/><path d="M8 18h.01"/>',
+  file:'<path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M10 9H8"/><path d="M16 13H8"/><path d="M16 17H8"/>'
+};
+const svgIcon = n => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${ICON[n]}</svg>`;
+document.querySelectorAll('[data-ic]').forEach(el=>el.innerHTML=svgIcon(el.dataset.ic));
+$('logoTruck').innerHTML = ICON.truck.replace(/\/>/g,' pathLength="1"/>');
+const logoParts = [...$('logoTruck').children];
+
+/* ---------- SCENE 1 cards (content taken from the recording) ---------- */
+const step=(n,txt)=>`<div class="card step" style="width:520px"><div class="lbl">Step ${n}</div><div class="ttl">${txt}</div></div>`;
+const load=(id,meta,b)=>`<div class="card data" style="width:600px"><div class="lr-top"><b>${id}</b><span class="m">${meta}</span></div><span class="badge">${b}</span></div>`;
+const data=(title,rows)=>`<div class="card data" style="width:600px"><div class="dh"><span>${title}</span><span class="pill">Sample</span></div>${rows.map(r=>`<div class="dr"><span>${r[0]}</span><span class="m">${r[1]}</span></div>`).join('')}</div>`;
+const inv=()=>`<div class="card data" style="width:600px"><div class="dh"><span>Ready to invoice</span><span class="pill">Sample</span></div><div class="inv"><span class="n">#1038 · Sample Logistics</span><span class="m">$1,150</span><span class="btn-c">Create</span></div><div class="inv"><span class="n">#1035 · Sample Brokers</span><span class="m">$2,300</span><span class="btn-c">Create</span></div></div>`;
+const S1 = [
+  {h:load('#1042 Chicago → Dallas','Pickup Nov 12, 8:00 AM','Assigned'), p:[0,60,200], a:.2},
+  {h:data('Quote — 26 ft box truck',[['Miles','642'],['Carrier buy','$1,480'],['Customer rate (18% margin)','$1,805']]), p:[-250,-390,-100], a:.55},
+  {h:data('New quote request',[['Lane','Peoria, IL → Omaha, NE'],['Equipment','53 ft dry van'],['Shipment','12 pallets · stackable']]), p:[270,430,-60], a:.66},
+  {h:inv(), p:[-290,640,-260], a:.86},
+  {h:step(1,'Drop in a rate con'), p:[300,-300,-300], a:.95},
+  {h:step(2,'Miles calculated automatically'), p:[-330,150,40], a:1.12},
+  {h:load('#1038 Dallas → Tulsa','Delivered Nov 9','Completed'), p:[320,880,-160], a:1.3},
+  {h:step(3,'Assign a driver'), p:[60,-640,-420], a:1.38},
+  {h:step(4,'Check calls in seconds'), p:[-90,1020,-520], a:1.6},
+  {h:step(2,'Vet the carrier'), p:[370,90,-560], a:1.75},
+  {h:step(3,'Track and download'), p:[-370,-760,-470], a:1.95}
+];
+const s1 = $('s1');
+S1.forEach(c=>{
+  const w=document.createElement('div');
+  w.style.cssText='position:absolute;left:540px;top:960px;will-change:transform,opacity';
+  w.innerHTML=c.h; s1.appendChild(w); c.el=w;
+  c.node=document.createElementNS('http://www.w3.org/2000/svg','circle');
+  c.node.setAttribute('r','7'); c.node.setAttribute('fill','#70FF24'); $('s1nodes').appendChild(c.node);
+});
+
+/* ---------- SCENE 5 tiles: the six real product areas ---------- */
+const TILES = [
+  ['truck','Dispatch','Drop in a rate con'],
+  ['truck','Driver portal','Loads on the driver’s phone'],
+  ['calc','Brokerage','Quote with the calculator'],
+  ['truck','Broker portal','Live truck map'],
+  ['calc','Shipper portal','Request a freight quote'],
+  ['file','Owner & Finance','Truck profitability']
+];
+const SCAT=[[-280,-420,-28],[310,-300,22],[-360,160,16],[300,280,-24],[-220,540,30],[330,500,-14]];
+const tiles = TILES.map((d,i)=>{
+  const el=document.createElement('div'); el.className='tile';
+  el.innerHTML=`<div class="th"><div class="ic">${svgIcon(d[0])}</div><div class="nm">${d[2-1].replace('&','&amp;')}</div></div><div class="st">${d[2]}</div>`;
+  const col=i%2,row=(i/2)|0; const x=70+col*485, y=990+row*262;
+  el.style.left=x+'px'; el.style.top=y+'px';
+  $('tiles').appendChild(el);
+  return {el,cx:x+227.5,cy:y+118,sc:SCAT[i]};
+});
+
+/* ---------- headline engine ---------- */
+const HL = [
+  {id:'h1', ins:[.85,.93,1.05], out:2.62},
+  {id:'h2', ins:[3.5,3.58,3.7], out:4.4},
+  {id:'h3', ins:[5.2,6.75,7.45], out:7.95},
+  {id:'h4', ins:[8.45,8.53,9.4], out:99},
+  {id:'h5', ins:[11.35,11.45], out:12.7},
+  {id:'wm', ins:[13.42,13.5,13.58], out:99},
+  {id:'tag', ins:[13.82,13.87,13.95,14.0], out:99}
+].map(h=>({...h, el:$(h.id), words:[...$(h.id).querySelectorAll('.w > i')]}));
+function runHL(h,t){
+  const vis = t>=h.ins[0]-.02 && t<=h.out+.45;
+  setVis(h.el,vis); if(!vis) return;
+  h.words.forEach((w,i)=>{
+    const a=E.outQ(rng(t,h.ins[i],h.ins[i]+.42));
+    const b=E.inC(rng(t,h.out+i*.03,h.out+i*.03+.3));
+    w.style.transform=`translateY(${((1-a)*112-b*112).toFixed(2)}%)`;
+  });
+}
+function setVis(el,on){ if(el._v!==on){ el.style.display=on?'':'none'; el._v=on; } }
+function setOp(el,o){ o=+o.toFixed(3); if(el._o!==o){ el.style.opacity=o; el._o=o; } }
+
+/* ---------- desktop UI texture for the laptop screen ---------- */
+const UIW=2048, UIH=1280;
+const ui = document.createElement('canvas'); ui.width=UIW; ui.height=UIH;
+function rrect(c,x,y,w,h,r){c.beginPath();c.moveTo(x+r,y);c.arcTo(x+w,y,x+w,y+h,r);c.arcTo(x+w,y+h,x,y+h,r);c.arcTo(x,y+h,x,y,r);c.arcTo(x,y,x+w,y,r);c.closePath();}
+function drawIcon(c,name,x,y,size,color,lw){
+  c.save(); c.translate(x,y); c.scale(size/24,size/24); c.strokeStyle=color; c.lineWidth=lw; c.lineCap='round'; c.lineJoin='round';
+  const d=document.createElement('div'); d.innerHTML=`<svg>${ICON[name]}</svg>`;
+  d.firstChild.childNodes.forEach(n=>{
+    if(n.nodeName==='path') c.stroke(new Path2D(n.getAttribute('d')));
+    else if(n.nodeName==='circle'){c.beginPath();c.arc(+n.getAttribute('cx'),+n.getAttribute('cy'),+n.getAttribute('r'),0,Math.PI*2);c.stroke();}
+    else if(n.nodeName==='rect'){rrect(c,+n.getAttribute('x'),+n.getAttribute('y'),+n.getAttribute('width'),+n.getAttribute('height'),+(n.getAttribute('rx')||0));c.stroke();}
+    else if(n.nodeName==='line'){c.beginPath();c.moveTo(+n.getAttribute('x1'),+n.getAttribute('y1'));c.lineTo(+n.getAttribute('x2'),+n.getAttribute('y2'));c.stroke();}
+  });
+  c.restore();
+}
+function drawUI(){
+  const c=ui.getContext('2d'); const D="'Barlow Condensed','Arial Narrow',sans-serif", B="Barlow,'Segoe UI',sans-serif";
+  c.fillStyle='#0a1519'; c.fillRect(0,0,UIW,UIH);
+  let g=c.createRadialGradient(0,0,0,0,0,1300); g.addColorStop(0,'rgba(61,186,90,.26)'); g.addColorStop(1,'rgba(61,186,90,0)');
+  c.fillStyle=g; c.fillRect(0,0,UIW,UIH);
+  // header
+  rrect(c,90,56,86,86,16); c.fillStyle='#3DBA5A'; c.fill(); drawIcon(c,'truck',108,74,50,'#05230F',2.2);
+  c.fillStyle='#EEF4F1'; c.font=`800 46px ${D}`; c.textBaseline='alphabetic'; c.fillText('MEGA FURY',200,100);
+  c.fillStyle='#3DBA5A'; c.font=`600 21px ${B}`; c.fillText('S E R V I C E S   T M S   ·   O P S',202,134);
+  rrect(c,1790,64,170,70,12); c.strokeStyle='#2a3d42'; c.lineWidth=2; c.stroke(); c.fillStyle='#E3ECE8'; c.font=`500 27px ${B}`; c.fillText('Sign in',1828,108);
+  // title
+  c.font=`800 112px ${D}`; c.fillStyle='#EEF4F1'; c.fillText('SEE IT ',90,300); const w0=c.measureText('SEE IT ').width; c.fillStyle='#3DBA5A'; c.fillText('IN ACTION',90+w0,300);
+  c.font=`400 30px ${B}`; c.fillStyle='#8EA49E'; c.fillText('Click through each part of the system. All names and numbers below are samples.',92,360);
+  // tabs
+  const tabs=['Dispatch','Driver portal','Brokerage','Broker portal','Shipper portal','Owner & Finance']; let x=90;
+  c.font=`500 28px ${B}`;
+  tabs.forEach(tb=>{const w=c.measureText(tb).width+64; rrect(c,x,410,w,72,12);
+    if(tb==='Driver portal'){c.fillStyle='#3DBA5A';c.fill();c.fillStyle='#05230F';} else {c.fillStyle='#0d1a1e';c.fill();c.strokeStyle='#22363A';c.stroke();c.fillStyle='#E3ECE8';}
+    c.fillText(tb,x+32,456); x+=w+18;});
+  // suite chip
+  c.font=`500 23px ${B}`; const chip='Carrier suite · $30 per truck/user/mo'; const cw=c.measureText(chip).width+36;
+  rrect(c,90,516,cw,46,9); c.fillStyle='#1a2b30'; c.fill(); c.fillStyle='#E3ECE8'; c.fillText(chip,108,548);
+  // feature panel
+  rrect(c,90,590,1868,640,26); c.fillStyle='#0f1d21'; c.fill(); c.strokeStyle='#22363A'; c.lineWidth=2; c.stroke();
+  rrect(c,140,646,100,100,18); c.fillStyle='rgba(61,186,90,.15)'; c.fill(); drawIcon(c,'truck',164,670,52,'#3DBA5A',2);
+  c.fillStyle='#EEF4F1'; c.font=`800 64px ${D}`; c.fillText("LOADS ON THE DRIVER'S PHONE",276,708);
+  c.fillStyle='#8EA49E'; c.font=`400 32px ${B}`; c.fillText('Drivers see their assigned loads, stops,',278,768); c.fillText('PO numbers and on-site contacts.',278,814);
+  // my loads card
+  rrect(c,1010,640,900,430,20); c.fillStyle='#0a1619'; c.fill(); c.strokeStyle='#22363A'; c.stroke();
+  c.fillStyle='#E3ECE8'; c.font=`600 34px ${B}`; c.fillText('My loads',1050,712);
+  rrect(c,1770,680,104,46,10); c.strokeStyle='#3a4f53'; c.stroke(); c.font=`500 22px ${B}`; c.fillText('Sample',1785,711);
+  const row=(y,id,meta,badge)=>{c.font=`600 31px ${B}`;c.fillStyle='#E3ECE8';c.textAlign='left';c.fillText(id,1050,y);
+    c.font=`400 28px ${B}`;c.fillStyle='#8EA49E';c.textAlign='right';c.fillText(meta,1874,y);c.textAlign='left';
+    c.font=`600 24px ${B}`;const bw=c.measureText(badge).width+30;rrect(c,1050,y+20,bw,44,9);c.fillStyle='#3DBA5A';c.fill();c.fillStyle='#05230F';c.fillText(badge,1065,y+51);};
+  row(792,'#1042 Chicago → Dallas','Pickup Nov 12, 8:00 AM','Assigned');
+  c.fillStyle='#1c2e32'; c.fillRect(1050,880,824,2);
+  row(942,'#1038 Dallas → Tulsa','Delivered Nov 9','Completed');
+  // nav
+  rrect(c,140,1120,210,72,12); c.strokeStyle='#22363A'; c.stroke(); c.fillStyle='#8EA49E'; c.font=`500 28px ${B}`; c.fillText('←  Back',176,1166);
+  rrect(c,1720,1120,190,72,12); c.fillStyle='#3DBA5A'; c.fill(); c.fillStyle='#05230F'; c.font=`600 28px ${B}`; c.fillText('Next  →',1760,1166);
+}
+drawUI();
+
+/* ---------- THREE: the laptop ---------- */
+const S2 = {ok:false};
+function initThree(){
+  if(!window.THREE) return;
+  try{
+  const T=THREE, canvas=$('gl');
+  const renderer=new T.WebGLRenderer({canvas,antialias:true,alpha:true,powerPreference:'high-performance'});
+  renderer.outputEncoding=T.sRGBEncoding; renderer.toneMapping=T.ACESFilmicToneMapping; renderer.toneMappingExposure=1.05;
+  renderer.setClearColor(0x000000,0);
+  const scene=new T.Scene();
+  const camera=new T.PerspectiveCamera(30,1080/1920,0.02,100);
+  // studio environment for controlled reflections (softboxes + one green strip)
+  const pm=new T.PMREMGenerator(renderer), env=new T.Scene();
+  env.add(new T.Mesh(new T.BoxGeometry(30,30,30),new T.MeshBasicMaterial({color:0x040909,side:T.BackSide})));
+  const box=(w,h,col,k,pos)=>{const m=new T.Mesh(new T.PlaneGeometry(w,h),new T.MeshBasicMaterial({color:new T.Color(col).multiplyScalar(k),side:T.DoubleSide}));m.position.set(...pos);m.lookAt(0,0,0);env.add(m);};
+  box(12,4,0xffffff,2.6,[0,10,4]); box(3,9,0xe4f2ec,1.4,[-10,3,3]); box(3,9,0xffffff,.9,[10,4,-2]); box(14,.7,0x70ff24,1.8,[0,1.2,-10]);
+  scene.environment=pm.fromScene(env,0.04).texture;
+  scene.add(new T.HemisphereLight(0xd7efe4,0x040909,.35));
+  const key=new T.DirectionalLight(0xffffff,1.3); key.position.set(4,6,5); scene.add(key);
+  const rim=new T.DirectionalLight(0x9dff6a,1.1); rim.position.set(-3,3,-5); scene.add(rim);
+
+  const metal=new T.MeshStandardMaterial({color:0x1b2326,metalness:.9,roughness:.28});
+  const rr=(w,h,r)=>{const s=new T.Shape(),x=-w/2,y=-h/2;s.moveTo(x+r,y);s.lineTo(x+w-r,y);s.quadraticCurveTo(x+w,y,x+w,y+r);s.lineTo(x+w,y+h-r);s.quadraticCurveTo(x+w,y+h,x+w-r,y+h);s.lineTo(x+r,y+h);s.quadraticCurveTo(x,y+h,x,y+h-r);s.lineTo(x,y+r);s.quadraticCurveTo(x,y,x+r,y);return s;};
+  const W=3.3, Dp=2.25, LH=2.16;
+  const laptop=new T.Group(); scene.add(laptop);
+  const bg=new T.ExtrudeGeometry(rr(W,Dp,.14),{depth:.06,bevelEnabled:true,bevelThickness:.025,bevelSize:.025,bevelSegments:4,curveSegments:10});
+  bg.rotateX(-Math.PI/2); laptop.add(new T.Mesh(bg,metal));
+  const top=.086;
+  // keyboard deck (single texture, no modelled keys)
+  const kc=document.createElement('canvas'); kc.width=1024; kc.height=384; const k=kc.getContext('2d');
+  k.fillStyle='#0b1012'; k.fillRect(0,0,1024,384);
+  const rows=[14,14,14,13,12]; rows.forEach((n,r)=>{const kw=(1000-(n-1)*8)/n; for(let i=0;i<n;i++){const x=12+i*(kw+8), y=12+r*62; rrect(k,x,y,kw,54,7); k.fillStyle='#141b1e'; k.fill(); k.fillStyle='#1b2427'; k.fillRect(x+4,y+2,kw-8,2);} });
+  rrect(k,250,12+5*62,520,54,7); k.fillStyle='#141b1e'; k.fill();
+  const ktex=new T.CanvasTexture(kc); ktex.encoding=T.sRGBEncoding;
+  const kb=new T.Mesh(new T.PlaneGeometry(2.86,1.07),new T.MeshStandardMaterial({map:ktex,roughness:.55,metalness:.2}));
+  kb.rotation.x=-Math.PI/2; kb.position.set(0,top+.001,-.3); laptop.add(kb);
+  const pad=new T.Mesh(new T.PlaneGeometry(1.15,.66),new T.MeshStandardMaterial({color:0x222b2e,metalness:.7,roughness:.25}));
+  pad.rotation.x=-Math.PI/2; pad.position.set(0,top+.001,.66); laptop.add(pad);
+  const hinge=new T.Mesh(new T.CylinderGeometry(.045,.045,W-.6,24),metal); hinge.rotation.z=Math.PI/2; hinge.position.set(0,top,-Dp/2+.04); laptop.add(hinge);
+  // contact shadow
+  const sc=document.createElement('canvas'); sc.width=sc.height=256; const sx=sc.getContext('2d');
+  const sg=sx.createRadialGradient(128,128,10,128,128,128); sg.addColorStop(0,'rgba(0,0,0,.75)'); sg.addColorStop(1,'rgba(0,0,0,0)'); sx.fillStyle=sg; sx.fillRect(0,0,256,256);
+  const shadow=new T.Mesh(new T.PlaneGeometry(5.6,3.6),new T.MeshBasicMaterial({map:new T.CanvasTexture(sc),transparent:true,depthWrite:false}));
+  shadow.rotation.x=-Math.PI/2; shadow.position.y=-.035; laptop.add(shadow);
+  // lid
+  const lid=new T.Group(); lid.position.set(0,top,-Dp/2+.04); lid.rotation.x=-.2; laptop.add(lid);
+  const lg=new T.ExtrudeGeometry(rr(W,LH,.14),{depth:.03,bevelEnabled:true,bevelThickness:.015,bevelSize:.015,bevelSegments:4,curveSegments:10});
+  lg.translate(0,LH/2,-.046); lid.add(new T.Mesh(lg,metal));
+  const bezel=new T.Mesh(new T.PlaneGeometry(W-.07,LH-.07),new T.MeshStandardMaterial({color:0x030506,metalness:.2,roughness:.12}));
+  bezel.position.set(0,LH/2,.001); lid.add(bezel);
+  const tex=new T.CanvasTexture(ui); tex.encoding=T.sRGBEncoding; tex.anisotropy=renderer.capabilities.getMaxAnisotropy();
+  const smat=new T.MeshBasicMaterial({map:tex,toneMapped:false});
+  const SW=3.0, SH=1.875, SY=1.12;
+  const screen=new T.Mesh(new T.PlaneGeometry(SW,SH),smat); screen.position.set(0,SY,.002); lid.add(screen);
+  // glass sheen
+  const gc=document.createElement('canvas'); gc.width=gc.height=256; const gx=gc.getContext('2d');
+  const gg=gx.createLinearGradient(0,0,256,256); gg.addColorStop(.35,'rgba(255,255,255,0)'); gg.addColorStop(.5,'rgba(255,255,255,.10)'); gg.addColorStop(.65,'rgba(255,255,255,0)'); gx.fillStyle=gg; gx.fillRect(0,0,256,256);
+  const stex=new T.CanvasTexture(gc); stex.wrapS=T.RepeatWrapping;
+  const sheen=new T.Mesh(new T.PlaneGeometry(W-.07,LH-.07),new T.MeshBasicMaterial({map:stex,transparent:true,blending:T.AdditiveBlending,depthWrite:false}));
+  sheen.position.set(0,LH/2,.004); lid.add(sheen);
+
+  scene.updateMatrixWorld(true);
+  const center=screen.getWorldPosition(new T.Vector3());
+  const nrm=new T.Vector3(0,0,1).applyQuaternion(screen.getWorldQuaternion(new T.Quaternion())).normalize();
+  const upS=new T.Vector3(0,1,0).applyQuaternion(screen.getWorldQuaternion(new T.Quaternion())).normalize();
+  const right=new T.Vector3(1,0,0);
+  const corners=[[-SW/2,SY+SH/2],[SW/2,SY+SH/2],[SW/2,SY-SH/2],[-SW/2,SY-SH/2]].map(([x,y])=>lid.localToWorld(new T.Vector3(x,y,.002)));
+  Object.assign(S2,{ok:true,T,renderer,scene,camera,tex,smat,stex,center,nrm,upS,right,corners,elN:Math.asin(nrm.y)});
+  }catch(e){ console.warn('3D unavailable, using flat fallback',e); S2.ok=false; }
+}
+
+/* laptop camera: orbit -> aligned push -> through the screen (deterministic) */
+function laptopCam(t){
+  const {T,camera,center,right,upS,elN}=S2;
+  const pA=E.ioC(rng(t,3.0,4.6));
+  const az=lerp(-.52,0,pA), el=lerp(.44,elN,pA);
+  const d = t<3.9 ? lerp(17,13,E.outC(rng(t,3.0,3.9))) : 13-(13-1.13)*E.inC(rng(t,3.9,5.0));
+  const off=E.ioC(rng(t,4.25,4.95));
+  // aim toward the "#1042" load row on the screen while diving in
+  const target=center.clone().addScaledVector(right,.64*off).addScaledVector(upS,-.26*off);
+  camera.position.set(target.x+d*Math.cos(el)*Math.sin(az), target.y+d*Math.sin(el), target.z+d*Math.cos(el)*Math.cos(az));
+  camera.lookAt(target);
+  camera.updateMatrixWorld(); camera.updateProjectionMatrix();
+  return az;
+}
+const proj = v => { const p=v.clone().project(S2.camera); return [(p.x+1)/2*1080,(1-p.y)/2*1920]; };
+
+/* ---------- layout measurements for DOM panels ---------- */
+const P = {calc:$('calc'), loadsP:$('loadsP'), shipP:$('shipP'), brokP:$('brokP'), invP:$('invP')};
+const M = {};
+function offIn(el,anc){let x=0,y=0;while(el&&el!==anc){x+=el.offsetLeft;y+=el.offsetTop;el=el.offsetParent;}return {x,y};}
+function measure(){
+  for(const k in P){P[k]._w=P[k].offsetWidth;P[k]._h=P[k].offsetHeight;}
+  const row=$('r1042'), o=offIn(row,P.loadsP);
+  M.calcTop=470; M.calcCy=M.calcTop+P.calc._h/2;
+  M.loadsCy=Math.max(470+P.loadsP._h/2, 980-(o.y+row.offsetHeight/2)+P.loadsP._h/2);
+  M.row={x:540-P.loadsP._w/2+o.x, y:M.loadsCy-P.loadsP._h/2+o.y, w:row.offsetWidth, h:row.offsetHeight};
+  M.invCy=430+P.invP._h/2;
+}
+function place(el,cx,cy,s=1,ry=0,rx=0,rz=0){
+  el.style.transform=`translate(${(cx-el._w/2).toFixed(1)}px,${(cy-el._h/2).toFixed(1)}px) perspective(1800px) rotateX(${rx.toFixed(2)}deg) rotateY(${ry.toFixed(2)}deg) rotateZ(${rz.toFixed(2)}deg) scale(${s.toFixed(4)})`;
+}
+function edgePoint(c,o){ // where the line from panel c toward point o leaves c's (scaled) box
+  const dx=o[0]-c.x, dy=o[1]-c.y; const k=Math.min((c.w/2)/Math.abs(dx||1e-6),(c.h/2)/Math.abs(dy||1e-6));
+  return [c.x+dx*Math.min(k,1), c.y+dy*Math.min(k,1)];
+}
+
+/* ---------- master render: everything is a pure function of t ---------- */
+const s1line=$('s1line');
+const s4path=$('s4path'), s4nodes=$('s4nodes');
+const s4dots=[0,1,2,3].map(()=>{const c=document.createElementNS('http://www.w3.org/2000/svg','circle');c.setAttribute('r','9');c.setAttribute('fill','#70FF24');s4nodes.appendChild(c);return c;});
+
+function render(t){
+  t=clamp(t,0,DURATION);
+  // background
+  setOp($('glowTL'), lerp(.25,1,rng(t,3.0,3.8))*(1-.5*rng(t,13,14)));
+  setOp($('glowC'), Math.max(.35*rng(t,2.8,3.1)*(1-rng(t,3.4,4)), rng(t,13.1,14)));
+
+  /* SCENE 1 — the problem (0–3.15s) */
+  const on1=t<3.2; setVis($('s1wrap'),on1);
+  if(on1){
+    const tf=Math.min(t,2.4);
+    const camZ=lerp(320,-620,E.ioS(rng(tf,.3,2.4))), camX=Math.sin(tf*1.6)*25;
+    $('s1wrap').style.setProperty('--fz', (rng(t,2.4,2.46)*(1-rng(t,2.55,2.9))).toFixed(3));
+    const pts=[];
+    S1.forEach((c,i)=>{
+      const a=rng(t,c.a,c.a+.32);
+      let x=c.p[0]+Math.sin(tf*1.9+i*1.3)*38, y=c.p[1]+Math.cos(tf*1.5+i*2.1)*30, z=c.p[2]+Math.sin(tf*1.2+i)*60-(1-E.outC(a))*320;
+      let ry=Math.sin(tf*1.1+i*.7)*24, rx=Math.cos(tf*1.4+i)*14, rz=Math.sin(tf*.8+i*1.7)*6, sc=.7+.3*E.outB(a);
+      const k=E.inC(rng(t,2.8+(i%4)*.015,3.12));
+      x=lerp(x,-camX,k); y=lerp(y,0,k); z=lerp(z,-camZ,k); sc*=(1-k); ry*=(1-k); rx*=(1-k); rz*=(1-k);
+      const op = a<=0?0:Math.min(a*1.6,1)*(1-rng(k,.75,1));
+      setOp(c.el,op);
+      c.el.style.transform=`translate(-50%,-50%) translate3d(${(x+camX).toFixed(1)}px,${y.toFixed(1)}px,${(z+camZ).toFixed(1)}px) rotateX(${rx.toFixed(2)}deg) rotateY(${ry.toFixed(2)}deg) rotateZ(${rz.toFixed(2)}deg) scale(${sc.toFixed(4)})`;
+      const s=1400/(1400-(z+camZ));
+      pts.push([540+(x+camX)*s, 960+y*s]);
+    });
+    // the green line: freeze at 2.4s, draw through every panel, then contract
+    const lp=E.ioC(rng(t,2.42,2.8));
+    let L=0; const seg=[]; for(let i=1;i<pts.length;i++){const d=Math.hypot(pts[i][0]-pts[i-1][0],pts[i][1]-pts[i-1][1]);seg.push(d);L+=d;}
+    let rem=lp*L; const vis=[pts[0]];
+    for(let i=1;i<pts.length&&rem>0;i++){ if(rem>=seg[i-1]){vis.push(pts[i]);rem-=seg[i-1];} else {const f=rem/seg[i-1];vis.push([lerp(pts[i-1][0],pts[i][0],f),lerp(pts[i-1][1],pts[i][1],f)]);rem=0;} }
+    s1line.setAttribute('points', lp>0?vis.map(p=>p[0].toFixed(1)+','+p[1].toFixed(1)).join(' '):'');
+    s1line.style.opacity=(1-rng(t,3.0,3.12)).toFixed(3);
+    S1.forEach((c,i)=>{const reached=lp>0 && i<vis.length; c.node.setAttribute('cx',pts[i][0].toFixed(1)); c.node.setAttribute('cy',pts[i][1].toFixed(1)); c.node.style.opacity=reached?(1-rng(t,3.0,3.12)):0;});
+  }
+  runHL(HL[0],t);
+
+  /* SCENE 2 — the solution: point -> laptop screen -> push through (2.85–5.0s) */
+  const on2=t>=2.84&&t<3.75; setVis($('s2fx'),on2);
+  const onGL=t>=3.05&&t<5.0;
+  if(S2.ok){ setVis($('gl'),onGL); } else setVis($('fallback'),onGL);
+  if(on2){
+    const g=rng(t,2.85,3.05), out=rng(t,3.02,3.16);
+    $('pt').setAttribute('r',(g*12*(1-out)).toFixed(2)); $('halo').setAttribute('r',(g*46*(1-out)).toFixed(2));
+  }
+  if(S2.ok && (onGL||on2)){
+    const az=laptopCam(t);
+    const ko=E.outB(rng(t,3.02,3.34));
+    if(on2){
+      const poly=S2.corners.map(c=>{const p=proj(c);return [lerp(540,p[0],ko),lerp(960,p[1],ko)];});
+      $('outline').setAttribute('points', t>=3.02?poly.map(p=>p.join(',')).join(' '):'');
+      $('outline').style.opacity=(1-rng(t,3.34,3.7)).toFixed(3);
+    }
+    if(onGL){
+      setOp($('gl'), rng(t,3.08,3.36)*(1-rng(t,4.8,4.98)));
+      const on=E.outC(rng(t,3.2,3.55)); S2.smat.color.setRGB(lerp(.44,1,on)*on+.0,lerp(1,1,on)*Math.max(on,.25),lerp(.14,1,on)*on);
+      S2.stex.offset.x=az*.8+.15;
+      S2.renderer.render(S2.scene,S2.camera);
+    }
+  } else if(!S2.ok && onGL){ // flat fallback if WebGL is unavailable
+    const f=$('fallback'), k=E.inC(rng(t,3.9,5.0));
+    setOp(f, rng(t,3.08,3.36)*(1-rng(t,4.8,4.98)));
+    f.style.transform=`translate(540px,960px) scale(${lerp(.92,4,k)}) translate(${-1460*.5273*k}px,${-(820-640)*.5273*k}px) translate(-540px,-337px)`;
+    if(on2) $('outline').setAttribute('points','');
+  }
+  runHL(HL[1],t);
+
+  /* SCENES 3 + 4 */
+  const on34=t>=4.8&&t<11.02; setVis($('s34'),on34);
+  if(on34){
+    // loads panel: we land inside the interface, then the #1042 card rises
+    const onL=t<6.9; setVis(P.loadsP,onL);
+    if(onL){
+      const ein=E.outC(rng(t,4.82,5.3)), rec=E.ioC(rng(t,6.28,6.85));
+      place(P.loadsP,540,M.loadsCy,lerp(1.22,1,ein)*lerp(1,.93,rec));
+      setOp(P.loadsP, rng(t,4.82,5.05)*(1-rec));
+      const lift=E.outB(rng(t,5.42,5.85));
+      const r=$('r1042');
+      r.style.transform=`translateY(${(-10*lift).toFixed(2)}px) scale(${(1+.045*lift).toFixed(4)})`;
+      r.style.background=`rgba(26,46,50,${(.9*lift).toFixed(3)})`;
+      r.style.borderColor=`rgba(112,255,36,${(.9*lift).toFixed(3)})`;
+      r.style.boxShadow=`0 ${(30*lift).toFixed(1)}px ${(70*lift).toFixed(1)}px rgba(0,0,0,${(.55*lift).toFixed(3)})`;
+      $('pk').style.setProperty('--u',(100*E.outC(rng(t,5.85,6.15))).toFixed(1)+'%');
+      $('pk').style.color = t>5.85?'#E3ECE8':'';
+      $('asg').style.boxShadow=`0 0 0 ${(6*Math.sin(Math.PI*rng(t,5.95,6.3))).toFixed(2)}px rgba(112,255,36,.35)`;
+    }
+    // calculator: revealed through the selected card (mask), then folds into a floating card
+    const onC=t>=6.25; setVis(P.calc,onC);
+    const mk=E.ioC(rng(t,6.28,6.86));
+    const lx=M.row.x-70, ly=M.row.y-M.calcTop;
+    const ins=[Math.max(0,ly*(1-mk)), Math.max(0,(940-(lx+M.row.w))*(1-mk)), Math.max(0,(P.calc._h-(ly+M.row.h))*(1-mk)), Math.max(0,lx*(1-mk))];
+    if(onC){
+      P.calc.style.clipPath = mk<1?`inset(${ins.map(v=>v.toFixed(1)+'px').join(' ')} round ${lerp(16,30,mk).toFixed(1)}px)`:'none';
+      const ml=$('maskline'); const mo=Math.sin(Math.PI*rng(t,6.26,6.95));
+      setOp(ml,mo); setVis(ml,mo>0.01);
+      ml.style.left=(70+ins[3])+'px'; ml.style.top=(M.calcTop+ins[0])+'px';
+      ml.style.width=(940-ins[1]-ins[3])+'px'; ml.style.height=(P.calc._h-ins[0]-ins[2])+'px';
+      $('chipBox').classList.toggle('sel',t>=6.98);
+      P.calc.querySelectorAll('.qr').forEach((q,i)=>{const a=E.outC(rng(t,7.02+i*.12,7.32+i*.12)); q.style.opacity=a.toFixed(3); q.style.transform=`translateY(${(18*(1-a)).toFixed(1)}px)`;});
+      $('miles').textContent = Math.round(642*E.outC(rng(t,7.02,7.4))).toString();
+      $('mrg').style.setProperty('--h',(rng(t,7.45,7.6)*(1-rng(t,8.0,8.3))).toFixed(3));
+    }
+    // scene 4 geometry
+    const camX=lerp(50,-50,E.ioS(rng(t,8.0,11.0)));
+    const k4=E.ioC(rng(t,8.0,8.65));
+    const A={x:lerp(540,330+camX,k4), y:lerp(M.calcCy,800,k4), s:lerp(1,.6,k4)};
+    if(onC) place(P.calc,A.x,A.y,A.s,lerp(0,10,k4)+Math.sin(k4*Math.PI)*16,lerp(0,-4,k4));
+    const kB=E.outC(rng(t,8.3,8.95)), kC=E.outC(rng(t,8.45,9.1));
+    const B={x:lerp(1320,770+camX*.6,kB), y:1150, s:.56}, C={x:330+camX*1.4, y:lerp(1980,1525,kC), s:.58};
+    const onB=t>=8.25; setVis(P.shipP,onB); setVis(P.brokP,t>=8.4);
+    if(onB){ place(P.shipP,B.x,B.y,B.s,lerp(-38,-10,kB)); setOp(P.shipP,kB); place(P.brokP,C.x,C.y,C.s,lerp(26,8,kC),lerp(18,4,kC)); setOp(P.brokP,kC); }
+    // the connection line
+    const lp=E.ioC(rng(t,9.0,9.6));
+    if(t>=8.95){
+      const a=[A.x,A.y], b=[B.x,B.y], c=[C.x,C.y];
+      s4path.setAttribute('d',`M${a} C${a[0]+300},${a[1]} ${b[0]},${b[1]-300} ${b} C${b[0]},${b[1]+300} ${c[0]+320},${c[1]} ${c}`);
+      const L=s4path.getTotalLength(); s4path.style.strokeDasharray=L; s4path.style.strokeDashoffset=(L*(1-lp)).toFixed(1);
+      const bx={x:A.x,y:A.y,w:940*A.s,h:P.calc._h*A.s}, bb={x:B.x,y:B.y,w:940*B.s,h:P.shipP._h*B.s}, bc={x:C.x,y:C.y,w:940*C.s,h:P.brokP._h*C.s};
+      const ep=[edgePoint(bx,b),edgePoint(bb,a),edgePoint(bb,c),edgePoint(bc,b)], when=[.05,.45,.55,.95];
+      s4dots.forEach((d,i)=>{d.setAttribute('cx',ep[i][0].toFixed(1));d.setAttribute('cy',ep[i][1].toFixed(1));d.style.opacity=lp>=when[i]?1:0;});
+      const sp=E.ioS(rng(t,9.6,10.3)), sOn=t>9.58&&t<10.32;
+      const pt=s4path.getPointAtLength(L*sp);
+      ['sig','sigh'].forEach(id=>{const e=$(id);e.setAttribute('cx',pt.x.toFixed(1));e.setAttribute('cy',pt.y.toFixed(1));e.style.opacity=sOn?1:0;});
+      s4path.style.strokeWidth = (4+3*Math.sin(Math.PI*rng(t,10.15,10.5))).toFixed(2);
+    } else { s4path.setAttribute('d',''); s4dots.forEach(d=>d.style.opacity=0); $('sig').style.opacity=0; $('sigh').style.opacity=0; }
+    // the green line becomes a wipe
+    const bxp=lerp(-60,1140,E.ioC(rng(t,10.35,11.0)));
+    $('s34').style.clipPath = t>=10.35?`inset(0 0 0 ${bxp.toFixed(1)}px)`:'none';
+  }
+  runHL(HL[2],t); runHL(HL[3],t);
+  const bxp=lerp(-60,1140,E.ioC(rng(t,10.35,11.0)));
+  const onBeam=t>=10.35&&t<11.02; setVis($('beam'),onBeam);
+  if(onBeam) $('beam').style.transform=`translateX(${(bxp-4).toFixed(1)}px)`;
+
+  /* SCENES 5 + 6 */
+  const on56=t>=10.35; setVis($('s56'),on56);
+  if(on56){
+    $('s56').style.clipPath = t<11.0?`inset(0 ${(1080-bxp).toFixed(1)}px 0 0)`:'none';
+    const pull=E.outC(rng(t,10.9,12.9));
+    $('s5cam').style.transform=`scale(${lerp(1.1,1,pull).toFixed(4)})`;
+    const conv=t>=12.85;
+    // invoices panel
+    const ki=E.outB(rng(t,10.95,11.55));
+    let ix=lerp(720,540,ki), iy=lerp(M.invCy-160,M.invCy,ki), is=lerp(.86,1,ki), ir=lerp(10,0,ki);
+    const kv=E.inC(rng(t,12.86,13.28));
+    ix=lerp(ix,540,kv); iy=lerp(iy,800,kv); is*=lerp(1,.04,kv);
+    place(P.invP,ix,iy,is,0,0,ir); setOp(P.invP,1-rng(kv,.7,1));
+    $('cr1').style.boxShadow=`0 0 0 ${(7*Math.sin(Math.PI*rng(t,12.05,12.4))).toFixed(2)}px rgba(112,255,36,.4)`;
+    $('cr2').style.boxShadow=`0 0 0 ${(7*Math.sin(Math.PI*rng(t,12.3,12.65))).toFixed(2)}px rgba(112,255,36,.4)`;
+    // tiles: scattered -> orderly grid -> converge into the logo
+    tiles.forEach((tl,i)=>{
+      const k=E.outB(rng(t,11.1+i*.09,11.75+i*.09));
+      let dx=lerp(tl.sc[0],0,k), dy=lerp(tl.sc[1],0,k), r=lerp(tl.sc[2],0,k), s=lerp(.82,1,k);
+      const c=E.inC(rng(t,12.88+i*.035,13.3+i*.02));
+      dx=lerp(dx,540-tl.cx,c); dy=lerp(dy,800-tl.cy,c); s*=lerp(1,.04,c); r=lerp(r,0,c);
+      tl.el.style.transform=`translate(${dx.toFixed(1)}px,${dy.toFixed(1)}px) rotate(${r.toFixed(2)}deg) scale(${s.toFixed(4)})`;
+      setOp(tl.el,(1-rng(c,.7,1)));
+    });
+    // brand
+    const onBr=t>=13.1; setVis($('brand'),onBr);
+    if(onBr){
+      const lk=E.outB(rng(t,13.15,13.55));
+      $('logo').style.transform=`scale(${lk.toFixed(4)})`;
+      const ring=Math.sin(Math.PI*rng(t,13.3,13.9));
+      $('logo').style.boxShadow=`0 0 0 ${(18*ring).toFixed(1)}px rgba(112,255,36,${(.18*ring).toFixed(3)}), 0 30px 80px rgba(0,0,0,.5)`;
+      const dk=E.ioC(rng(t,13.3,13.75));
+      logoParts.forEach(p=>{p.style.strokeDasharray='1';p.style.strokeDashoffset=(1-dk).toFixed(4);});
+      const bk=E.outC(rng(t,13.62,14.0)); setOp($('by'),bk); $('by').style.transform=`translateY(${(16*(1-bk)).toFixed(1)}px)`;
+      $('rule').style.transform=`scaleX(${E.ioC(rng(t,13.72,14.05)).toFixed(4)})`;
+      const uk=E.outC(rng(t,14.0,14.35)); setOp($('url'),uk);
+      $('wm').style.setProperty('--sw',lerp(100,0,E.ioS(rng(t,14.1,14.75))).toFixed(1)+'%');
+    }
+  }
+  runHL(HL[4],t); runHL(HL[5],t); runHL(HL[6],t);
+}
+
+/* ---------- player ---------- */
+const stage=$('stage'), frame=$('frame'), vp=$('viewport');
+let scale=1;
+function fit(){
+  const w=vp.clientWidth, h=vp.clientHeight;
+  scale=Math.max(.05,Math.min(w/1080,h/1920));
+  const fw=1080*scale, fh=1920*scale;
+  frame.style.width=fw+'px'; frame.style.height=fh+'px'; frame.style.left=((w-fw)/2)+'px';
+  stage.style.transform=`scale(${scale})`;
+  document.querySelector('.controls').style.maxWidth=Math.max(300,fw)+'px';
+  if(S2.ok){ S2.renderer.setPixelRatio(clamp(scale*(window.devicePixelRatio||1),.5,1.5)); S2.renderer.setSize(1080,1920,false); }
+  dirty=true;
+}
+let t=0, playing=false, last=null, dirty=true;
+const ICO_PLAY='<svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 4.5v15a1 1 0 0 0 1.5.86l12-7.5a1 1 0 0 0 0-1.72l-12-7.5A1 1 0 0 0 7 4.5Z"/></svg>';
+const ICO_PAUSE='<svg viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16" rx="1"/><rect x="14" y="4" width="4" height="16" rx="1"/></svg>';
+function syncBtn(){ $('play').innerHTML=playing?ICO_PAUSE:ICO_PLAY; $('play').setAttribute('aria-label',playing?'Pause':'Play'); }
+function play(){ if(t>=DURATION) t=0; playing=true; last=null; syncBtn(); }
+function pause(){ playing=false; syncBtn(); }
+function seek(x){ t=clamp(x,0,DURATION); dirty=true; }
+$('play').onclick=()=>playing?pause():play();
+$('replay').onclick=()=>{ seek(0); play(); };
+const scrub=$('scrub'); let wasPlaying=false, scrubbing=false;
+scrub.addEventListener('pointerdown',()=>{ scrubbing=true; wasPlaying=playing; pause(); });
+scrub.addEventListener('input',()=>{ if(!scrubbing){wasPlaying=false;pause();} seek(+scrub.value); });
+const endScrub=()=>{ if(scrubbing){ scrubbing=false; if(wasPlaying) play(); } };
+scrub.addEventListener('pointerup',endScrub); scrub.addEventListener('change',endScrub);
+document.addEventListener('keydown',e=>{ if(e.code==='Space'&&e.target===document.body){e.preventDefault();playing?pause():play();} });
+
+function tick(now){
+  if(playing){ if(last!=null) t+=Math.min(.25,(now-last)/1000); last=now; if(t>=DURATION){t=DURATION;pause();} dirty=true; }
+  if(dirty){ render(t); if(!scrubbing) scrub.value=t.toFixed(2); $('time').textContent=t.toFixed(2)+' / 15.00'; dirty=false; }
+  requestAnimationFrame(tick);
+}
+
+/* hooks for later audio / frame-export work: deterministic seek + render */
+window.MegaFuryAd={duration:DURATION,fps:30,seek:x=>{seek(x);render(t);},play,pause,renderAt:x=>render(x)};
+
+function start(){
+  initThree();
+  if(!S2.ok){ const f=$('fallback'); f.style.cssText='position:absolute;left:0;top:0;width:1080px;height:675px;transform-origin:0 0;border-radius:18px;overflow:hidden;box-shadow:0 0 0 14px #050708,0 0 0 16px #2a3336'; ui.style.width='1080px'; f.appendChild(ui); }
+  measure(); fit(); syncBtn();
+  const reduce=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if(reduce){ seek(DURATION); } else play();
+  requestAnimationFrame(tick);
+}
+window.addEventListener('resize',()=>{fit();});
+const fontsReady = document.fonts ? Promise.race([
+  Promise.all(['800 100px "Barlow Condensed"','700 40px "Barlow Condensed"','400 30px Barlow','500 30px Barlow','600 30px Barlow'].map(f=>document.fonts.load(f))),
+  new Promise(r=>setTimeout(r,2500))]) : Promise.resolve();
+fontsReady.then(()=>{ drawUI(); if(S2.ok) S2.tex.needsUpdate=true; measure(); dirty=true; });
+fontsReady.then(start);
+})();
+</script>
