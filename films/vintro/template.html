@@ -1,0 +1,364 @@
+<title>VINTRO Brand Film</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,500;6..96,600&family=Jost:wght@400;500&display=swap">
+<style>
+  /* One vertical stage (1080x1920 design units) scaled to fit; a CSS 3D world with one camera inside it. Single dark look. */
+  :root {
+    --plum: #160D25;
+    --violet: #35217C;
+    --lavender: #C7A5FF;
+    --blue: #536DFF;
+    --white: #F7F3FF;
+    --ui: #241638;
+    --ui-line: #3A2858;
+    --display: "Bodoni Moda", "Didot", "Bodoni 72", Georgia, serif;
+    --utility: "Jost", "Futura", "Century Gothic", system-ui, sans-serif;
+    color-scheme: dark;
+  }
+  html, body { height: 100%; }
+  body {
+    background: #0D0716; color: var(--white); font-family: var(--utility);
+    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px;
+    padding-block: 12px;
+    padding-left: max(16px, env(safe-area-inset-left, 0px));
+    padding-right: max(16px, env(safe-area-inset-right, 0px));
+    box-sizing: border-box; overflow: hidden;
+  }
+  .frame {
+    position: relative; width: min(100%, calc((100dvh - 110px) * 9 / 16)); max-width: 100%;
+    aspect-ratio: 9 / 16; overflow: hidden; border-radius: 14px; background: var(--plum);
+    box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5);
+  }
+  #stage { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; transform-origin: 0 0; overflow: hidden; background: var(--plum);
+    perspective: 1700px; perspective-origin: 540px 960px; }
+  #stage * { position: absolute; }
+  .p3 { transform-style: preserve-3d; }
+  .full { left: 0; top: 0; width: 1080px; height: 1920px; }
+  .vignette { inset: 0; background: radial-gradient(1100px 1400px at 50% 46%, rgba(53, 33, 124, 0.34), rgba(22, 13, 37, 0) 70%); }
+  .key { inset: 0; background: radial-gradient(900px 700px at 28% 22%, rgba(199, 165, 255, 0.16), rgba(199, 165, 255, 0) 70%); }
+  .shade { inset: 0; background: radial-gradient(130% 90% at 50% 45%, rgba(0,0,0,0) 55%, rgba(6, 3, 12, 0.7) 100%); pointer-events: none; }
+  .grain { inset: 0; opacity: 0.035; pointer-events: none;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='240' height='240'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='240' height='240' filter='url(%23n)'/></svg>"); }
+  .flood { left: 540px; top: 960px; width: 2px; height: 2px; border-radius: 50%;
+    background: radial-gradient(circle at 50% 45%, #46309A 0%, var(--violet) 55%, #2A1866 100%); }
+  .halo { left: 540px; top: 760px; width: 1100px; height: 1100px; margin: -550px 0 0 -550px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(199, 165, 255, 0.22) 0%, rgba(83, 109, 255, 0.08) 35%, rgba(22, 13, 37, 0) 68%); }
+  .spark { left: 540px; top: 960px; width: 14px; height: 14px; margin: -7px 0 0 -7px; border-radius: 7px; background: var(--white);
+    box-shadow: 0 0 18px 4px rgba(199, 165, 255, 0.85), 0 0 60px 14px rgba(83, 109, 255, 0.28); }
+  .ring { left: 540px; top: 960px; width: 20px; height: 20px; margin: -10px 0 0 -10px; border-radius: 50%; border: 2px solid var(--blue); }
+  svg.grid { left: 0; top: 0; width: 1080px; height: 1920px; overflow: visible; }
+  .mask { overflow: hidden; left: 0; width: 1080px; perspective: 900px; perspective-origin: 50% 50%; }
+  .mask > div { position: relative; width: 100%; text-align: center; transform-origin: 50% 100%; backface-visibility: hidden; }
+  .idea { font-family: var(--display); font-weight: 500; font-size: 146px; line-height: 160px; letter-spacing: 0.035em; font-optical-sizing: none; font-variation-settings: 'opsz' 22; color: var(--white); }
+  .idea.accent { color: var(--lavender); }
+  #think { left: -300px; width: 1680px; top: 760px; height: 400px; }
+  #think > div { inset: 0; display: flex; align-items: center; justify-content: center; font-family: var(--display); font-weight: 600;
+    font-size: 400px; line-height: 400px; letter-spacing: -0.015em; font-optical-sizing: none; font-variation-settings: 'opsz' 30; white-space: nowrap; }
+  .band { left: 0; top: 0; width: 0; height: 0; overflow: visible; }
+  .band .word { font-family: var(--display); font-weight: 600; font-size: 222px; line-height: 280px; letter-spacing: -0.012em; font-optical-sizing: none; font-variation-settings: 'opsz' 30;
+    color: var(--white); text-align: center; white-space: nowrap; }
+  .lock img { left: 0; top: 0; width: 100%; height: 100%; }
+  .sweep { mix-blend-mode: screen; pointer-events: none; }
+
+  .controls {
+    width: min(100%, calc((100dvh - 110px) * 9 / 16), 560px); max-width: 100%;
+    display: flex; align-items: center; gap: 10px;
+    background: var(--ui); border: 1px solid var(--ui-line); border-radius: 999px; padding: 6px 14px 6px 6px; box-sizing: border-box;
+  }
+  .controls button { flex: none; width: 40px; height: 40px; border-radius: 50%; border: 0; cursor: pointer;
+    background: var(--violet); color: var(--white); display: grid; place-items: center; }
+  .controls button.ghost { background: transparent; }
+  .controls button:hover { background: #4A31A3; }
+  .controls button:focus-visible, .controls input:focus-visible { outline: 2px solid var(--lavender); outline-offset: 2px; }
+  .controls svg { width: 18px; height: 18px; fill: currentColor; }
+  #scrub { flex: 1; min-width: 0; accent-color: var(--lavender); height: 24px; cursor: pointer; }
+  #clock { flex: none; font: 500 13px/1 var(--utility); font-variant-numeric: tabular-nums; color: var(--lavender); letter-spacing: 0.04em; width: 74px; text-align: right; }
+</style>
+
+<div class="frame" id="frame">
+  <div id="stage">
+    <div class="vignette"></div>
+    <div class="flood" id="flood"></div>
+    <div class="key" id="key"></div>
+    <div class="halo" id="halo"></div>
+    <div class="full p3" id="world">
+      <svg class="grid" id="grid" viewBox="0 0 1080 1920"></svg>
+      <div class="ring" id="ring"></div>
+      <div class="spark" id="spark"></div>
+      <div id="ideas" class="full p3"></div>
+      <div class="p3" id="think"></div>
+      <div class="full p3" id="assembly">
+        <div class="p3" id="mono"></div>
+        <div class="lock" id="reflect"><img alt="" src="%%MONO%%"></div>
+        <div id="bands" class="full p3"></div>
+        <div class="sweep" id="sweep"></div>
+      </div>
+      <div class="full p3" id="lockup">
+        <div class="lock" id="vintro"><img alt="VINTRO" src="%%VINTRO%%"></div>
+        <div class="lock" id="designs"><img alt="DESIGNS" src="%%DESIGNS%%"></div>
+        <div class="lock" id="tag"><img alt="THINK DESIGN" src="%%THINK%%"></div>
+      </div>
+    </div>
+    <div class="shade"></div>
+    <div class="grain"></div>
+  </div>
+</div>
+
+<div class="controls" role="group" aria-label="Playback">
+  <button id="play" aria-label="Pause"><svg viewBox="0 0 24 24" id="playIcon"></svg></button>
+  <button id="replay" class="ghost" aria-label="Replay"><svg viewBox="0 0 24 24"><path d="M12 5V2L7 6l5 4V7a5 5 0 1 1-5 5H5a7 7 0 1 0 7-7z"/></svg></button>
+  <input id="scrub" type="range" min="0" max="15000" step="1" value="0" aria-label="Timeline">
+  <span id="clock">00.00 / 15</span>
+</div>
+
+<script>
+(() => {
+  const DUR = 15;
+  const HQ = !!window.__HQ; // the video export renders the full-depth version; phones get the light one
+  const MONO_SRC = document.querySelector('#reflect img').src;
+  const A = { mono: { w: %%MONO_W%%, h: %%MONO_H%% }, vintro: { w: %%VINTRO_W%%, h: %%VINTRO_H%% }, designs: { w: %%DESIGNS_W%%, h: %%DESIGNS_H%% }, think: { w: %%THINK_W%%, h: %%THINK_H%% } };
+  const $ = (id) => document.getElementById(id);
+  const NS = 'http://www.w3.org/2000/svg';
+
+  /* ---------- easing ---------- */
+  const clamp = (x, a = 0, b = 1) => Math.min(b, Math.max(a, x));
+  const bez = (x1, y1, x2, y2) => (x) => {
+    if (x <= 0) return 0; if (x >= 1) return 1;
+    let t = x;
+    for (let i = 0; i < 8; i++) {
+      const cx = 3 * x1 * t * (1 - t) ** 2 + 3 * x2 * t * t * (1 - t) + t ** 3 - x;
+      const d = 3 * x1 * (1 - t) ** 2 + 6 * (x2 - x1) * t * (1 - t) + 3 * (1 - x2) * t * t;
+      if (Math.abs(d) < 1e-6) break; t = clamp(t - cx / d);
+    }
+    return 3 * y1 * t * (1 - t) ** 2 + 3 * y2 * t * t * (1 - t) + t ** 3;
+  };
+  const E = { out: bez(0.16, 1, 0.3, 1), glide: bez(0.22, 0.8, 0.3, 1), inOut: bez(0.7, 0, 0.2, 1), soft: bez(0.45, 0, 0.25, 1), in: bez(0.6, 0, 0.9, 0.4) };
+  const p = (t, a, b, e = E.out) => e(clamp((t - a) / (b - a)));
+  const mix = (a, b, k) => a + (b - a) * k;
+  const hump = (k) => Math.sin(clamp(k) * Math.PI);
+
+  /* ---------- layout (design units) ---------- */
+  const CX = 540, CY = 960;
+  const MONO_W = 620, MONO_H = MONO_W * A.mono.h / A.mono.w;
+  const MONO_TOP = CY - MONO_H / 2;            // where the monogram assembles
+  const RISE = 470 - MONO_TOP;                 // then rises to its lockup place
+  const S = 1.16;
+  const LOCK = { vintro: [A.vintro.w * S, A.vintro.h * S, 1162], designs: [A.designs.w * S, A.designs.h * S, 1298], tag: [A.think.w * S, A.think.h * S, 1414] };
+  const place = (el, w, h, top) => Object.assign(el.style, { width: w + 'px', height: h + 'px', left: (CX - w / 2) + 'px', top: top + 'px' });
+  for (const k in LOCK) place($(k), ...LOCK[k]);
+
+  // the monogram with real depth: identical copies of the supplied artwork stacked along z, the back ones in shadow
+  const DEPTH = HQ ? 20 : 8, STEP = HQ ? 2 : 4.6;
+  const mono = $('mono'); place(mono, MONO_W, MONO_H, MONO_TOP);
+  for (let i = DEPTH - 1; i >= 0; i--) {
+    const im = document.createElement('img'); im.src = MONO_SRC; im.alt = i === 0 ? 'VINTRO monogram' : '';
+    Object.assign(im.style, { left: 0, top: 0, width: '100%', height: '100%', transform: `translateZ(${-i * STEP}px)` });
+    if (i > 0) im.style.filter = `brightness(${mix(0.62, 0.3, i / DEPTH)}) saturate(1.25)`;
+    mono.appendChild(im);
+  }
+  place($('reflect'), MONO_W, MONO_H, MONO_TOP + MONO_H + 6);
+  Object.assign($('reflect').style, { transform: 'scaleY(-1)', opacity: 0,
+    WebkitMaskImage: 'linear-gradient(to top, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 45%)', maskImage: 'linear-gradient(to top, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 45%)' });
+  const sweep = $('sweep'); place(sweep, MONO_W, MONO_H, MONO_TOP);
+  Object.assign(sweep.style, { WebkitMaskImage: `url(${MONO_SRC})`, maskImage: `url(${MONO_SRC})`, WebkitMaskSize: '100% 100%', maskSize: '100% 100%', transform: 'translateZ(1px)' });
+
+  /* ---------- the grid ---------- */
+  const grid = $('grid');
+  const mk = (tag, attrs) => { const el = document.createElementNS(NS, tag); for (const k in attrs) el.setAttribute(k, attrs[k]); grid.appendChild(el); return el; };
+  const H_LINES = [-4, -3, -2, -1, 1, 2, 3, 4].map((k) => ({ k, el: mk('line', { stroke: '#C7A5FF', 'stroke-width': 1.6 }) }));
+  const V_LINES = [-3, -2, -1, 0, 1, 2, 3].map((k) => ({ k, el: mk('line', { x1: CX + k * 120, x2: CX + k * 120, stroke: '#C7A5FF', 'stroke-width': 1.6 }) }));
+  const centre = mk('line', { y1: CY, y2: CY, stroke: '#F7F3FF', 'stroke-width': 2.4 });
+  const shapes = [
+    { el: mk('circle', { cx: CX, cy: CY, r: 300, fill: 'none', stroke: '#C7A5FF', 'stroke-width': 2 }), len: 2 * Math.PI * 300, at: 2.55 },
+    { el: mk('circle', { cx: CX + 240, cy: CY - 240, r: 120, fill: 'none', stroke: '#536DFF', 'stroke-width': 2.4 }), len: 2 * Math.PI * 120, at: 2.8 },
+    { el: mk('rect', { x: CX - 360, y: CY + 120, width: 240, height: 240, fill: 'none', stroke: '#C7A5FF', 'stroke-width': 2 }), len: 960, at: 2.95 },
+    { el: mk('line', { x1: CX - 360, y1: CY - 360, x2: CX + 360, y2: CY + 360, stroke: '#C7A5FF', 'stroke-width': 1.2 }), len: 1018, at: 3.1 },
+  ];
+  shapes.forEach((s) => { s.el.setAttribute('stroke-dasharray', s.len); s.el.style.transformOrigin = `${CX}px ${CY}px`; });
+  grid.style.transformOrigin = `${CX}px ${CY + 420}px`;
+
+  /* ---------- IDEAS TAKE SHAPE. (each line hinges up out of its mask) ---------- */
+  const IDEA_LINES = ['IDEAS', 'TAKE', 'SHAPE.'].map((txt, i) => {
+    const m = document.createElement('div'); m.className = 'mask';
+    Object.assign(m.style, { top: (CY - 240 + i * 160) + 'px', height: '160px' });
+    const d = document.createElement('div'); d.className = 'idea' + (i === 2 ? ' accent' : ''); d.textContent = txt;
+    m.appendChild(d); $('ideas').appendChild(m); return d;
+  });
+
+  /* ---------- THINK. as a solid block of type ---------- */
+  const THINK_DEPTH = HQ ? 16 : 6, THINK_STEP = HQ ? 3.5 : 9;
+  for (let i = THINK_DEPTH - 1; i >= 0; i--) {
+    const d = document.createElement('div'); d.textContent = 'THINK.';
+    d.style.transform = `translateZ(${-i * THINK_STEP}px)`;
+    const k = i / THINK_DEPTH;
+    d.style.color = i === 0 ? '#F7F3FF' : `rgb(${Math.round(mix(120, 40, k))}, ${Math.round(mix(88, 26, k))}, ${Math.round(mix(200, 92, k))})`;
+    $('think').appendChild(d);
+  }
+
+  /* ---------- DESIGN. as bands that become the monogram ---------- */
+  const N = 12;
+  const WORD = { left: 40, top: 820, w: 1000, h: 280 };
+  const BANDS = [];
+  for (let i = 0; i < N; i++) {
+    const b = document.createElement('div'); b.className = 'band';
+    const w = document.createElement('div'); w.className = 'word'; w.textContent = 'DESIGN.';
+    const wt = WORD.h * (i + 0.5) / N, it = MONO_H * (i + 0.5) / N;
+    Object.assign(w.style, { left: -WORD.w / 2 + 'px', top: -wt + 'px', width: WORD.w + 'px', height: WORD.h + 'px',
+      clipPath: `inset(${(i / N) * 100}% 0 ${100 - ((i + 1) / N) * 100}% 0)`, transformOrigin: `${WORD.w / 2}px ${wt}px` });
+    const img = document.createElement('img'); img.src = MONO_SRC; img.alt = '';
+    Object.assign(img.style, { left: -MONO_W / 2 + 'px', top: -it + 'px', width: MONO_W + 'px', height: MONO_H + 'px',
+      clipPath: `inset(${(i / N) * 100}% 0 ${100 - ((i + 1) / N) * 100}% 0)` });
+    b.append(w, img); $('bands').appendChild(b);
+    BANDS.push({ i, el: b, word: w, img, side: i % 2 ? 1 : -1, sy: WORD.top + wt, ex: CX, ey: MONO_TOP + it });
+  }
+
+  /* ---------- the master timeline: render(t) is a pure function of t ---------- */
+  const el = { world: $('world'), flood: $('flood'), spark: $('spark'), ring: $('ring'), think: $('think'), assembly: $('assembly'), mono, halo: $('halo'), key: $('key'), lockup: $('lockup'), reflect: $('reflect'), vintro: $('vintro'), designs: $('designs'), tag: $('tag'), sweep };
+
+  function render(t) {
+    /* CAMERA: one move per act, each with a job, landing still for the brand */
+    const camZ = mix(-260, 0, p(t, 0, 2.6, E.soft)) + 140 * hump(p(t, 8.2, 11.6, E.soft));
+    const orbit = 9 * p(t, 2.2, 4.4, E.inOut) * (1 - p(t, 4.4, 5.1, E.inOut));
+    const swing = t >= 5.0 ? mix(-16, 10, p(t, 5.0, 6.9, E.inOut)) * (1 - p(t, 6.9, 7.9, E.inOut)) : 0;
+    const camRX = 6 * p(t, 2.2, 4.0, E.inOut) * (1 - p(t, 4.4, 5.1, E.inOut));
+    el.world.style.transformOrigin = `${CX}px ${CY}px`;
+    el.world.style.transform = `translateZ(${camZ}px) rotateX(${camRX}deg) rotateY(${orbit + swing}deg)`;
+
+    /* 0-2  THE SPARK */
+    const sIn = p(t, 0.25, 0.75, E.out);
+    const pulse = hump((t - 0.8) / 0.5);
+    const stretch = p(t, 1.3, 2.05, E.inOut);
+    const sw = mix(14, 780, stretch), sh = mix(14, 2.4, stretch);
+    Object.assign(el.spark.style, { width: sw + 'px', height: sh + 'px', marginLeft: -sw / 2 + 'px', marginTop: -sh / 2 + 'px', borderRadius: sh / 2 + 'px',
+      opacity: t < 2.05 ? sIn : 0, transform: `scale(${mix(0.3, 1, sIn) * (1 + pulse * 0.45 * (1 - stretch))})` });
+    const ringK = clamp((t - 0.85) / 0.9);
+    Object.assign(el.ring.style, { opacity: t > 0.85 ? (1 - ringK) * 0.8 : 0, transform: `scale(${mix(1, 9, E.out(ringK))})` });
+
+    /* 2-5  IDEAS TAKE SHAPE: the line becomes a grid, the grid tips back into a floor */
+    const gridCollapse = p(t, 4.45, 5.0, E.inOut);
+    grid.style.opacity = t >= 2.0 && t < 5.15 ? 1 : 0;
+    const tilt = 64 * p(t, 3.55, 4.35, E.inOut) * (1 - gridCollapse);
+    grid.style.transform = `rotateX(${tilt}deg)`;
+    const cw = mix(390, 470, p(t, 2.0, 2.9, E.out));
+    centre.setAttribute('x1', CX - cw); centre.setAttribute('x2', CX + cw);
+    H_LINES.forEach(({ k, el: l }) => {
+      const g = p(t, 2.0 + Math.abs(k) * 0.06, 2.85 + Math.abs(k) * 0.06, E.out) * (1 - gridCollapse);
+      const y = CY + k * 120 * g, w = mix(390, 470, g) + tilt * 6;
+      l.setAttribute('x1', CX - w); l.setAttribute('x2', CX + w); l.setAttribute('y1', y); l.setAttribute('y2', y);
+      l.setAttribute('opacity', 0.34 * Math.min(1, g * 3));
+    });
+    V_LINES.forEach(({ k, el: l }) => {
+      const g = p(t, 2.15 + Math.abs(k) * 0.07, 3.0 + Math.abs(k) * 0.07, E.out) * (1 - gridCollapse);
+      const half = 520 * g;
+      l.setAttribute('y1', CY - half); l.setAttribute('y2', CY + half); l.setAttribute('opacity', 0.34 * Math.min(1, g * 3));
+    });
+    shapes.forEach((s) => {
+      const d = p(t, s.at, s.at + 0.8, E.glide);
+      s.el.setAttribute('stroke-dashoffset', s.len * (1 - d));
+      s.el.setAttribute('opacity', (d > 0 ? 0.75 : 0) * (1 - gridCollapse));
+      s.el.style.transform = `scale(${mix(1, 0.2, gridCollapse)})`;
+    });
+    IDEA_LINES.forEach((d, i) => {
+      const a = p(t, 3.0 + i * 0.14, 3.75 + i * 0.14, E.out);
+      const o = p(t, 4.2 + i * 0.06, 4.7 + i * 0.06, E.in);
+      d.style.transform = `translateY(${(1 - a) * 70 - o * 100}%) rotateX(${(1 - a) * -80 + o * 70}deg)`;
+      d.parentNode.style.opacity = t >= 2.9 && t < 4.85 ? 1 : 0;
+    });
+
+    /* 5-8  THINK. -> DESIGN. */
+    const thinkOpen = p(t, 5.0, 5.6, E.out);
+    const thinkExit = p(t, 6.3, 6.8, E.in);
+    const thinkScale = mix(1.3, 1.0, p(t, 5.0, 6.3, E.glide));
+    Object.assign(el.think.style, { opacity: t >= 4.98 && t < 6.8 ? 1 : 0,
+      transform: `translateY(${-thinkExit * 1150}px) translateZ(${-thinkExit * 400}px) rotateX(${thinkExit * 30}deg) scale(${thinkScale}) scaleY(${Math.max(0.004, thinkOpen)})` });
+    const fIn = p(t, 5.85, 6.55, E.inOut), fOut = p(t, 8.05, 9.0, E.inOut);
+    const r = 1250 * fIn * (1 - fOut);
+    Object.assign(el.flood.style, { width: 2 * r + 'px', height: 2 * r + 'px', marginLeft: -r + 'px', marginTop: -r + 'px', opacity: r > 1 ? 1 : 0 });
+
+    // the assembly turns in space while the bands fly, so the monogram arrives already showing its depth
+    const turnIn = p(t, 8.3, 9.9, E.inOut), turnOut = p(t, 10.55, 12.3, E.inOut);
+    const ry = -28 * turnIn * (1 - turnOut), rx = 9 * turnIn * (1 - turnOut);
+    const rise = p(t, 10.95, 11.9, E.inOut);
+    const creep = mix(1, 1.025, p(t, 11.9, 15, E.soft));
+    el.assembly.style.transformOrigin = `${CX}px ${CY}px`;
+    el.assembly.style.transform = `translateY(${RISE * rise}px) rotateY(${ry}deg) rotateX(${rx}deg) scale(${creep})`;
+
+    const groupScale = mix(1.45, 1, p(t, 6.5, 7.9, E.glide));
+    const monoIn = p(t, 10.3, 10.75, E.soft);
+    BANDS.forEach((b) => {
+      const enter = p(t, 6.5 + b.i * 0.022, 7.25 + b.i * 0.022, E.out);
+      const brk = p(t, 7.95, 8.35, E.inOut);
+      const f0 = 8.35 + b.i * 0.06, f1 = f0 + 1.45;
+      const k = p(t, f0, f1, E.inOut);
+      const gx = CX + b.side * (1 - enter) * 1300 + b.side * brk * 20;
+      const gy = CY + (b.sy - CY) * groupScale + (b.i - (N - 1) / 2) * brk * 6;
+      const gz = (1 - enter) * -500 + b.side * brk * 70;
+      const cx = (gx + b.ex) / 2 + b.side * (150 + b.i * 9), cy = (gy + b.ey) / 2 - 40;
+      const x = (1 - k) ** 2 * gx + 2 * (1 - k) * k * cx + k * k * b.ex;
+      const y = (1 - k) ** 2 * gy + 2 * (1 - k) * k * cy + k * k * b.ey;
+      const z = mix(gz, 0, k) + hump(k) * (240 + b.i * 14);          // each segment loops toward the lens, then lands
+      const tumbleX = hump(k) * b.side * 38, tumbleY = hump(k) * b.side * -24;
+      const sc = k > 0 ? 1 : groupScale;
+      b.el.style.opacity = t >= 6.5 && t < 10.8 ? 1 : 0;
+      b.el.style.transform = `translate3d(${x}px, ${y}px, ${z}px) rotateX(${tumbleX + (1 - enter) * b.side * 60}deg) rotateY(${tumbleY}deg) scale(${sc})`;
+      const swap = p(t, f0 + 0.25, f0 + 0.75, E.soft);
+      b.word.style.opacity = 1 - swap;
+      b.word.style.transform = `scaleX(${mix(1, 0.62, k)})`;
+      b.img.style.opacity = swap * (1 - monoIn);
+    });
+
+    /* 11-15  THE BRAND REVEAL */
+    el.mono.style.opacity = monoIn;
+    el.reflect.style.opacity = 0; // a floor reflection crowded the wordmark: the halo carries the depth instead
+    el.halo.style.opacity = p(t, 10.4, 12.0, E.soft);
+    el.halo.style.transform = `translateY(${RISE * rise}px) scale(${mix(0.85, 1, p(t, 10.4, 15, E.soft))})`;
+    el.key.style.opacity = 0.4 + 0.6 * p(t, 10.4, 12.5, E.soft);
+    const sw2 = p(t, 13.05, 14.2, E.soft);
+    el.sweep.style.background = `linear-gradient(115deg, rgba(247,243,255,0) ${mix(-40, 110, sw2)}%, rgba(247,243,255,0.55) ${mix(-28, 122, sw2)}%, rgba(247,243,255,0) ${mix(-16, 134, sw2)}%)`;
+    el.sweep.style.opacity = t > 13.05 && t < 14.2 ? 1 : 0;
+
+    // the wordmark comes forward out of depth, line by line
+    el.lockup.style.transformOrigin = `${CX}px ${CY}px`;
+    el.lockup.style.transform = `scale(${creep})`;
+    const v = p(t, 11.5, 12.3, E.out);
+    Object.assign(el.vintro.style, { opacity: v, filter: `blur(${(1 - v) * 10}px)`, transform: `translateZ(${(1 - v) * -420}px) rotateX(${(1 - v) * 50}deg)` });
+    const d = p(t, 11.95, 12.75, E.inOut);
+    el.designs.style.clipPath = `inset(0 ${(1 - d) * 50}% 0 ${(1 - d) * 50}%)`;
+    const g = p(t, 12.35, 13.0, E.out);
+    Object.assign(el.tag.style, { opacity: g, transform: `translateY(${(1 - g) * 18}px)`, filter: `blur(${(1 - g) * 6}px)` });
+  }
+
+  /* ---------- playback ---------- */
+  const frame = $('frame'), stage = $('stage'), scrub = $('scrub'), clock = $('clock'), playBtn = $('play'), playIcon = $('playIcon');
+  const fit = () => { stage.style.transform = `scale(${frame.clientWidth / 1080})`; };
+  new ResizeObserver(fit).observe(frame); fit();
+
+  let t = 0, playing = true, last = null;
+  if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) { t = DUR; playing = false; }
+  const ICON_PAUSE = '<path d="M7 5h3.5v14H7zM13.5 5H17v14h-3.5z"/>', ICON_PLAY = '<path d="M8 5v14l11-7z"/>';
+  const sync = () => {
+    render(t);
+    scrub.value = Math.round(t * 1000);
+    clock.textContent = `${t.toFixed(2).padStart(5, '0')} / 15`;
+    playIcon.innerHTML = playing ? ICON_PAUSE : ICON_PLAY;
+    playBtn.setAttribute('aria-label', playing ? 'Pause' : 'Play');
+  };
+  const tick = (now) => {
+    if (playing) {
+      if (last !== null) t = Math.min(DUR, t + (now - last) / 1000);
+      last = now;
+      if (t >= DUR) { playing = false; last = null; }
+      sync();
+    } else last = null;
+    requestAnimationFrame(tick);
+  };
+  playBtn.addEventListener('click', () => { if (!playing && t >= DUR) t = 0; playing = !playing; last = null; sync(); });
+  $('replay').addEventListener('click', () => { t = 0; playing = true; last = null; sync(); });
+  scrub.addEventListener('input', () => { t = scrub.value / 1000; playing = false; sync(); });
+  const start = () => { sync(); requestAnimationFrame(tick); };
+  (document.fonts && document.fonts.ready ? Promise.race([document.fonts.ready, new Promise((r) => setTimeout(r, 1500))]) : Promise.resolve()).then(start);
+  window.__render = (s) => { t = s; playing = false; sync(); };
+})();
+</script>
