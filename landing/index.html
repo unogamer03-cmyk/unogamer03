@@ -3,497 +3,672 @@
 <meta name="description" content="مِداد — استوديو تصميم هويات بصرية وشعارات وحملات للسعودية والخليج.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Reem+Kufi:wght@500;700&family=IBM+Plex+Sans+Arabic:wght@400;500;700&family=Space+Grotesk:wght@500;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Reem+Kufi:wght@500;700&family=IBM+Plex+Sans+Arabic:wght@400;500;700&family=Unbounded:wght@500;700;800&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <style>
-/* Layout: print-proof sheet. Asymmetric 12-col grid, crop marks + CMYK colour bar as the studio's signature, sharp brutalist edges. */
+/* Layout: one continuous scroll-driven 3D stage. A fixed WebGL layer (ink drop + letterpress type blocks) sits between each
+   section's background and its text. Sections move light → graphite → black → magenta. Tiny mono UI, giant wordmark, pill buttons.
+   Deliberately single-look (immersive): every colour is set explicitly per section, no light/dark switch. */
 :root {
-  --paper: #EEF0F2;      /* cool proof paper */
-  --ink: #0B1B2B;        /* process blue-black */
-  --ink-soft: #3A4A5C;
-  --rule: #0B1B2B;
-  --magenta: #C8006A;    /* process magenta: the one loud colour */
-  --on-magenta: #FFFFFF;
-  --cyan: #007DB8;
-  --yellow: #F2C500;
-  --card: #FFFFFF;
-  --muted: #DDE2E7;
+  color-scheme: light;
+  --paper: #E8E9EB;     /* hero: cool studio grey */
+  --paper-ink: #0E0F12;
+  --graphite: #17191E;  /* work */
+  --black: #08090B;     /* services / process */
+  --magenta: #E6007E;   /* process magenta, the studio's colour */
+  --magenta-deep: #5C0034;
+  --yellow: #FFE14D;    /* glow accent on magenta only */
+  --light: #F2F2F0;
+  --dim-on-dark: #A3A7B0;
+  --dim-on-light: #4B4F57;
+  --line-dark: rgba(242, 242, 240, .16);
+  --line-light: rgba(14, 15, 18, .18);
 
-  --f-display-ar: "Reem Kufi", "IBM Plex Sans Arabic", "Geeza Pro", Tahoma, sans-serif;
-  --f-body-ar: "IBM Plex Sans Arabic", "Geeza Pro", Tahoma, sans-serif;
-  --f-display-en: "Space Grotesk", "Helvetica Neue", Arial, sans-serif;
+  --f-ar-display: "Reem Kufi", "IBM Plex Sans Arabic", "Geeza Pro", Tahoma, sans-serif;
+  --f-ar: "IBM Plex Sans Arabic", "Geeza Pro", Tahoma, sans-serif;
+  --f-en-display: "Unbounded", "Arial Black", Arial, sans-serif;
+  --f-en: "IBM Plex Sans Arabic", "Helvetica Neue", Arial, sans-serif;
   --f-mono: "IBM Plex Mono", ui-monospace, Menlo, Consolas, monospace;
-
-  --s-1: 8px; --s-2: 16px; --s-3: 24px; --s-4: 40px; --s-5: 64px; --s-6: 96px;
-  --border: 2px solid var(--rule);
-  --maxw: 1280px;
+  --maxw: 1360px;
 }
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) {
-    --paper: #0C141D; --ink: #E7ECF1; --ink-soft: #A7B3C0; --rule: #E7ECF1;
-    --magenta: #FF4FA3; --on-magenta: #0C141D; --cyan: #4CC3F0; --yellow: #F2C500;
-    --card: #131E2A; --muted: #1C2938; color-scheme: dark;
-  }
-}
-:root[data-theme="dark"] {
-  --paper: #0C141D; --ink: #E7ECF1; --ink-soft: #A7B3C0; --rule: #E7ECF1;
-  --magenta: #FF4FA3; --on-magenta: #0C141D; --cyan: #4CC3F0; --yellow: #F2C500;
-  --card: #131E2A; --muted: #1C2938; color-scheme: dark;
-}
-
 *, *::before, *::after { box-sizing: border-box; }
-html { scroll-behavior: smooth; }
-body {
-  background: var(--paper); color: var(--ink);
-  font-family: var(--f-body-ar); font-size: 16px; line-height: 1.7;
-  -webkit-font-smoothing: antialiased;
-}
-html[lang="en"] body { font-family: var(--f-display-en); line-height: 1.6; }
-body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--paper); }
-
-.wrap {
-  max-width: var(--maxw); margin-inline: auto;
-  padding-left: max(16px, env(safe-area-inset-left, 0px));
-  padding-right: max(16px, env(safe-area-inset-right, 0px));
-}
-h1, h2, h3 { font-family: var(--f-display-ar); font-weight: 700; line-height: 1.15; margin: 0; text-wrap: balance; }
-html[lang="en"] h1, html[lang="en"] h2, html[lang="en"] h3 { font-family: var(--f-display-en); letter-spacing: -0.02em; }
+html { background: var(--black); }
+body { margin: 0; background: var(--paper); color: var(--paper-ink); font-family: var(--f-ar); font-size: 16px; line-height: 1.7; -webkit-font-smoothing: antialiased; overflow-x: hidden; }
+html[lang="en"] body { font-family: var(--f-en); }
+h1, h2, h3 { margin: 0; font-family: var(--f-ar-display); font-weight: 700; line-height: 1.12; text-wrap: balance; }
+html[lang="en"] h1, html[lang="en"] h2, html[lang="en"] h3 { font-family: var(--f-en-display); text-transform: uppercase; letter-spacing: -0.02em; line-height: 1.02; }
 p { margin: 0; }
 a { color: inherit; }
-.mono { font-family: var(--f-mono); font-size: 12px; letter-spacing: 0.06em; text-transform: uppercase; direction: ltr; unicode-bidi: isolate; }
-.eyebrow { font-family: var(--f-mono); font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-soft); }
-html[lang="ar"] .eyebrow { letter-spacing: 0; text-transform: none; font-family: var(--f-body-ar); font-weight: 500; font-size: 14px; }
+:focus-visible { outline: 3px solid var(--magenta); outline-offset: 3px; }
+.wrap { position: relative; z-index: 2; max-width: var(--maxw); margin-inline: auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+.mono { font-family: var(--f-mono); font-size: 11px; letter-spacing: .1em; text-transform: uppercase; direction: ltr; unicode-bidi: isolate; }
+.skip { position: fixed; z-index: 60; inset-inline-start: 16px; top: -60px; background: var(--magenta); color: #fff; padding: 8px 14px; }
+.skip:focus { top: calc(10px + env(safe-area-inset-top, 0px)); }
 
-:focus-visible { outline: 3px solid var(--cyan); outline-offset: 3px; }
-.skip { position: absolute; inset-inline-start: 16px; top: -60px; background: var(--ink); color: var(--paper); padding: 8px 14px; z-index: 50; }
-.skip:focus { top: calc(8px + env(safe-area-inset-top, 0px)); }
-
-/* Buttons */
-.btn {
-  display: inline-flex; align-items: center; gap: 10px; min-height: 48px; padding: 0 22px;
-  font: inherit; font-weight: 700; text-decoration: none; cursor: pointer;
-  border: var(--border); background: var(--card); color: var(--ink);
-  transition: transform .18s ease, box-shadow .18s ease, background-color .18s ease;
-}
-.btn:hover { transform: translate(-3px, -3px); box-shadow: 3px 3px 0 var(--rule); }
-html[dir="rtl"] .btn:hover { transform: translate(3px, -3px); box-shadow: -3px 3px 0 var(--rule); }
-.btn--primary { background: var(--magenta); color: var(--on-magenta); border-color: var(--magenta); }
-.btn svg { width: 18px; height: 18px; flex: none; }
-html[dir="rtl"] .btn svg.flip { transform: scaleX(-1); }
+/* WebGL stage */
+#stage { position: fixed; inset: 0; z-index: 1; pointer-events: none; display: block; width: 100%; height: 100%; }
 
 /* Header */
-.top { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 20; background: var(--paper); border-bottom: var(--border); }
-.top .wrap { display: flex; align-items: center; gap: var(--s-3); min-height: 68px; }
-.logo { display: flex; align-items: baseline; gap: 10px; text-decoration: none; }
-.logo b { font-family: var(--f-display-ar); font-size: 28px; line-height: 1; }
-.logo span { font-family: var(--f-display-en); font-weight: 700; font-size: 13px; letter-spacing: 0.14em; }
-.logo i { width: 10px; height: 10px; background: var(--magenta); display: inline-block; }
-.nav { display: flex; gap: var(--s-3); margin-inline-start: auto; }
-.nav a { text-decoration: none; font-weight: 500; padding-block: 6px; border-bottom: 2px solid transparent; }
-.nav a:hover { border-bottom-color: var(--magenta); }
-.top-actions { display: flex; gap: var(--s-1); align-items: center; }
-.lang { min-height: 44px; min-width: 52px; padding: 0 12px; border: var(--border); background: transparent; color: var(--ink); font-family: var(--f-mono); font-weight: 500; cursor: pointer; }
-.lang:hover { background: var(--ink); color: var(--paper); }
-@media (max-width: 860px) { .nav { display: none; } .top-actions { margin-inline-start: auto; } .top .btn { display: none; } }
-
-/* Hero — framed like a proof sheet */
-.hero { padding-block: var(--s-5) var(--s-4); }
-.sheet { position: relative; border: var(--border); background: var(--card); padding: clamp(24px, 5vw, 64px); }
-.sheet::before, .sheet::after, .sheet > .crop-b::before, .sheet > .crop-b::after {
-  content: ""; position: absolute; width: 22px; height: 22px; border-color: var(--ink); border-style: solid;
-}
-.sheet::before { top: -14px; left: -14px; border-width: 0 1px 1px 0; }
-.sheet::after { top: -14px; right: -14px; border-width: 0 0 1px 1px; }
-.sheet > .crop-b::before { bottom: -14px; left: -14px; border-width: 1px 1px 0 0; }
-.sheet > .crop-b::after { bottom: -14px; right: -14px; border-width: 1px 0 0 1px; }
-.hero-grid { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: var(--s-3); align-items: end; }
-.hero h1 { grid-column: 1 / span 9; font-size: clamp(44px, 8.4vw, 120px); line-height: 1.08; }
-html[lang="en"] .hero h1 { line-height: 0.98; }
-.hero h1 em { font-style: normal; color: var(--magenta); }
-.hero-side { grid-column: 10 / span 3; display: grid; gap: var(--s-3); padding-bottom: 10px; }
-.hero-side p { color: var(--ink-soft); }
-.hero-cta { grid-column: 1 / -1; display: flex; flex-wrap: wrap; gap: var(--s-2); align-items: center; margin-top: var(--s-3); }
-@media (max-width: 860px) { .hero h1, .hero-side { grid-column: 1 / -1; } }
-
-/* CMYK colour bar */
-.colorbar { display: grid; grid-template-columns: repeat(8, minmax(0, 1fr)); border: var(--border); border-top: 0; direction: ltr; }
-.colorbar div { min-height: 44px; display: flex; align-items: flex-end; padding: 6px 8px; font-family: var(--f-mono); font-size: 11px; border-inline-end: 1px solid var(--rule); }
-.colorbar div:last-child { border-inline-end: 0; }
-@media (max-width: 560px) { .colorbar { grid-template-columns: repeat(4, minmax(0, 1fr)); } .colorbar div:nth-child(n+5) { display: none; } }
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: transparent; }
+.top { position: fixed; z-index: 30; top: env(safe-area-inset-top, 0px); inset-inline: 0; transition: color .3s ease; color: var(--paper-ink); }
+.top[data-tone="dark"] { color: var(--light); }
+.top .bar { display: flex; align-items: center; gap: 24px; min-height: 64px; max-width: var(--maxw); margin-inline: auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+.logo { display: inline-flex; align-items: center; gap: 10px; text-decoration: none; font-family: var(--f-ar-display); font-size: 22px; }
+.logo i { width: 22px; height: 22px; background: var(--magenta); display: inline-grid; place-items: center; }
+.logo i::after { content: ""; width: 8px; height: 8px; border-radius: 50%; background: #0E0F12; }
+.nav { display: flex; gap: 28px; margin-inline: auto; }
+.nav a { text-decoration: none; display: inline-flex; gap: 6px; align-items: baseline; padding-block: 8px; border-bottom: 1px solid transparent; font-size: 14px; font-weight: 500; }
+.nav a .mono { opacity: .55; }
+.nav a[aria-current="true"] { border-bottom-color: currentColor; }
+.top-actions { display: flex; gap: 8px; align-items: center; margin-inline-start: auto; }
+.lang { min-height: 40px; min-width: 44px; border-radius: 999px; border: 1px solid currentColor; background: transparent; color: inherit; font-family: var(--f-mono); font-size: 12px; cursor: pointer; }
+.pill { display: inline-flex; align-items: center; gap: 10px; min-height: 44px; padding-inline: 18px 6px; border-radius: 999px; text-decoration: none; font-weight: 700; font-size: 14px; cursor: pointer; border: 0; font-family: inherit; transition: transform .2s ease, background-color .2s ease; }
+.pill .dot { width: 32px; height: 32px; border-radius: 50%; display: inline-grid; place-items: center; transition: transform .25s ease; }
+.pill .dot svg { width: 14px; height: 14px; }
+html[dir="rtl"] .pill .dot svg { transform: scaleX(-1); }
+.pill:hover .dot { transform: rotate(-45deg); }
+html[dir="rtl"] .pill:hover .dot { transform: rotate(45deg); }
+.pill--hot { background: var(--magenta); color: #fff; }
+.pill--hot .dot { background: #fff; color: var(--magenta); }
+.pill--ink { background: #0E0F12; color: var(--light); }
+.pill--ink .dot { background: var(--light); color: #0E0F12; }
+.pill--ghost { background: transparent; color: inherit; box-shadow: inset 0 0 0 1px currentColor; }
+.pill--ghost .dot { background: currentColor; }
+.pill--ghost .dot svg { color: var(--paper); }
+.pill--glow { background: var(--yellow); color: #1A0010; box-shadow: 0 0 32px rgba(255, 225, 77, .45); }
+.pill--glow .dot { background: #1A0010; color: var(--yellow); }
+@media (max-width: 900px) { .nav { display: none; } .top .pill { display: none; } }
 
 /* Sections */
-section { padding-block: var(--s-6) 0; }
-.sec-head { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: var(--s-3); align-items: end; padding-bottom: var(--s-3); border-bottom: var(--border); margin-bottom: var(--s-4); }
-.sec-head h2 { grid-column: 1 / span 7; font-size: clamp(34px, 5vw, 64px); }
-.sec-head p { grid-column: 8 / span 5; color: var(--ink-soft); max-width: 46ch; }
-.sec-head .eyebrow { grid-column: 1 / -1; }
-@media (max-width: 860px) { .sec-head h2, .sec-head p { grid-column: 1 / -1; } }
+.sec { position: relative; }
+.sec-hero { background: var(--paper); color: var(--paper-ink); min-height: 640px; padding-top: calc(96px + env(safe-area-inset-top, 0px)); overflow: hidden; }
+.sec-work { background: linear-gradient(var(--paper) 0, var(--graphite) 220px); color: var(--light); padding-block: 260px 120px; }
+.sec-services { background: linear-gradient(var(--graphite) 0, var(--black) 200px); color: var(--light); padding-block: 200px 120px; }
+.sec-process { background: var(--black); color: var(--light); padding-block: 40px 140px; }
+.sec-contact { background: radial-gradient(120% 90% at 50% 100%, var(--magenta) 0, #8A0049 45%, var(--magenta-deep) 75%, var(--black) 100%); color: var(--light); padding-block: 220px 0; }
 
-/* Work */
-.filters { display: flex; flex-wrap: wrap; gap: var(--s-1); margin-bottom: var(--s-3); }
-.chip { min-height: 44px; padding: 0 18px; border: var(--border); background: transparent; color: var(--ink); font: inherit; font-weight: 500; cursor: pointer; transition: background-color .15s ease, color .15s ease; }
-.chip[aria-pressed="true"] { background: var(--ink); color: var(--paper); }
-.chip:hover:not([aria-pressed="true"]) { background: var(--muted); }
-.work { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: var(--s-3); }
-.piece { grid-column: span 4; display: grid; gap: 12px; margin: 0; }
-.piece.wide { grid-column: span 8; }
-@media (max-width: 960px) { .piece, .piece.wide { grid-column: span 6; } }
-@media (max-width: 600px) { .piece, .piece.wide { grid-column: 1 / -1; } }
-.art { position: relative; aspect-ratio: 4 / 3; max-width: 100%; border: var(--border); overflow: hidden; display: grid; place-items: center; }
-.piece.wide .art { aspect-ratio: 16 / 9; }
-.piece figcaption { display: flex; justify-content: space-between; gap: var(--s-2); align-items: baseline; }
-.piece figcaption strong { font-size: 18px; }
-.piece figcaption span { color: var(--ink-soft); font-size: 14px; }
-.tag-sample { position: absolute; inset-block-start: 10px; inset-inline-start: 10px; background: var(--paper); color: var(--ink); border: 1px solid var(--rule); padding: 2px 8px; font-size: 12px; }
+/* Hero */
+.hero-grid { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 24px; align-items: start; }
+.hero-copy { grid-column: 1 / span 4; display: grid; gap: 22px; padding-top: 40px; }
+.hero-copy h1 { font-size: clamp(34px, 3.6vw, 52px); }
+html[lang="en"] .hero-copy h1 { font-size: clamp(26px, 2.6vw, 38px); }
+.hero-actions { display: flex; flex-wrap: wrap; gap: 10px; }
+.hero-meta { grid-column: 10 / span 3; display: grid; gap: 14px; padding-top: 40px; }
+.hero-meta .big { font-family: var(--f-en-display); font-weight: 500; font-size: clamp(30px, 3.4vw, 50px); line-height: 1; direction: ltr; text-align: end; display: flex; justify-content: space-between; gap: 12px; }
+.hero-meta p { color: var(--dim-on-light); font-size: 14px; }
+.hero-meta .mono-row { display: flex; justify-content: space-between; gap: 12px; color: var(--dim-on-light); }
+.wordmark { position: relative; z-index: 0; margin-top: clamp(40px, 10vw, 150px); font-family: var(--f-ar-display); font-weight: 700; font-size: clamp(120px, 27vw, 420px); line-height: .8; letter-spacing: -0.01em; text-align: center; color: var(--paper-ink); white-space: nowrap; user-select: none; }
+html[lang="en"] .wordmark { font-family: var(--f-en-display); font-weight: 800; font-size: clamp(76px, 19vw, 300px); letter-spacing: -0.04em; line-height: .86; }
+.hero-foot { position: relative; z-index: 2; display: flex; justify-content: space-between; gap: 16px; padding-block: 18px 22px; color: var(--dim-on-light); border-top: 1px solid var(--line-light); margin-top: 12px; }
+.hero-foot .hint { display: inline-flex; gap: 8px; align-items: center; font-size: 13px; }
+.hero-foot .hint b { width: 8px; height: 8px; border-radius: 50%; background: var(--magenta); animation: pulse 1.6s ease-in-out infinite; }
+@keyframes pulse { 50% { transform: scale(1.7); opacity: .4; } }
+.no-webgl .sec-hero::after { content: ""; position: absolute; z-index: 1; width: min(46vw, 520px); aspect-ratio: 1; inset-inline-start: 18%; top: 22%; border-radius: 50%; background: radial-gradient(circle at 35% 30%, #5a5d66 0, #0E0F12 45%, #000 70%); box-shadow: inset -30px -30px 80px rgba(230, 0, 126, .45); }
+@media (max-width: 900px) {
+  .hero-copy, .hero-meta { grid-column: 1 / -1; }
+  .hero-copy { padding-top: 8px; }
+  .hero-meta { padding-top: 0; }
+  .hero-meta .big { justify-content: flex-start; gap: 24px; }
+  .sec-hero { min-height: 0; }
+  .wordmark { margin-top: 220px; }
+}
 
-/* concept art pieces (pure CSS placeholders for real project images) */
-.a1 { background: var(--magenta); color: var(--on-magenta); }
-.a1 .glyph { font-family: var(--f-display-ar); font-size: clamp(120px, 20vw, 260px); line-height: 1; }
-.a1 .word { position: absolute; inset-block-end: 16px; inset-inline-end: 20px; font-family: var(--f-display-en); font-weight: 700; letter-spacing: .3em; font-size: 14px; direction: ltr; }
-.a2 { background: var(--ink); }
-.a2 .mark { width: 46%; aspect-ratio: 1; border-radius: 50%; background: conic-gradient(var(--yellow) 0 25%, transparent 0 50%, var(--cyan) 0 75%, transparent 0); border: 2px solid var(--yellow); }
-.a3 { background: var(--yellow); color: #0B1B2B; }
-.a3 .stack { display: grid; gap: 6px; width: 70%; }
-.a3 .stack i { display: block; height: 18px; background: #0B1B2B; }
-.a3 .stack i:nth-child(2) { width: 70%; } .a3 .stack i:nth-child(3) { width: 45%; background: #C8006A; }
-.a4 { background: var(--card); background-image: repeating-linear-gradient(90deg, var(--muted) 0 1px, transparent 1px 32px), repeating-linear-gradient(0deg, var(--muted) 0 1px, transparent 1px 32px); }
-.a4 .box { width: 34%; aspect-ratio: 2/3; background: var(--cyan); border: 2px solid var(--rule); box-shadow: 14px 14px 0 var(--ink); }
-.a5 { background: var(--card); }
-.a5 .poster { font-family: var(--f-display-ar); font-size: clamp(36px, 5.6vw, 76px); line-height: 1.05; text-align: center; color: var(--ink); }
-.a5 .poster span { color: var(--magenta); }
+/* Section heads */
+.head { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 24px; align-items: end; margin-bottom: 48px; }
+.head .mono { grid-column: 1 / -1; opacity: .6; }
+.head h2 { grid-column: 1 / span 7; font-size: clamp(40px, 6vw, 88px); }
+html[lang="en"] .head h2 { font-size: clamp(30px, 4.4vw, 64px); }
+.head p { grid-column: 9 / span 4; color: var(--dim-on-dark); }
+@media (max-width: 900px) { .head h2, .head p { grid-column: 1 / -1; } }
 
-/* Process — a real sequence, so numbered */
-.steps { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); border: var(--border); counter-reset: step; list-style: none; margin: 0; padding: 0; }
-.steps li { padding: var(--s-4) var(--s-3); border-inline-end: var(--border); display: grid; gap: 12px; align-content: start; min-width: 0; }
-.steps li:last-child { border-inline-end: 0; }
-.steps .n { font-family: var(--f-display-en); font-weight: 700; font-size: 48px; line-height: 1; color: var(--magenta); }
+/* Work cards with 3D tilt */
+.work { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 20px; perspective: 1400px; }
+.card { grid-column: span 4; margin: 0; display: grid; gap: 12px; }
+.card.tall { grid-column: span 5; } .card.wide { grid-column: span 7; }
+@media (max-width: 1000px) { .card, .card.tall, .card.wide { grid-column: span 6; } }
+@media (max-width: 620px) { .card, .card.tall, .card.wide { grid-column: 1 / -1; } }
+.card .art { position: relative; aspect-ratio: 4 / 3; max-width: 100%; border-radius: 6px; overflow: hidden; display: grid; place-items: center; transform-style: preserve-3d; transition: transform .35s cubic-bezier(.2,.7,.2,1), box-shadow .35s ease; box-shadow: 0 30px 60px rgba(0,0,0,.45); }
+.card.wide .art { aspect-ratio: 16 / 10; }
+.card figcaption { display: flex; justify-content: space-between; gap: 16px; align-items: baseline; }
+.card figcaption strong { font-size: 18px; }
+.card figcaption span { color: var(--dim-on-dark); font-size: 14px; }
+.card .tag { position: absolute; top: 12px; inset-inline-start: 12px; z-index: 2; padding: 3px 10px; border-radius: 999px; background: rgba(8, 9, 11, .6); color: var(--light); font-size: 12px; backdrop-filter: blur(6px); }
+.card .idx { position: absolute; bottom: 12px; inset-inline-end: 14px; z-index: 2; color: rgba(242,242,240,.75); }
+.art-1 { background: radial-gradient(circle at 30% 25%, #ff4fa8 0, var(--magenta) 35%, #6b003b 100%); }
+.art-1 .g { font-family: var(--f-ar-display); font-size: clamp(120px, 16vw, 230px); line-height: 1; color: #fff; text-shadow: 0 18px 40px rgba(0,0,0,.35); transform: translateZ(40px); }
+.art-2 { background: linear-gradient(160deg, #2a2d34, #0b0c0f); }
+.art-2 .m { width: 44%; aspect-ratio: 1; border-radius: 50%; background: radial-gradient(circle at 35% 30%, #fff 0, #c9ccd3 18%, #50545d 55%, #15171b 80%); box-shadow: 0 0 0 10px rgba(230,0,126,.9), 0 40px 60px rgba(0,0,0,.6); }
+.art-3 { background: linear-gradient(135deg, #F2F2F0, #c9cbd0); }
+.art-3 .s { display: grid; gap: 8px; width: 64%; transform: rotate(-8deg); }
+.art-3 .s i { display: block; height: 22px; border-radius: 3px; background: #0E0F12; box-shadow: 0 10px 20px rgba(0,0,0,.25); }
+.art-3 .s i:nth-child(2) { width: 76%; background: var(--magenta); } .art-3 .s i:nth-child(3) { width: 48%; }
+.art-4 { background: radial-gradient(circle at 70% 20%, #3b3f48, #0b0c0f 70%); }
+.art-4 .b { width: 32%; aspect-ratio: 2 / 3; border-radius: 4px; background: linear-gradient(150deg, #ff5cb0, var(--magenta) 50%, #7a0043); box-shadow: 22px 26px 50px rgba(0,0,0,.6); transform: rotateY(-22deg) rotateX(8deg); }
+.art-5 { background: #0E0F12; }
+.art-5 .p { font-family: var(--f-ar-display); font-size: clamp(40px, 5vw, 72px); line-height: 1.05; text-align: center; color: var(--light); }
+.art-5 .p span { color: var(--magenta); }
+
+/* Services accordion */
+.svc-list { border-top: 1px solid var(--line-dark); }
+.svc { border-bottom: 1px solid var(--line-dark); }
+.svc summary { list-style: none; display: grid; grid-template-columns: 70px minmax(0, 1fr) 44px; gap: 16px; align-items: center; padding-block: 22px; cursor: pointer; }
+.svc summary::-webkit-details-marker { display: none; }
+.svc summary .mono { opacity: .55; }
+.svc summary h3 { font-size: clamp(26px, 3.6vw, 52px); transition: color .2s ease, transform .3s ease; }
+html[lang="en"] .svc summary h3 { font-size: clamp(20px, 2.8vw, 40px); }
+.svc summary:hover h3 { color: var(--magenta); transform: translateX(-8px); }
+html[dir="ltr"] .svc summary:hover h3 { transform: translateX(8px); }
+.svc .plus { width: 40px; height: 40px; border-radius: 50%; border: 1px solid var(--line-dark); display: grid; place-items: center; transition: transform .3s ease, background-color .2s ease; }
+.svc[open] .plus { transform: rotate(45deg); background: var(--magenta); border-color: var(--magenta); }
+.svc .body { display: grid; grid-template-columns: 70px minmax(0, 1fr); gap: 16px; padding-bottom: 26px; }
+.svc .body > div { grid-column: 2; display: grid; gap: 14px; max-width: 70ch; color: var(--dim-on-dark); }
+.chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.chips span { font-family: var(--f-mono); font-size: 12px; padding: 4px 10px; border-radius: 999px; border: 1px solid var(--line-dark); color: var(--light); direction: ltr; unicode-bidi: isolate; }
+@media (max-width: 620px) { .svc summary { grid-template-columns: 44px minmax(0, 1fr) 40px; } .svc .body { grid-template-columns: 1fr; } .svc .body > div { grid-column: 1; } }
+
+/* Process: a real sequence, so numbered */
+.steps { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; }
+.steps li { min-width: 0; padding: 26px 22px; border-radius: 6px; background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02)); border: 1px solid var(--line-dark); display: grid; gap: 10px; align-content: start; }
+.steps .n { font-family: var(--f-en-display); font-size: 40px; font-weight: 500; line-height: 1; color: var(--magenta); }
 .steps h3 { font-size: 24px; }
-.steps p { color: var(--ink-soft); }
-.steps .out { margin-top: 8px; padding-top: 12px; border-top: 1px dashed var(--rule); font-size: 14px; }
-@media (max-width: 960px) { .steps { grid-template-columns: repeat(2, minmax(0, 1fr)); } .steps li:nth-child(2) { border-inline-end: 0; } .steps li:nth-child(-n+2) { border-bottom: var(--border); } }
-@media (max-width: 560px) { .steps { grid-template-columns: 1fr; } .steps li { border-inline-end: 0; border-bottom: var(--border); } .steps li:last-child { border-bottom: 0; } }
-
-/* Services as spec table */
-.services { border-top: var(--border); }
-.svc { display: grid; grid-template-columns: minmax(0, 4fr) minmax(0, 5fr) minmax(0, 3fr); gap: var(--s-3); padding-block: var(--s-3); border-bottom: var(--border); align-items: start; }
-.svc h3 { font-size: clamp(24px, 3vw, 34px); }
-.svc p { color: var(--ink-soft); }
-.svc ul { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 6px; }
-.svc li { font-family: var(--f-mono); font-size: 12px; padding: 4px 8px; background: var(--muted); direction: ltr; unicode-bidi: isolate; }
-@media (max-width: 860px) { .svc { grid-template-columns: 1fr; gap: 12px; } }
+html[lang="en"] .steps h3 { font-size: 18px; }
+.steps p { color: var(--dim-on-dark); font-size: 15px; }
+.steps .out { margin-top: 6px; padding-top: 12px; border-top: 1px dashed var(--line-dark); font-size: 13px; color: var(--light); }
+@media (max-width: 1000px) { .steps { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 560px) { .steps { grid-template-columns: 1fr; } }
 
 /* Contact */
-.contact { margin-top: var(--s-6); background: var(--ink); color: var(--paper); }
-.contact .wrap { padding-block: var(--s-6); display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: var(--s-4); }
-.contact h2 { grid-column: 1 / span 6; font-size: clamp(40px, 6vw, 84px); }
-.contact h2 em { font-style: normal; color: var(--magenta); }
-.contact .lead { margin-top: var(--s-3); color: var(--paper); opacity: .8; max-width: 44ch; }
-.contact-left { grid-column: 1 / span 6; }
-form { grid-column: 8 / span 5; display: grid; gap: var(--s-2); align-content: start; }
-@media (max-width: 860px) { .contact .wrap { grid-template-columns: minmax(0, 1fr); } .contact-left, form { grid-column: 1 / -1; } }
+.cta-grid { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 32px; align-items: start; }
+.cta-copy { grid-column: 1 / span 6; display: grid; gap: 26px; }
+.cta-copy h2 { font-size: clamp(44px, 6.4vw, 96px); color: var(--light); text-shadow: 0 0 40px rgba(255, 225, 77, .25); }
+html[lang="en"] .cta-copy h2 { font-size: clamp(32px, 4.6vw, 68px); }
+.cta-copy h2 em { font-style: normal; color: var(--yellow); }
+.cta-copy p { color: #FFD9EC; max-width: 46ch; }
+form { grid-column: 8 / span 5; display: grid; gap: 14px; padding: 26px; border-radius: 8px; background: rgba(8, 9, 11, .55); border: 1px solid rgba(255,255,255,.14); backdrop-filter: blur(14px); }
+@media (max-width: 900px) { .cta-grid { grid-template-columns: minmax(0, 1fr); } .cta-copy, form { grid-column: 1 / -1; } }
 .field { display: grid; gap: 6px; }
-.field label { font-weight: 500; font-size: 14px; }
-.field input, .field select, .field textarea {
-  font: inherit; color: var(--paper); background: transparent; border: 2px solid var(--paper);
-  padding: 12px 14px; min-height: 48px; border-radius: 0; width: 100%;
-}
-.field textarea { min-height: 110px; resize: vertical; }
-.field select option { color: #0B1B2B; }
-.field .err { color: var(--magenta); font-size: 13px; min-height: 1em; }
-.field [aria-invalid="true"] { border-color: var(--magenta); }
-.contact .btn { border-color: var(--magenta); }
-.note { font-size: 13px; opacity: .75; }
-.status { padding: 12px 14px; border: 2px solid var(--yellow); }
-
-footer { background: var(--ink); color: var(--paper); border-top: 1px solid var(--ink-soft); }
-footer .wrap { display: flex; flex-wrap: wrap; gap: var(--s-2); justify-content: space-between; padding-block: var(--s-3); font-size: 14px; opacity: .85; }
+.field label { font-size: 14px; font-weight: 500; }
+.field input, .field select, .field textarea { width: 100%; font: inherit; color: var(--light); background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.22); border-radius: 6px; min-height: 48px; padding: 10px 14px; }
+.field textarea { min-height: 100px; resize: vertical; }
+.field select option { color: #0E0F12; }
+.field [aria-invalid="true"] { border-color: var(--yellow); }
+.err { color: var(--yellow); font-size: 13px; min-height: 1em; }
+.note { font-size: 12px; color: #FFD9EC; opacity: .8; }
+.status { padding: 12px 14px; border-radius: 6px; border: 1px solid var(--yellow); }
+footer.end { position: relative; z-index: 2; margin-top: 160px; border-top: 1px solid rgba(255,255,255,.18); }
+footer.end .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 16px; padding-block: 22px calc(70px + env(safe-area-inset-bottom, 0px)); font-size: 14px; }
 .copy { display: inline-flex; gap: 8px; align-items: center; }
 .copy code { font-family: var(--f-mono); direction: ltr; unicode-bidi: isolate; user-select: all; }
-.copy button { min-height: 44px; padding: 0 12px; border: 1px solid var(--paper); background: transparent; color: var(--paper); cursor: pointer; font: inherit; font-size: 13px; }
+.copy button { min-height: 40px; padding: 0 14px; border-radius: 999px; border: 1px solid currentColor; background: transparent; color: inherit; font: inherit; font-size: 13px; cursor: pointer; }
 
-/* Motion: content is visible at rest; only a short transform settles in */
-@media (prefers-reduced-motion: no-preference) {
-  .rise { animation: rise .6s cubic-bezier(.2,.7,.2,1) both; }
-  .rise:nth-child(2) { animation-delay: .08s; } .rise:nth-child(3) { animation-delay: .16s; }
-  @keyframes rise { from { transform: translateY(14px); } to { transform: none; } }
+/* Scroll progress */
+.progress { position: fixed; z-index: 30; bottom: calc(16px + env(safe-area-inset-bottom, 0px)); left: 50%; transform: translateX(-50%); display: flex; align-items: center; gap: 12px; padding: 8px 14px; border-radius: 999px; background: rgba(8, 9, 11, .55); color: var(--light); backdrop-filter: blur(10px); }
+.progress .track { width: 90px; height: 2px; background: rgba(255,255,255,.25); position: relative; overflow: hidden; }
+.progress .fill { position: absolute; inset: 0; background: var(--magenta); transform-origin: left; transform: scaleX(0); }
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-foot .hint b { animation: none; }
+  .pill, .pill .dot, .card .art, .svc summary h3, .svc .plus, .top { transition: none; }
 }
-@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } .btn, .chip { transition: none; } }
 </style>
 
 <a class="skip" href="#main" data-i18n="skip">انتقل إلى المحتوى</a>
+<canvas id="stage" aria-hidden="true"></canvas>
 
-<header class="top">
-  <div class="wrap">
-    <a class="logo" href="#main" aria-label="Midad Studio">
-      <b>مِداد</b><i aria-hidden="true"></i><span>MIDAD</span>
-    </a>
+<header class="top" id="top" data-tone="light">
+  <div class="bar">
+    <a class="logo" href="#hero" aria-label="Midad Studio"><i aria-hidden="true"></i><span data-i18n="brand">مِداد</span></a>
     <nav class="nav" aria-label="الرئيسية" data-i18n-aria="navLabel">
-      <a href="#work" data-i18n="navWork">الأعمال</a>
-      <a href="#process" data-i18n="navProcess">المنهجية</a>
-      <a href="#services" data-i18n="navServices">الخدمات</a>
-      <a href="#contact" data-i18n="navContact">تواصل</a>
+      <a href="#work" data-sec="work"><span class="mono">01</span><span data-i18n="navWork">الأعمال</span></a>
+      <a href="#services" data-sec="services"><span class="mono">02</span><span data-i18n="navServices">الخدمات</span></a>
+      <a href="#contact" data-sec="contact"><span class="mono">03</span><span data-i18n="navContact">تواصل</span></a>
     </nav>
     <div class="top-actions">
       <button class="lang" id="langToggle" type="button" aria-label="Switch to English">EN</button>
-      <a class="btn btn--primary" href="#contact" data-i18n="ctaTop">ابدأ مشروعك</a>
+      <a class="pill pill--hot" href="#contact"><span data-i18n="talk">لنتحدث</span><span class="dot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></a>
     </div>
   </div>
 </header>
 
 <main id="main">
-  <div class="wrap hero">
-    <div class="sheet">
-      <span class="crop-b" aria-hidden="true"></span>
-      <div class="hero-grid">
-        <h1 class="rise" data-i18n-html="heroTitle">هويّات تُقرأ <em>من بعيد</em>،<br>وتبقى في الذاكرة.</h1>
-        <div class="hero-side rise">
-          <span class="eyebrow" data-i18n="heroEyebrow">استوديو تصميم · السعودية والخليج</span>
-          <p data-i18n="heroLead">نبني الهويات البصرية والشعارات والحملات لعلامات تريد أن تُعرف من النظرة الأولى، بالعربية والإنجليزية معاً.</p>
-        </div>
-        <div class="hero-cta rise">
-          <a class="btn btn--primary" href="#contact">
-            <span data-i18n="heroCta">احجز جلسة اكتشاف</span>
-            <svg class="flip" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-          </a>
-          <a class="btn" href="#work" data-i18n="heroCta2">شاهد الأعمال</a>
-        </div>
-      </div>
-    </div>
-    <div class="colorbar" aria-hidden="true">
-      <div style="background:#00A0E3;color:#0B1B2B">C100</div>
-      <div style="background:#E4007C;color:#FFFFFF">M100</div>
-      <div style="background:#FFED00;color:#0B1B2B">Y100</div>
-      <div style="background:#1D1D1B;color:#FFFFFF">K100</div>
-      <div style="background:#80CFF1;color:#0B1B2B">C50</div>
-      <div style="background:#F180BE;color:#0B1B2B">M50</div>
-      <div style="background:#FFF680;color:#0B1B2B">Y50</div>
-      <div style="background:#8E8E8D;color:#0B1B2B">K50</div>
-    </div>
-  </div>
-
-  <section id="work" aria-labelledby="work-h">
+  <section class="sec sec-hero" id="hero" data-state="0" data-tone="light" aria-labelledby="hero-h">
     <div class="wrap">
-      <div class="sec-head">
-        <span class="eyebrow" data-i18n="workEyebrow">أعمال مختارة</span>
-        <h2 id="work-h" data-i18n="workTitle">العمل يتكلم أولاً</h2>
-        <p data-i18n="workLead">كل مشروع يبدأ بسؤال واحد: ماذا يجب أن يتذكره الناس عن هذه العلامة؟</p>
+      <div class="hero-grid">
+        <div class="hero-copy">
+          <span class="mono" data-i18n="vol">[ ملف الأعمال · VOL. 01 ]</span>
+          <h1 id="hero-h" data-i18n-html="heroTitle">هويّاتٌ لها وزن،<br>تشعر بها قبل أن تقرأها.</h1>
+          <div class="hero-actions">
+            <a class="pill pill--ink" href="#work"><span data-i18n="seeWork">شاهد الأعمال</span><span class="dot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></a>
+            <a class="pill pill--ghost" href="#contact"><span data-i18n="startProject">ابدأ مشروعاً</span><span class="dot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></a>
+          </div>
+        </div>
+        <div class="hero-meta">
+          <div class="big"><span>CMYK</span><span>3D</span></div>
+          <div class="mono-row mono"><span data-i18n="metaA">PRINT-READY</span><span data-i18n="metaB">BILINGUAL AR/EN</span></div>
+          <p data-i18n="heroLead">مِداد استوديو مستقل يبني الهويات البصرية والشعارات والحملات للسعودية والخليج، بنظام واحد يعمل بالعربية والإنجليزية من الشاشة إلى المطبعة.</p>
+        </div>
       </div>
-      <div class="filters" role="group" aria-label="تصفية الأعمال" data-i18n-aria="filterLabel">
-        <button class="chip" type="button" data-filter="all" aria-pressed="true" data-i18n="fAll">الكل</button>
-        <button class="chip" type="button" data-filter="identity" aria-pressed="false" data-i18n="fIdentity">هوية بصرية</button>
-        <button class="chip" type="button" data-filter="logo" aria-pressed="false" data-i18n="fLogo">شعارات</button>
-        <button class="chip" type="button" data-filter="campaign" aria-pressed="false" data-i18n="fCampaign">حملات</button>
-        <button class="chip" type="button" data-filter="packaging" aria-pressed="false" data-i18n="fPackaging">تغليف</button>
-      </div>
-      <div class="work" id="workGrid">
-        <figure class="piece wide" data-cat="identity">
-          <div class="art a1" role="img" aria-label="مفهوم هوية: حرف القاف بخط كوفي على خلفية ماجنتا" data-i18n-aria="art1">
-            <span class="tag-sample" data-i18n="sample">نموذج</span>
-            <span class="glyph">ق</span><span class="word">QAHWA</span>
-          </div>
-          <figcaption><strong data-i18n="p1">قهوة · هوية بصرية</strong><span data-i18n="p1s">محمصة قهوة مختصة</span></figcaption>
-        </figure>
-        <figure class="piece" data-cat="logo">
-          <div class="art a2" role="img" aria-label="مفهوم شعار: دائرة مقسومة بالأصفر والسماوي" data-i18n-aria="art2">
-            <span class="tag-sample" data-i18n="sample">نموذج</span><span class="mark"></span>
-          </div>
-          <figcaption><strong data-i18n="p2">مدار · شعار</strong><span data-i18n="p2s">شركة تقنية مالية</span></figcaption>
-        </figure>
-        <figure class="piece" data-cat="campaign">
-          <div class="art a3" role="img" aria-label="مفهوم حملة: أشرطة عناوين على خلفية صفراء" data-i18n-aria="art3">
-            <span class="tag-sample" data-i18n="sample">نموذج</span>
-            <div class="stack"><i></i><i></i><i></i></div>
-          </div>
-          <figcaption><strong data-i18n="p3">صيف · حملة</strong><span data-i18n="p3s">مهرجان صيفي: لوحات خارجية وسوشال</span></figcaption>
-        </figure>
-        <figure class="piece" data-cat="packaging">
-          <div class="art a4" role="img" aria-label="مفهوم تغليف: علبة سماوية على شبكة" data-i18n-aria="art4">
-            <span class="tag-sample" data-i18n="sample">نموذج</span><span class="box"></span>
-          </div>
-          <figcaption><strong data-i18n="p4">نخلة · تغليف</strong><span data-i18n="p4s">علب تمور فاخرة</span></figcaption>
-        </figure>
-        <figure class="piece" data-cat="campaign identity">
-          <div class="art a5" role="img" aria-label="مفهوم ملصق: عنوان عربي كبير" data-i18n-aria="art5">
-            <span class="tag-sample" data-i18n="sample">نموذج</span>
-            <p class="poster" data-i18n-html="poster">افتتاح<br><span>قريباً</span></p>
-          </div>
-          <figcaption><strong data-i18n="p5">دار · إطلاق علامة</strong><span data-i18n="p5s">معرض تصميم داخلي</span></figcaption>
-        </figure>
+    </div>
+    <div class="wordmark" aria-hidden="true" data-i18n="wordmark">مِداد</div>
+    <div class="wrap">
+      <div class="hero-foot">
+        <span class="hint"><b aria-hidden="true"></b><span data-i18n="hint">حرّك المؤشر نحو قطرة الحبر، وانقر لترى أثرها.</span></span>
+        <span class="mono" data-i18n="scroll">SCROLL ↓</span>
       </div>
     </div>
   </section>
 
-  <section id="process" aria-labelledby="process-h">
+  <section class="sec sec-work" id="work" data-state="1" data-tone="dark" aria-labelledby="work-h">
     <div class="wrap">
-      <div class="sec-head">
-        <span class="eyebrow" data-i18n="procEyebrow">المنهجية</span>
-        <h2 id="process-h" data-i18n="procTitle">من الفكرة إلى ملف المطبعة</h2>
-        <p data-i18n="procLead">أربع مراحل واضحة، ولكل مرحلة مخرج تستلمه وتوافق عليه قبل أن ننتقل.</p>
+      <div class="head">
+        <span class="mono" data-i18n="workEyebrow">[ 01 · أعمال مختارة ]</span>
+        <h2 id="work-h" data-i18n="workTitle">أعمال تُلمَس</h2>
+        <p data-i18n="workLead">كل مشروع يبدأ بسؤال واحد: ما الشيء الذي يجب أن يتذكره الناس عن هذه العلامة؟</p>
+      </div>
+      <div class="work">
+        <figure class="card wide"><div class="art art-1" role="img" aria-label="مفهوم هوية: حرف القاف الكوفي على ماجنتا" data-i18n-aria="a1"><span class="tag" data-i18n="sample">نموذج</span><span class="g">ق</span><span class="idx mono">01 / 05</span></div><figcaption><strong data-i18n="p1">قهوة · هوية بصرية</strong><span data-i18n="p1s">محمصة قهوة مختصة</span></figcaption></figure>
+        <figure class="card tall"><div class="art art-2" role="img" aria-label="مفهوم شعار: كرة معدنية بإطار ماجنتا" data-i18n-aria="a2"><span class="tag" data-i18n="sample">نموذج</span><span class="m"></span><span class="idx mono">02 / 05</span></div><figcaption><strong data-i18n="p2">مدار · شعار</strong><span data-i18n="p2s">شركة تقنية مالية</span></figcaption></figure>
+        <figure class="card"><div class="art art-3" role="img" aria-label="مفهوم حملة: أشرطة عناوين مائلة" data-i18n-aria="a3"><span class="tag" data-i18n="sample">نموذج</span><div class="s"><i></i><i></i><i></i></div><span class="idx mono">03 / 05</span></div><figcaption><strong data-i18n="p3">صيف · حملة</strong><span data-i18n="p3s">مهرجان صيفي: لوحات وسوشال</span></figcaption></figure>
+        <figure class="card"><div class="art art-4" role="img" aria-label="مفهوم تغليف: علبة ماجنتا لامعة" data-i18n-aria="a4"><span class="tag" data-i18n="sample">نموذج</span><span class="b"></span><span class="idx mono">04 / 05</span></div><figcaption><strong data-i18n="p4">نخلة · تغليف</strong><span data-i18n="p4s">علب تمور فاخرة</span></figcaption></figure>
+        <figure class="card"><div class="art art-5" role="img" aria-label="مفهوم ملصق إطلاق بعنوان عربي" data-i18n-aria="a5"><span class="tag" data-i18n="sample">نموذج</span><p class="p" data-i18n-html="poster">افتتاح<br><span>قريباً</span></p><span class="idx mono">05 / 05</span></div><figcaption><strong data-i18n="p5">دار · إطلاق علامة</strong><span data-i18n="p5s">معرض تصميم داخلي</span></figcaption></figure>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec sec-services" id="services" data-state="2" data-tone="dark" aria-labelledby="svc-h">
+    <div class="wrap">
+      <div class="head">
+        <span class="mono" data-i18n="svcEyebrow">[ 02 · الخدمات ]</span>
+        <h2 id="svc-h" data-i18n="svcTitle">ماذا نصنع</h2>
+        <p data-i18n="svcLead">نحدد صيغ التسليم من اليوم الأول، فلا تفاجئك المطبعة ولا المنصة.</p>
+      </div>
+      <div class="svc-list">
+        <details class="svc" open><summary><span class="mono">[ID]</span><h3 data-i18n="v1">الهوية البصرية</h3><span class="plus" aria-hidden="true">+</span></summary><div class="body"><div><p data-i18n="v1d">نظام كامل يعمل بالعربية والإنجليزية: شعار، خطوط، ألوان، أنماط، وتطبيقات على كل نقطة تواصل.</p><div class="chips"><span>AI · PDF · SVG</span><span>CMYK · RGB · Pantone</span><span>Guidelines</span></div></div></div></details>
+        <details class="svc"><summary><span class="mono">[LG]</span><h3 data-i18n="v2">الشعارات</h3><span class="plus" aria-hidden="true">+</span></summary><div class="body"><div><p data-i18n="v2d">علامة تُقرأ في 16 بكسل وعلى واجهة مبنى، بنسختين عربية ولاتينية متوازنتين.</p><div class="chips"><span>Primary · Secondary · Icon</span><span>Min size spec</span></div></div></div></details>
+        <details class="svc"><summary><span class="mono">[AD]</span><h3 data-i18n="v3">الحملات الإعلانية</h3><span class="plus" aria-hidden="true">+</span></summary><div class="body"><div><p data-i18n="v3d">فكرة واحدة قوية تتمدد عبر اللوحات الخارجية والسوشال والمطبوعات.</p><div class="chips"><span>OOH print-ready</span><span>1080×1350</span><span>1080×1920</span></div></div></div></details>
+        <details class="svc"><summary><span class="mono">[3D]</span><h3 data-i18n="v4">التغليف والمجسّمات</h3><span class="plus" aria-hidden="true">+</span></summary><div class="body"><div><p data-i18n="v4d">تصميم على قالب المصنع الفعلي مع النزف ومناطق الأمان، ومجسّمات 3D للعرض قبل الطباعة.</p><div class="chips"><span>Dieline</span><span>3mm bleed</span><span>300 dpi</span><span>3D mockup</span></div></div></div></details>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec sec-process" id="process" data-state="2" data-tone="dark" aria-labelledby="proc-h">
+    <div class="wrap">
+      <div class="head">
+        <span class="mono" data-i18n="procEyebrow">[ المنهجية ]</span>
+        <h2 id="proc-h" data-i18n="procTitle">من الفكرة إلى ملف المطبعة</h2>
+        <p data-i18n="procLead">أربع مراحل، لكل مرحلة مخرج تستلمه وتوافق عليه قبل أن ننتقل.</p>
       </div>
       <ol class="steps">
         <li><span class="n">01</span><h3 data-i18n="s1">اكتشاف</h3><p data-i18n="s1d">جلسة مع فريقك، وتحليل للمنافسين والجمهور.</p><span class="out" data-i18n="s1o">المخرج: موجز إبداعي معتمد</span></li>
         <li><span class="n">02</span><h3 data-i18n="s2">اتجاهات</h3><p data-i18n="s2d">اتجاهان أو ثلاثة مختلفة جذرياً، مع توصية صريحة بالأقوى.</p><span class="out" data-i18n="s2o">المخرج: لوحات مفاهيم</span></li>
-        <li><span class="n">03</span><h3 data-i18n="s3">تطوير</h3><p data-i18n="s3d">نبني النظام كاملاً: الشعار والخطوط العربية واللاتينية والألوان والتطبيقات.</p><span class="out" data-i18n="s3o">المخرج: نظام الهوية</span></li>
-        <li><span class="n">04</span><h3 data-i18n="s4">تسليم</h3><p data-i18n="s4d">ملفات جاهزة للطباعة والشاشة، ودليل استخدام يفهمه فريقك.</p><span class="out" data-i18n="s4o">المخرج: Brand Guidelines + ملفات</span></li>
+        <li><span class="n">03</span><h3 data-i18n="s3">تطوير</h3><p data-i18n="s3d">نبني النظام كاملاً: الشعار والخطوط والألوان والتطبيقات.</p><span class="out" data-i18n="s3o">المخرج: نظام الهوية</span></li>
+        <li><span class="n">04</span><h3 data-i18n="s4">تسليم</h3><p data-i18n="s4d">ملفات جاهزة للطباعة والشاشة، ودليل يفهمه فريقك.</p><span class="out" data-i18n="s4o">المخرج: Brand Guidelines + ملفات</span></li>
       </ol>
     </div>
   </section>
 
-  <section id="services" aria-labelledby="services-h">
+  <section class="sec sec-contact" id="contact" data-state="3" data-tone="dark" aria-labelledby="cta-h">
     <div class="wrap">
-      <div class="sec-head">
-        <span class="eyebrow" data-i18n="svcEyebrow">الخدمات</span>
-        <h2 id="services-h" data-i18n="svcTitle">ماذا نصمم، وماذا تستلم</h2>
-        <p data-i18n="svcLead">نحدد صيغ التسليم من البداية حتى لا تفاجئك المطبعة أو المنصة.</p>
-      </div>
-      <div class="services">
-        <div class="svc"><h3 data-i18n="v1">الهوية البصرية</h3><p data-i18n="v1d">نظام كامل يعمل بالعربية والإنجليزية: شعار، خطوط، ألوان، أنماط، وتطبيقات.</p><ul><li>AI / PDF / SVG</li><li>CMYK + RGB + Pantone</li><li>Guidelines PDF</li></ul></div>
-        <div class="svc"><h3 data-i18n="v2">الشعارات</h3><p data-i18n="v2d">علامة تُقرأ في 16 بكسل وعلى واجهة مبنى، مع نسخة عربية ولاتينية متوازنة.</p><ul><li>Primary / Secondary / Icon</li><li>Min size spec</li></ul></div>
-        <div class="svc"><h3 data-i18n="v3">الحملات الإعلانية</h3><p data-i18n="v3d">فكرة واحدة قوية تتمدد عبر اللوحات الخارجية والسوشال والمطبوعات.</p><ul><li>OOH print-ready</li><li>1080×1350 · 1080×1920</li></ul></div>
-        <div class="svc"><h3 data-i18n="v4">التغليف</h3><p data-i18n="v4d">تصميم على القالب الفعلي للمصنع، مع النزف ومناطق الأمان.</p><ul><li>Dieline</li><li>3mm bleed</li><li>300 dpi</li></ul></div>
+      <div class="cta-grid">
+        <div class="cta-copy">
+          <span class="mono" data-i18n="ctaEyebrow">[ 03 · تواصل ]</span>
+          <h2 id="cta-h" data-i18n-html="ctaTitle">لنصنع علامةً<br>يريد الناس <em>أن يلمسوها.</em></h2>
+          <p data-i18n="ctaLead">أخبرنا عن مشروعك في دقيقتين. نرد خلال يومي عمل بخطة مبدئية وجدول زمني.</p>
+          <div><a class="pill pill--glow" href="#f-name"><span data-i18n="startProject">ابدأ مشروعاً</span><span class="dot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></a></div>
+        </div>
+        <form id="brief" novalidate>
+          <div class="field"><label for="f-name" data-i18n="fName">الاسم</label><input id="f-name" name="fullname" autocomplete="name" aria-describedby="e-name"><span class="err" id="e-name" aria-live="polite"></span></div>
+          <div class="field"><label for="f-email" data-i18n="fEmail">البريد الإلكتروني</label><input id="f-email" name="email" type="email" dir="ltr" autocomplete="email" aria-describedby="e-email"><span class="err" id="e-email" aria-live="polite"></span></div>
+          <div class="field"><label for="f-type" data-i18n="fType">نوع المشروع</label><select id="f-type" name="type"><option data-i18n="o1">هوية بصرية كاملة</option><option data-i18n="o2">شعار</option><option data-i18n="o3">حملة إعلانية</option><option data-i18n="o4">تغليف ومجسّمات</option></select></div>
+          <div class="field"><label for="f-msg" data-i18n="fMsg">نبذة عن المشروع</label><textarea id="f-msg" name="message"></textarea></div>
+          <button class="pill pill--hot" type="submit"><span data-i18n="fSend">أرسل الموجز</span><span class="dot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></button>
+          <p class="note" data-i18n="fNote">نسخة عرض: النموذج غير موصول بعد ببريد أو CRM.</p>
+          <p class="status" id="status" role="status" hidden></p>
+        </form>
       </div>
     </div>
-  </section>
-
-  <section class="contact" id="contact" aria-labelledby="contact-h">
-    <div class="wrap">
-      <div class="contact-left">
-        <h2 id="contact-h" data-i18n-html="ctaTitle">عندك علامة<br>تستحق أن <em>تُرى</em>؟</h2>
-        <p class="lead" data-i18n="ctaLead">أخبرنا عن مشروعك في دقيقتين. نرد خلال يومي عمل بخطة مبدئية وجدول زمني.</p>
+    <footer class="end">
+      <div class="wrap">
+        <span data-i18n="foot">© مِداد للتصميم</span>
+        <span class="copy"><code id="mail">hello@midad.studio</code><button type="button" id="copyMail" data-i18n="copy">نسخ</button></span>
       </div>
-      <form id="brief" novalidate>
-        <div class="field">
-          <label for="f-name" data-i18n="fName">الاسم</label>
-          <input id="f-name" name="name" autocomplete="name" required aria-describedby="e-name">
-          <span class="err" id="e-name" aria-live="polite"></span>
-        </div>
-        <div class="field">
-          <label for="f-email" data-i18n="fEmail">البريد الإلكتروني</label>
-          <input id="f-email" name="email" type="email" autocomplete="email" dir="ltr" required aria-describedby="e-email">
-          <span class="err" id="e-email" aria-live="polite"></span>
-        </div>
-        <div class="field">
-          <label for="f-type" data-i18n="fType">نوع المشروع</label>
-          <select id="f-type" name="type">
-            <option data-i18n="o1">هوية بصرية كاملة</option>
-            <option data-i18n="o2">شعار</option>
-            <option data-i18n="o3">حملة إعلانية</option>
-            <option data-i18n="o4">تغليف</option>
-          </select>
-        </div>
-        <div class="field">
-          <label for="f-msg" data-i18n="fMsg">نبذة عن المشروع</label>
-          <textarea id="f-msg" name="message"></textarea>
-        </div>
-        <button class="btn btn--primary" type="submit" data-i18n="fSend">أرسل الموجز</button>
-        <p class="note" data-i18n="fNote">هذه نسخة عرض: النموذج غير موصول بعد ببريد أو نظام CRM.</p>
-        <p class="status" id="status" role="status" hidden></p>
-      </form>
-    </div>
+    </footer>
   </section>
 </main>
 
-<footer>
-  <div class="wrap">
-    <span data-i18n="foot">© مِداد للتصميم</span>
-    <span class="copy"><code id="mail">hello@midad.studio</code><button type="button" id="copyMail" data-i18n="copy">نسخ</button></span>
-  </div>
-</footer>
+<div class="progress" aria-hidden="true"><span class="mono" id="progNum">01 / 04</span><span class="track"><span class="fill" id="progFill"></span></span></div>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script>
 (function () {
+  "use strict";
+  /* ---------- i18n ---------- */
   var en = {
-    skip: "Skip to content", navLabel: "Main", navWork: "Work", navProcess: "Process", navServices: "Services", navContact: "Contact",
-    ctaTop: "Start a project",
-    heroTitle: "Identities that read <em>from afar</em><br>and stay in memory.",
-    heroEyebrow: "Design studio · Saudi Arabia & GCC",
-    heroLead: "We build visual identities, logos and campaigns for brands that want to be known at first glance, in Arabic and English together.",
-    heroCta: "Book a discovery session", heroCta2: "See the work",
-    workEyebrow: "Selected work", workTitle: "The work speaks first",
+    skip: "Skip to content", brand: "Midad", navLabel: "Main", navWork: "Work", navServices: "Services", navContact: "Contact", talk: "Let's talk",
+    vol: "[ PORTFOLIO · VOL. 01 ]", heroTitle: "Identities with weight.<br>Felt before they're read.",
+    seeWork: "See the work", startProject: "Start a project", metaA: "PRINT-READY", metaB: "BILINGUAL AR/EN",
+    heroLead: "Midad is an independent studio building visual identities, logos and campaigns for Saudi Arabia and the GCC: one system that works in Arabic and English, from screen to press.",
+    wordmark: "MIDAD", hint: "Move toward the ink drop. Click to leave a mark.", scroll: "SCROLL ↓",
+    workEyebrow: "[ 01 · SELECTED WORK ]", workTitle: "Work you can touch",
     workLead: "Every project starts with one question: what should people remember about this brand?",
-    filterLabel: "Filter work", fAll: "All", fIdentity: "Identity", fLogo: "Logos", fCampaign: "Campaigns", fPackaging: "Packaging",
-    sample: "Sample",
-    art1: "Identity concept: Kufic letter Qaf on magenta", art2: "Logo concept: circle split in yellow and cyan",
-    art3: "Campaign concept: headline bars on yellow", art4: "Packaging concept: cyan box on a grid", art5: "Poster concept: large Arabic headline",
-    p1: "Qahwa · Identity", p1s: "Specialty coffee roaster", p2: "Madar · Logo", p2s: "Fintech company",
-    p3: "Sayf · Campaign", p3s: "Summer festival: outdoor and social", p4: "Nakhla · Packaging", p4s: "Premium date boxes",
-    p5: "Dar · Brand launch", p5s: "Interior design showroom", poster: "Opening<br><span>soon</span>",
-    procEyebrow: "Process", procTitle: "From idea to print-ready file",
-    procLead: "Four clear stages. Each ends with a deliverable you approve before we move on.",
-    s1: "Discover", s1d: "A session with your team, plus competitor and audience analysis.", s1o: "Deliverable: approved creative brief",
-    s2: "Directions", s2d: "Two or three truly different directions, with a clear recommendation.", s2o: "Deliverable: concept boards",
-    s3: "Develop", s3d: "We build the full system: logo, Arabic and Latin type, colour and applications.", s3o: "Deliverable: identity system",
-    s4: "Deliver", s4d: "Print and screen-ready files, and a guide your team can follow.", s4o: "Deliverable: Brand Guidelines + files",
-    svcEyebrow: "Services", svcTitle: "What we design, and what you get",
-    svcLead: "We agree delivery formats up front, so the printer or platform never surprises you.",
-    v1: "Visual identity", v1d: "A complete system that works in Arabic and English: logo, type, colour, patterns and applications.",
+    sample: "Sample", a1: "Identity concept: Kufic Qaf on magenta", a2: "Logo concept: chrome sphere ringed in magenta",
+    a3: "Campaign concept: tilted headline bars", a4: "Packaging concept: glossy magenta box", a5: "Launch poster concept with Arabic headline",
+    p1: "Qahwa · Identity", p1s: "Specialty coffee roaster", p2: "Madar · Logo", p2s: "Fintech company", p3: "Sayf · Campaign", p3s: "Summer festival: outdoor and social",
+    p4: "Nakhla · Packaging", p4s: "Premium date boxes", p5: "Dar · Brand launch", p5s: "Interior design showroom", poster: "Opening<br><span>soon</span>",
+    svcEyebrow: "[ 02 · SERVICES ]", svcTitle: "What we make", svcLead: "We agree delivery formats on day one, so neither the printer nor the platform surprises you.",
+    v1: "Visual identity", v1d: "A complete system in Arabic and English: logo, type, colour, patterns and applications across every touchpoint.",
     v2: "Logos", v2d: "A mark that reads at 16 pixels and on a building facade, with balanced Arabic and Latin versions.",
     v3: "Campaigns", v3d: "One strong idea that stretches across outdoor, social and print.",
-    v4: "Packaging", v4d: "Designed on the factory's real dieline, with bleed and safe zones.",
-    ctaTitle: "Got a brand that<br>deserves to be <em>seen</em>?",
+    v4: "Packaging & 3D", v4d: "Designed on the factory's real dieline with bleed and safe zones, plus 3D mockups before anything is printed.",
+    procEyebrow: "[ PROCESS ]", procTitle: "From idea to print-ready file", procLead: "Four stages, each ending with a deliverable you approve before we move on.",
+    s1: "Discover", s1d: "A session with your team, plus competitor and audience analysis.", s1o: "Deliverable: approved creative brief",
+    s2: "Directions", s2d: "Two or three truly different directions, with a clear recommendation.", s2o: "Deliverable: concept boards",
+    s3: "Develop", s3d: "We build the full system: logo, type, colour and applications.", s3o: "Deliverable: identity system",
+    s4: "Deliver", s4d: "Print and screen-ready files, and a guide your team can follow.", s4o: "Deliverable: Brand Guidelines + files",
+    ctaEyebrow: "[ 03 · CONTACT ]", ctaTitle: "Let's make a brand<br>people <em>want to touch.</em>",
     ctaLead: "Tell us about your project in two minutes. We reply within two working days with an outline plan and timeline.",
-    fName: "Name", fEmail: "Email", fType: "Project type", o1: "Full visual identity", o2: "Logo", o3: "Ad campaign", o4: "Packaging",
+    fName: "Name", fEmail: "Email", fType: "Project type", o1: "Full visual identity", o2: "Logo", o3: "Ad campaign", o4: "Packaging & 3D",
     fMsg: "About the project", fSend: "Send brief", fNote: "Demo version: the form is not yet connected to email or a CRM.",
-    foot: "© Midad Design Studio", copy: "Copy",
-    errName: "Enter your name.", errEmail: "Enter a valid email, like name@company.com.",
+    foot: "© Midad Design Studio", copy: "Copy", errName: "Enter your name.", errEmail: "Enter a valid email, like name@company.com.",
     ok: "Brief received in this demo. Connect the form to email or a CRM to receive real briefs.", copied: "Copied",
-    toggle: "ع", toggleLabel: "التبديل إلى العربية", navAria: "Main"
+    toggle: "ع", toggleLabel: "التبديل إلى العربية"
   };
   var ar = { errName: "اكتب اسمك.", errEmail: "اكتب بريداً صحيحاً، مثل name@company.com.",
-    ok: "استُلم الموجز في نسخة العرض. اربط النموذج ببريد أو CRM لاستقبال الطلبات فعلياً.", copied: "تم النسخ",
-    toggle: "EN", toggleLabel: "Switch to English" };
-
-  // capture the Arabic source text once
+    ok: "استُلم الموجز في نسخة العرض. اربط النموذج ببريد أو CRM لاستقبال الطلبات فعلياً.", copied: "تم النسخ", toggle: "EN", toggleLabel: "Switch to English" };
   document.querySelectorAll("[data-i18n]").forEach(function (el) { ar[el.dataset.i18n] = el.textContent; });
   document.querySelectorAll("[data-i18n-html]").forEach(function (el) { ar[el.dataset.i18nHtml] = el.innerHTML; });
   document.querySelectorAll("[data-i18n-aria]").forEach(function (el) { ar[el.dataset.i18nAria] = el.getAttribute("aria-label"); });
-
   var lang = "ar";
-  function apply(l) {
-    lang = l; var d = l === "en" ? en : ar, root = document.documentElement;
+  function dict() { return lang === "en" ? en : ar; }
+  function applyLang(l) {
+    lang = l; var d = dict(), root = document.documentElement;
     root.lang = l; root.dir = l === "en" ? "ltr" : "rtl";
     document.querySelectorAll("[data-i18n]").forEach(function (el) { var v = d[el.dataset.i18n]; if (v != null) el.textContent = v; });
     document.querySelectorAll("[data-i18n-html]").forEach(function (el) { var v = d[el.dataset.i18nHtml]; if (v != null) el.innerHTML = v; });
     document.querySelectorAll("[data-i18n-aria]").forEach(function (el) { var v = d[el.dataset.i18nAria]; if (v != null) el.setAttribute("aria-label", v); });
     var t = document.getElementById("langToggle"); t.textContent = d.toggle; t.setAttribute("aria-label", d.toggleLabel);
     try { localStorage.setItem("midad-lang", l); } catch (e) {}
+    measure();
   }
-  var saved = null; try { saved = localStorage.getItem("midad-lang"); } catch (e) {}
-  apply(saved === "en" ? "en" : "ar");
-  document.getElementById("langToggle").addEventListener("click", function () { apply(lang === "ar" ? "en" : "ar"); });
 
-  // work filter
-  var chips = document.querySelectorAll(".chip");
-  chips.forEach(function (c) {
-    c.addEventListener("click", function () {
-      var f = c.dataset.filter;
-      chips.forEach(function (x) { x.setAttribute("aria-pressed", String(x === c)); });
-      document.querySelectorAll("#workGrid .piece").forEach(function (p) {
-        p.hidden = !(f === "all" || p.dataset.cat.split(" ").indexOf(f) > -1);
-      });
+  /* ---------- scroll state ---------- */
+  var sections = [].slice.call(document.querySelectorAll("main > section"));
+  var header = document.getElementById("top"), progNum = document.getElementById("progNum"), progFill = document.getElementById("progFill");
+  var navLinks = [].slice.call(document.querySelectorAll(".nav a"));
+  var marks = []; // scroll positions where each state is "settled"
+  function measure() {
+    var vh = innerHeight; marks = [];
+    sections.forEach(function (s) {
+      var st = +s.dataset.state, top = s.offsetTop;
+      // state reached when section top is ~40% up the viewport
+      var at = Math.max(0, top - vh * 0.6);
+      if (!marks.length || marks[marks.length - 1].state !== st) marks.push({ state: st, at: st === 0 ? 0 : at });
     });
-  });
-
-  // form: validate near each field
-  var form = document.getElementById("brief");
-  function setErr(id, msg) {
-    var input = document.getElementById("f-" + id); document.getElementById("e-" + id).textContent = msg || "";
-    input.setAttribute("aria-invalid", msg ? "true" : "false");
   }
+  function stateFromScroll(y) {
+    if (y <= marks[0].at) return marks[0].state;
+    for (var i = 0; i < marks.length - 1; i++) {
+      var a = marks[i], b = marks[i + 1];
+      if (y < b.at) {
+        var span = b.at - a.at, f = (y - a.at) / span;
+        var k = Math.min(1, Math.max(0, (f - 0.35) / 0.65)); // hold, then travel
+        k = k * k * (3 - 2 * k);
+        return a.state + (b.state - a.state) * k;
+      }
+    }
+    return marks[marks.length - 1].state;
+  }
+  function onScrollUI() {
+    var y = scrollY, mid = y + 80, cur = sections[0];
+    sections.forEach(function (s) { if (s.offsetTop <= mid) cur = s; });
+    header.dataset.tone = cur.dataset.tone;
+    var order = { hero: 1, work: 2, services: 3, process: 3, contact: 4 };
+    progNum.textContent = "0" + order[cur.id] + " / 04";
+    var max = document.documentElement.scrollHeight - innerHeight;
+    progFill.style.transform = "scaleX(" + (max > 0 ? y / max : 0) + ")";
+    navLinks.forEach(function (a) { a.setAttribute("aria-current", String(a.dataset.sec === cur.id || (a.dataset.sec === "services" && cur.id === "process"))); });
+  }
+
+  /* ---------- 3D stage ---------- */
+  var reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var canvas = document.getElementById("stage"), three = window.THREE, R = null;
+  function initStage() {
+    if (!three) throw new Error("three missing");
+    var renderer = new three.WebGLRenderer({ canvas: canvas, antialias: true, alpha: true, powerPreference: "high-performance" });
+    var mobile = innerWidth < 760;
+    renderer.setPixelRatio(Math.min(devicePixelRatio || 1, mobile ? 1.5 : 2));
+    renderer.outputEncoding = three.sRGBEncoding;
+    renderer.toneMapping = three.ACESFilmicToneMapping;
+    renderer.toneMappingExposure = 0.92;
+    var scene = new three.Scene();
+    var camera = new three.PerspectiveCamera(32, 1, 0.1, 100);
+    camera.position.set(0, 0, 12);
+
+    // studio environment built from emissive panels (no external HDR)
+    var env = new three.Scene();
+    env.background = new three.Color(0x101114);
+    function panel(color, w, h, pos, look) {
+      var m = new three.Mesh(new three.PlaneGeometry(w, h), new three.MeshBasicMaterial({ color: color, side: three.DoubleSide }));
+      m.position.set(pos[0], pos[1], pos[2]); m.lookAt(look[0], look[1], look[2]); env.add(m);
+    }
+    panel(0xffffff, 8, 3, [0, 6, 2], [0, 0, 0]);
+    panel(0xffffff, 3, 6, [-7, 1, 3], [0, 0, 0]);
+    panel(0xff2a9a, 4, 6, [7, 0, 1], [0, 0, 0]);
+    panel(0xff0080, 10, 2, [0, -6, 0], [0, 0, 0]);
+    panel(0x9fb0c8, 6, 4, [0, 2, -8], [0, 0, 0]);
+    var pmrem = new three.PMREMGenerator(renderer);
+    var envTex = pmrem.fromScene(env, 0.02).texture;
+    scene.environment = envTex;
+
+    scene.add(new three.AmbientLight(0xffffff, 0.25));
+    var key = new three.DirectionalLight(0xffffff, 1.2); key.position.set(3, 5, 6); scene.add(key);
+    var rim = new three.PointLight(0xff2a9a, 2.2, 30); rim.position.set(-5, -2, 4); scene.add(rim);
+
+    // ink drop
+    var geo = new three.SphereGeometry(1.5, mobile ? 96 : 140, mobile ? 72 : 100);
+    var base = geo.attributes.position.array.slice();
+    var inkMat = new three.MeshPhysicalMaterial({ color: 0x020203, metalness: 0.55, roughness: 0.22, clearcoat: 1, clearcoatRoughness: 0.05, envMapIntensity: 0.9 });
+    var drop = new three.Mesh(geo, inkMat);
+    scene.add(drop);
+    // magenta core visible through ripples
+    var core = new three.Mesh(new three.SphereGeometry(1.32, 48, 32), new three.MeshStandardMaterial({ color: 0xe6007e, emissive: 0xe6007e, emissiveIntensity: 0.9, roughness: 0.4 }));
+    drop.add(core);
+
+    // letterpress type blocks
+    var letters = "مدابجحرسصطعقكلنهوي".split("");
+    var N = mobile ? 12 : 30;
+    var faceCache = {};
+    function face(letter, bg, fg) {
+      var k = letter + bg + fg; if (faceCache[k]) return faceCache[k];
+      var c = document.createElement("canvas"); c.width = c.height = 256; var g = c.getContext("2d");
+      g.fillStyle = bg; g.fillRect(0, 0, 256, 256);
+      g.fillStyle = fg; g.font = "700 170px 'Reem Kufi', 'IBM Plex Sans Arabic', sans-serif"; g.textAlign = "center"; g.textBaseline = "middle";
+      g.fillText(letter, 128, 140);
+      var t = new three.CanvasTexture(c); t.encoding = three.sRGBEncoding; t.anisotropy = 4;
+      return (faceCache[k] = t);
+    }
+    var palettes = [
+      { bg: "#E6007E", fg: "#FFFFFF", side: 0xb8005f },
+      { bg: "#F2F2F0", fg: "#0E0F12", side: 0xcfd0d2 },
+      { bg: "#16171B", fg: "#E6007E", side: 0x0c0c0f }
+    ];
+    var blockGeo = new three.BoxGeometry(0.62, 0.62, 0.62);
+    var blocks = [], blockMats = [];
+    function buildBlocks() {
+      for (var i = 0; i < N; i++) {
+        var p = palettes[i % 3];
+        var sideMat = new three.MeshStandardMaterial({ color: p.side, roughness: 0.45, metalness: 0.1, envMapIntensity: 0.5 });
+        var faceMat = new three.MeshStandardMaterial({ map: face(letters[i % letters.length], p.bg, p.fg), roughness: 0.4, envMapIntensity: 0.5 });
+        blockMats.push(faceMat);
+        var m = new three.Mesh(blockGeo, [sideMat, sideMat, sideMat, sideMat, faceMat, sideMat]);
+        m.userData = { seed: Math.random() * 100, spin: (Math.random() - 0.5) * 0.6, r: 2.4 + Math.random() * 0.9, tilt: (Math.random() - 0.5) * 1.6, off: Math.random() * Math.PI * 2 };
+        blocks.push(m); scene.add(m);
+      }
+    }
+    buildBlocks();
+    function refreshFaces() { // redraw letters once web fonts are ready
+      for (var k in faceCache) faceCache[k].dispose(); faceCache = {};
+      blocks.forEach(function (m, i) { var p = palettes[i % 3]; m.material[4].map = face(letters[i % letters.length], p.bg, p.fg); m.material[4].needsUpdate = true; });
+    }
+
+    var view = { w: 1, h: 1 };
+    function resize() {
+      var w = innerWidth, h = innerHeight;
+      renderer.setSize(w, h, false); camera.aspect = w / h; camera.updateProjectionMatrix();
+      var hh = Math.tan(three.MathUtils.degToRad(camera.fov / 2)) * camera.position.z;
+      view.h = hh; view.w = hh * camera.aspect;
+    }
+    resize();
+
+    // pointer
+    var ptr = { x: 0, y: 0, tx: 0, ty: 0, active: 0, ta: 0 };
+    var ripples = [];
+    function setPtr(cx, cy) { ptr.tx = (cx / innerWidth) * 2 - 1; ptr.ty = -(cy / innerHeight) * 2 + 1; ptr.ta = 1; }
+    addEventListener("pointermove", function (e) { setPtr(e.clientX, e.clientY); }, { passive: true });
+    addEventListener("touchmove", function (e) { if (e.touches[0]) setPtr(e.touches[0].clientX, e.touches[0].clientY); }, { passive: true });
+    document.documentElement.addEventListener("pointerleave", function () { ptr.ta = 0; });
+    var ray = new three.Raycaster(), v2 = new three.Vector2();
+    addEventListener("pointerdown", function (e) {
+      if (e.target.closest("a,button,input,select,textarea,summary,label")) return;
+      v2.set((e.clientX / innerWidth) * 2 - 1, -(e.clientY / innerHeight) * 2 + 1);
+      ray.setFromCamera(v2, camera);
+      var hit = ray.intersectObject(drop, false)[0];
+      if (hit) { var local = drop.worldToLocal(hit.point.clone()).normalize(); ripples.push({ dir: local, t0: clock.getElapsedTime() }); if (ripples.length > 4) ripples.shift(); }
+      blocks.forEach(function (b) { b.userData.kick = 1; });
+    });
+
+    var clock = new three.Clock();
+    var st = 0, stTarget = 0;
+    var tmp = new three.Vector3(), nrm = new three.Vector3(), pdir = new three.Vector3();
+    function lerp(a, b, k) { return a + (b - a) * k; }
+
+    // end = +1 when the inline-end side is screen-right (English), -1 when it is screen-left (Arabic)
+    function endSide() { return document.documentElement.dir === "rtl" ? -1 : 1; }
+    function formation(s, i, t, out) {
+      var u = blocks[i].userData, e = endSide(), W = view.w, H = view.h, small = W < 4;
+      if (s === 0) { // orbit around the ink drop
+        var a = u.off + t * 0.18 + i * 0.21, r = u.r * (small ? 0.5 : 1), c = dropPos(0);
+        out.set(c.x + Math.cos(a) * r, c.y + Math.sin(a) * r * 0.55 + Math.sin(a * 2 + u.tilt) * 0.5, Math.sin(a) * 1.6 + u.tilt);
+      } else if (s === 1) { // a ribbon of type threading across the page
+        var f = i / (N - 1), x = (f * 2 - 1) * W * 1.15;
+        out.set(x, Math.sin(f * 7 + t * 0.9) * 0.55 + H * 0.15, Math.cos(f * 7 + t * 0.9) * 1.4 - 1.2);
+      } else if (s === 2) { // a drifting column of type along the inline-end edge
+        var k = i / (N - 1), ang = k * 10 + t * 0.35;
+        out.set(e * (W * (small ? 0.98 : 0.92)) + Math.cos(ang) * 0.8, (1 - 2 * k) * H * 1.1, Math.sin(ang) * 1.1 - 2);
+      } else { // type spilled along the bottom of the screen, like sorts tipped out of a case
+        var f2 = i / (N - 1), lay = Math.floor(i / 2) % 3;
+        out.set((f2 * 2 - 1) * W * 0.95 + Math.sin(u.seed) * 0.3, -H * 0.82 + lay * 0.5 + Math.sin(t * 0.8 + i) * 0.05, -1.5 - (i % 3) * 0.6);
+      }
+      return out;
+    }
+    function dropPos(s) {
+      var e = endSide(), W = view.w, H = view.h, small = W < 4;
+      if (s === 0) return tmp.set(small ? 0 : e * W * 0.08, small ? -H * 0.36 : -H * 0.04, 0);
+      if (s === 1) return tmp.set(e * W * 1.02, H * 1.02, -3);
+      if (s === 2) return tmp.set(e * W * 0.95, -H * 1.25, -4);
+      return tmp.set(small ? -e * W * 0.6 : -e * W * 0.12, -H * 0.62, -1);
+    }
+    function dropScale(s) { return [1, 0.55, 0.42, 0.7][s] * (view.w < 4 ? 0.5 : 1); }
+
+    var a0 = new three.Vector3(), a1 = new three.Vector3(), d0 = new three.Vector3(), d1 = new three.Vector3();
+    function frame() {
+      var t = reduce ? 0 : clock.getElapsedTime();
+      st += (stTarget - st) * (reduce ? 1 : 0.07);
+      ptr.x += (ptr.tx - ptr.x) * 0.08; ptr.y += (ptr.ty - ptr.y) * 0.08; ptr.active += (ptr.ta - ptr.active) * 0.05;
+      var s0 = Math.floor(st), s1 = Math.min(3, s0 + 1), k = st - s0;
+
+      // drop transform
+      d0.copy(dropPos(s0)); d1.copy(dropPos(s1));
+      drop.position.lerpVectors(d0, d1, k);
+      var sc = lerp(dropScale(s0), dropScale(s1), k); drop.scale.setScalar(sc);
+      drop.rotation.y = t * 0.15 + ptr.x * 0.4; drop.rotation.x = ptr.y * 0.25;
+      core.material.emissiveIntensity = 0.6 + st * 0.25;
+
+      // deform ink surface (skipped under reduced motion)
+      if (!reduce) {
+        var pos = geo.attributes.position.array;
+        // pointer direction in drop's local space
+        pdir.set(ptr.x * view.w - drop.position.x, ptr.y * view.h - drop.position.y, 3).normalize();
+        drop.worldToLocal(pdir.add(drop.position)); pdir.normalize();
+        var now = clock.getElapsedTime(), pull = ptr.active * (st < 0.5 ? 1 : 0.4);
+        for (var i = 0; i < pos.length; i += 3) {
+          var bx = base[i], by = base[i + 1], bz = base[i + 2];
+          nrm.set(bx, by, bz).normalize();
+          var n = Math.sin(nrm.x * 3.1 + t * 0.9) * Math.sin(nrm.y * 2.7 + t * 1.1) * Math.sin(nrm.z * 2.3 + t * 0.7) * 0.11
+                + Math.sin(nrm.x * 7 + nrm.y * 5 + t * 1.7) * 0.025;
+          var d = nrm.dot(pdir); if (d > 0) n += Math.pow(d, 6) * 0.42 * pull;
+          for (var r = 0; r < ripples.length; r++) {
+            var age = now - ripples[r].t0; if (age > 2.4) continue;
+            var dist = Math.acos(Math.min(1, Math.max(-1, nrm.dot(ripples[r].dir))));
+            n += Math.sin(dist * 9 - age * 9) * Math.exp(-age * 1.6) * Math.exp(-dist * 0.9) * 0.16;
+          }
+          var s = 1 + n;
+          pos[i] = bx * s; pos[i + 1] = by * s; pos[i + 2] = bz * s;
+        }
+        geo.attributes.position.needsUpdate = true; geo.computeVertexNormals();
+      }
+
+      // blocks
+      for (var b = 0; b < blocks.length; b++) {
+        var m = blocks[b], u = m.userData;
+        formation(s0, b, t, a0); formation(s1, b, t, a1);
+        m.position.lerpVectors(a0, a1, k);
+        m.position.x += ptr.x * 0.25 * (b % 2 ? 1 : -1); m.position.y += ptr.y * 0.2;
+        u.kick = (u.kick || 0) * 0.94;
+        var orderly = Math.max(0, st - 2.4) / 0.6 * 0.85; // mostly settle face-forward at rest
+        m.rotation.x = lerp(t * u.spin + u.seed + u.kick * 3, 0, orderly);
+        m.rotation.y = lerp(t * u.spin * 1.3 + u.seed * 0.5 + u.kick * 2, 0, orderly);
+        m.rotation.z = lerp(u.tilt, 0, orderly);
+      }
+      camera.position.x = ptr.x * 0.35; camera.position.y = ptr.y * 0.25; camera.lookAt(0, 0, 0);
+      renderer.render(scene, camera);
+    }
+    return { frame: frame, resize: resize, refreshFaces: refreshFaces, setTarget: function (v) { stTarget = v; }, snap: function () { st = stTarget; } };
+  }
+
+  try { R = initStage(); } catch (e) { document.documentElement.classList.add("no-webgl"); canvas.hidden = true; R = null; }
+
+  var saved = null; try { saved = localStorage.getItem("midad-lang"); } catch (e) {}
+  applyLang(saved === "en" ? "en" : "ar");
+  document.getElementById("langToggle").addEventListener("click", function () { applyLang(lang === "ar" ? "en" : "ar"); onScroll(); });
+
+  function onScroll() { onScrollUI(); if (R) { R.setTarget(stateFromScroll(scrollY)); if (reduce) R.frame(); } }
+  addEventListener("scroll", onScroll, { passive: true });
+  addEventListener("resize", function () { measure(); if (R) { R.resize(); if (reduce) R.frame(); } onScrollUI(); });
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(function () { measure(); if (R) { R.refreshFaces(); if (reduce) R.frame(); } });
+  onScroll();
+  if (R) {
+    R.snap();
+    if (reduce) R.frame();
+    else (function loop() { if (!document.hidden) R.frame(); requestAnimationFrame(loop); })();
+  }
+
+  /* ---------- work cards: gentle 3D tilt ---------- */
+  if (!reduce && matchMedia("(hover: hover)").matches) {
+    document.querySelectorAll(".card .art").forEach(function (el) {
+      el.addEventListener("pointermove", function (e) {
+        var r = el.getBoundingClientRect(), x = (e.clientX - r.left) / r.width - 0.5, y = (e.clientY - r.top) / r.height - 0.5;
+        el.style.transform = "rotateY(" + x * 10 + "deg) rotateX(" + -y * 10 + "deg) translateZ(10px)";
+      });
+      el.addEventListener("pointerleave", function () { el.style.transform = ""; });
+    });
+  }
+
+  /* ---------- form ---------- */
+  var form = document.getElementById("brief");
+  function setErr(id, msg) { var i = document.getElementById("f-" + id); document.getElementById("e-" + id).textContent = msg || ""; i.setAttribute("aria-invalid", msg ? "true" : "false"); }
   form.addEventListener("submit", function (e) {
     e.preventDefault();
-    var d = lang === "en" ? en : ar, nameEl = document.getElementById("f-name"), mailEl = document.getElementById("f-email"), name = nameEl.value.trim(), email = mailEl.value.trim();
-    var okName = name.length > 1, okMail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-    setErr("name", okName ? "" : d.errName); setErr("email", okMail ? "" : d.errEmail);
-    if (!okName) return nameEl.focus(); if (!okMail) return mailEl.focus();
+    var d = dict(), nameEl = document.getElementById("f-name"), mailEl = document.getElementById("f-email");
+    var okN = nameEl.value.trim().length > 1, okM = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(mailEl.value.trim());
+    setErr("name", okN ? "" : d.errName); setErr("email", okM ? "" : d.errEmail);
+    if (!okN) return nameEl.focus(); if (!okM) return mailEl.focus();
     var s = document.getElementById("status"); s.textContent = d.ok; s.hidden = false; form.reset();
   });
-
-  // copy email
   document.getElementById("copyMail").addEventListener("click", function () {
-    var b = this, text = document.getElementById("mail").textContent, d = lang === "en" ? en : ar;
+    var b = this, d = dict(), el = document.getElementById("mail");
     function done() { var o = b.textContent; b.textContent = d.copied; setTimeout(function () { b.textContent = o; }, 1500); }
-    function fallback() { var r = document.createRange(); r.selectNodeContents(document.getElementById("mail")); var s = getSelection(); s.removeAllRanges(); s.addRange(r); }
-    try { navigator.clipboard.writeText(text).then(done, fallback); } catch (e) { fallback(); }
+    function fallback() { var r = document.createRange(); r.selectNodeContents(el); var s = getSelection(); s.removeAllRanges(); s.addRange(r); }
+    try { navigator.clipboard.writeText(el.textContent).then(done, fallback); } catch (e) { fallback(); }
   });
 })();
 </script>
