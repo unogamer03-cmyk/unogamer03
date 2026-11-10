@@ -1,0 +1,499 @@
+<title>Midad Studio</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="مِداد — استوديو تصميم هويات بصرية وشعارات وحملات للسعودية والخليج.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Reem+Kufi:wght@500;700&family=IBM+Plex+Sans+Arabic:wght@400;500;700&family=Space+Grotesk:wght@500;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: print-proof sheet. Asymmetric 12-col grid, crop marks + CMYK colour bar as the studio's signature, sharp brutalist edges. */
+:root {
+  --paper: #EEF0F2;      /* cool proof paper */
+  --ink: #0B1B2B;        /* process blue-black */
+  --ink-soft: #3A4A5C;
+  --rule: #0B1B2B;
+  --magenta: #C8006A;    /* process magenta: the one loud colour */
+  --on-magenta: #FFFFFF;
+  --cyan: #007DB8;
+  --yellow: #F2C500;
+  --card: #FFFFFF;
+  --muted: #DDE2E7;
+
+  --f-display-ar: "Reem Kufi", "IBM Plex Sans Arabic", "Geeza Pro", Tahoma, sans-serif;
+  --f-body-ar: "IBM Plex Sans Arabic", "Geeza Pro", Tahoma, sans-serif;
+  --f-display-en: "Space Grotesk", "Helvetica Neue", Arial, sans-serif;
+  --f-mono: "IBM Plex Mono", ui-monospace, Menlo, Consolas, monospace;
+
+  --s-1: 8px; --s-2: 16px; --s-3: 24px; --s-4: 40px; --s-5: 64px; --s-6: 96px;
+  --border: 2px solid var(--rule);
+  --maxw: 1280px;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #0C141D; --ink: #E7ECF1; --ink-soft: #A7B3C0; --rule: #E7ECF1;
+    --magenta: #FF4FA3; --on-magenta: #0C141D; --cyan: #4CC3F0; --yellow: #F2C500;
+    --card: #131E2A; --muted: #1C2938; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --paper: #0C141D; --ink: #E7ECF1; --ink-soft: #A7B3C0; --rule: #E7ECF1;
+  --magenta: #FF4FA3; --on-magenta: #0C141D; --cyan: #4CC3F0; --yellow: #F2C500;
+  --card: #131E2A; --muted: #1C2938; color-scheme: dark;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  background: var(--paper); color: var(--ink);
+  font-family: var(--f-body-ar); font-size: 16px; line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+}
+html[lang="en"] body { font-family: var(--f-display-en); line-height: 1.6; }
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--paper); }
+
+.wrap {
+  max-width: var(--maxw); margin-inline: auto;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+h1, h2, h3 { font-family: var(--f-display-ar); font-weight: 700; line-height: 1.15; margin: 0; text-wrap: balance; }
+html[lang="en"] h1, html[lang="en"] h2, html[lang="en"] h3 { font-family: var(--f-display-en); letter-spacing: -0.02em; }
+p { margin: 0; }
+a { color: inherit; }
+.mono { font-family: var(--f-mono); font-size: 12px; letter-spacing: 0.06em; text-transform: uppercase; direction: ltr; unicode-bidi: isolate; }
+.eyebrow { font-family: var(--f-mono); font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-soft); }
+html[lang="ar"] .eyebrow { letter-spacing: 0; text-transform: none; font-family: var(--f-body-ar); font-weight: 500; font-size: 14px; }
+
+:focus-visible { outline: 3px solid var(--cyan); outline-offset: 3px; }
+.skip { position: absolute; inset-inline-start: 16px; top: -60px; background: var(--ink); color: var(--paper); padding: 8px 14px; z-index: 50; }
+.skip:focus { top: calc(8px + env(safe-area-inset-top, 0px)); }
+
+/* Buttons */
+.btn {
+  display: inline-flex; align-items: center; gap: 10px; min-height: 48px; padding: 0 22px;
+  font: inherit; font-weight: 700; text-decoration: none; cursor: pointer;
+  border: var(--border); background: var(--card); color: var(--ink);
+  transition: transform .18s ease, box-shadow .18s ease, background-color .18s ease;
+}
+.btn:hover { transform: translate(-3px, -3px); box-shadow: 3px 3px 0 var(--rule); }
+html[dir="rtl"] .btn:hover { transform: translate(3px, -3px); box-shadow: -3px 3px 0 var(--rule); }
+.btn--primary { background: var(--magenta); color: var(--on-magenta); border-color: var(--magenta); }
+.btn svg { width: 18px; height: 18px; flex: none; }
+html[dir="rtl"] .btn svg.flip { transform: scaleX(-1); }
+
+/* Header */
+.top { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 20; background: var(--paper); border-bottom: var(--border); }
+.top .wrap { display: flex; align-items: center; gap: var(--s-3); min-height: 68px; }
+.logo { display: flex; align-items: baseline; gap: 10px; text-decoration: none; }
+.logo b { font-family: var(--f-display-ar); font-size: 28px; line-height: 1; }
+.logo span { font-family: var(--f-display-en); font-weight: 700; font-size: 13px; letter-spacing: 0.14em; }
+.logo i { width: 10px; height: 10px; background: var(--magenta); display: inline-block; }
+.nav { display: flex; gap: var(--s-3); margin-inline-start: auto; }
+.nav a { text-decoration: none; font-weight: 500; padding-block: 6px; border-bottom: 2px solid transparent; }
+.nav a:hover { border-bottom-color: var(--magenta); }
+.top-actions { display: flex; gap: var(--s-1); align-items: center; }
+.lang { min-height: 44px; min-width: 52px; padding: 0 12px; border: var(--border); background: transparent; color: var(--ink); font-family: var(--f-mono); font-weight: 500; cursor: pointer; }
+.lang:hover { background: var(--ink); color: var(--paper); }
+@media (max-width: 860px) { .nav { display: none; } .top-actions { margin-inline-start: auto; } .top .btn { display: none; } }
+
+/* Hero — framed like a proof sheet */
+.hero { padding-block: var(--s-5) var(--s-4); }
+.sheet { position: relative; border: var(--border); background: var(--card); padding: clamp(24px, 5vw, 64px); }
+.sheet::before, .sheet::after, .sheet > .crop-b::before, .sheet > .crop-b::after {
+  content: ""; position: absolute; width: 22px; height: 22px; border-color: var(--ink); border-style: solid;
+}
+.sheet::before { top: -14px; left: -14px; border-width: 0 1px 1px 0; }
+.sheet::after { top: -14px; right: -14px; border-width: 0 0 1px 1px; }
+.sheet > .crop-b::before { bottom: -14px; left: -14px; border-width: 1px 1px 0 0; }
+.sheet > .crop-b::after { bottom: -14px; right: -14px; border-width: 1px 0 0 1px; }
+.hero-grid { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: var(--s-3); align-items: end; }
+.hero h1 { grid-column: 1 / span 9; font-size: clamp(44px, 8.4vw, 120px); line-height: 1.08; }
+html[lang="en"] .hero h1 { line-height: 0.98; }
+.hero h1 em { font-style: normal; color: var(--magenta); }
+.hero-side { grid-column: 10 / span 3; display: grid; gap: var(--s-3); padding-bottom: 10px; }
+.hero-side p { color: var(--ink-soft); }
+.hero-cta { grid-column: 1 / -1; display: flex; flex-wrap: wrap; gap: var(--s-2); align-items: center; margin-top: var(--s-3); }
+@media (max-width: 860px) { .hero h1, .hero-side { grid-column: 1 / -1; } }
+
+/* CMYK colour bar */
+.colorbar { display: grid; grid-template-columns: repeat(8, minmax(0, 1fr)); border: var(--border); border-top: 0; direction: ltr; }
+.colorbar div { min-height: 44px; display: flex; align-items: flex-end; padding: 6px 8px; font-family: var(--f-mono); font-size: 11px; border-inline-end: 1px solid var(--rule); }
+.colorbar div:last-child { border-inline-end: 0; }
+@media (max-width: 560px) { .colorbar { grid-template-columns: repeat(4, minmax(0, 1fr)); } .colorbar div:nth-child(n+5) { display: none; } }
+
+/* Sections */
+section { padding-block: var(--s-6) 0; }
+.sec-head { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: var(--s-3); align-items: end; padding-bottom: var(--s-3); border-bottom: var(--border); margin-bottom: var(--s-4); }
+.sec-head h2 { grid-column: 1 / span 7; font-size: clamp(34px, 5vw, 64px); }
+.sec-head p { grid-column: 8 / span 5; color: var(--ink-soft); max-width: 46ch; }
+.sec-head .eyebrow { grid-column: 1 / -1; }
+@media (max-width: 860px) { .sec-head h2, .sec-head p { grid-column: 1 / -1; } }
+
+/* Work */
+.filters { display: flex; flex-wrap: wrap; gap: var(--s-1); margin-bottom: var(--s-3); }
+.chip { min-height: 44px; padding: 0 18px; border: var(--border); background: transparent; color: var(--ink); font: inherit; font-weight: 500; cursor: pointer; transition: background-color .15s ease, color .15s ease; }
+.chip[aria-pressed="true"] { background: var(--ink); color: var(--paper); }
+.chip:hover:not([aria-pressed="true"]) { background: var(--muted); }
+.work { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: var(--s-3); }
+.piece { grid-column: span 4; display: grid; gap: 12px; margin: 0; }
+.piece.wide { grid-column: span 8; }
+@media (max-width: 960px) { .piece, .piece.wide { grid-column: span 6; } }
+@media (max-width: 600px) { .piece, .piece.wide { grid-column: 1 / -1; } }
+.art { position: relative; aspect-ratio: 4 / 3; max-width: 100%; border: var(--border); overflow: hidden; display: grid; place-items: center; }
+.piece.wide .art { aspect-ratio: 16 / 9; }
+.piece figcaption { display: flex; justify-content: space-between; gap: var(--s-2); align-items: baseline; }
+.piece figcaption strong { font-size: 18px; }
+.piece figcaption span { color: var(--ink-soft); font-size: 14px; }
+.tag-sample { position: absolute; inset-block-start: 10px; inset-inline-start: 10px; background: var(--paper); color: var(--ink); border: 1px solid var(--rule); padding: 2px 8px; font-size: 12px; }
+
+/* concept art pieces (pure CSS placeholders for real project images) */
+.a1 { background: var(--magenta); color: var(--on-magenta); }
+.a1 .glyph { font-family: var(--f-display-ar); font-size: clamp(120px, 20vw, 260px); line-height: 1; }
+.a1 .word { position: absolute; inset-block-end: 16px; inset-inline-end: 20px; font-family: var(--f-display-en); font-weight: 700; letter-spacing: .3em; font-size: 14px; direction: ltr; }
+.a2 { background: var(--ink); }
+.a2 .mark { width: 46%; aspect-ratio: 1; border-radius: 50%; background: conic-gradient(var(--yellow) 0 25%, transparent 0 50%, var(--cyan) 0 75%, transparent 0); border: 2px solid var(--yellow); }
+.a3 { background: var(--yellow); color: #0B1B2B; }
+.a3 .stack { display: grid; gap: 6px; width: 70%; }
+.a3 .stack i { display: block; height: 18px; background: #0B1B2B; }
+.a3 .stack i:nth-child(2) { width: 70%; } .a3 .stack i:nth-child(3) { width: 45%; background: #C8006A; }
+.a4 { background: var(--card); background-image: repeating-linear-gradient(90deg, var(--muted) 0 1px, transparent 1px 32px), repeating-linear-gradient(0deg, var(--muted) 0 1px, transparent 1px 32px); }
+.a4 .box { width: 34%; aspect-ratio: 2/3; background: var(--cyan); border: 2px solid var(--rule); box-shadow: 14px 14px 0 var(--ink); }
+.a5 { background: var(--card); }
+.a5 .poster { font-family: var(--f-display-ar); font-size: clamp(36px, 5.6vw, 76px); line-height: 1.05; text-align: center; color: var(--ink); }
+.a5 .poster span { color: var(--magenta); }
+
+/* Process — a real sequence, so numbered */
+.steps { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); border: var(--border); counter-reset: step; list-style: none; margin: 0; padding: 0; }
+.steps li { padding: var(--s-4) var(--s-3); border-inline-end: var(--border); display: grid; gap: 12px; align-content: start; min-width: 0; }
+.steps li:last-child { border-inline-end: 0; }
+.steps .n { font-family: var(--f-display-en); font-weight: 700; font-size: 48px; line-height: 1; color: var(--magenta); }
+.steps h3 { font-size: 24px; }
+.steps p { color: var(--ink-soft); }
+.steps .out { margin-top: 8px; padding-top: 12px; border-top: 1px dashed var(--rule); font-size: 14px; }
+@media (max-width: 960px) { .steps { grid-template-columns: repeat(2, minmax(0, 1fr)); } .steps li:nth-child(2) { border-inline-end: 0; } .steps li:nth-child(-n+2) { border-bottom: var(--border); } }
+@media (max-width: 560px) { .steps { grid-template-columns: 1fr; } .steps li { border-inline-end: 0; border-bottom: var(--border); } .steps li:last-child { border-bottom: 0; } }
+
+/* Services as spec table */
+.services { border-top: var(--border); }
+.svc { display: grid; grid-template-columns: minmax(0, 4fr) minmax(0, 5fr) minmax(0, 3fr); gap: var(--s-3); padding-block: var(--s-3); border-bottom: var(--border); align-items: start; }
+.svc h3 { font-size: clamp(24px, 3vw, 34px); }
+.svc p { color: var(--ink-soft); }
+.svc ul { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 6px; }
+.svc li { font-family: var(--f-mono); font-size: 12px; padding: 4px 8px; background: var(--muted); direction: ltr; unicode-bidi: isolate; }
+@media (max-width: 860px) { .svc { grid-template-columns: 1fr; gap: 12px; } }
+
+/* Contact */
+.contact { margin-top: var(--s-6); background: var(--ink); color: var(--paper); }
+.contact .wrap { padding-block: var(--s-6); display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: var(--s-4); }
+.contact h2 { grid-column: 1 / span 6; font-size: clamp(40px, 6vw, 84px); }
+.contact h2 em { font-style: normal; color: var(--magenta); }
+.contact .lead { margin-top: var(--s-3); color: var(--paper); opacity: .8; max-width: 44ch; }
+.contact-left { grid-column: 1 / span 6; }
+form { grid-column: 8 / span 5; display: grid; gap: var(--s-2); align-content: start; }
+@media (max-width: 860px) { .contact .wrap { grid-template-columns: minmax(0, 1fr); } .contact-left, form { grid-column: 1 / -1; } }
+.field { display: grid; gap: 6px; }
+.field label { font-weight: 500; font-size: 14px; }
+.field input, .field select, .field textarea {
+  font: inherit; color: var(--paper); background: transparent; border: 2px solid var(--paper);
+  padding: 12px 14px; min-height: 48px; border-radius: 0; width: 100%;
+}
+.field textarea { min-height: 110px; resize: vertical; }
+.field select option { color: #0B1B2B; }
+.field .err { color: var(--magenta); font-size: 13px; min-height: 1em; }
+.field [aria-invalid="true"] { border-color: var(--magenta); }
+.contact .btn { border-color: var(--magenta); }
+.note { font-size: 13px; opacity: .75; }
+.status { padding: 12px 14px; border: 2px solid var(--yellow); }
+
+footer { background: var(--ink); color: var(--paper); border-top: 1px solid var(--ink-soft); }
+footer .wrap { display: flex; flex-wrap: wrap; gap: var(--s-2); justify-content: space-between; padding-block: var(--s-3); font-size: 14px; opacity: .85; }
+.copy { display: inline-flex; gap: 8px; align-items: center; }
+.copy code { font-family: var(--f-mono); direction: ltr; unicode-bidi: isolate; user-select: all; }
+.copy button { min-height: 44px; padding: 0 12px; border: 1px solid var(--paper); background: transparent; color: var(--paper); cursor: pointer; font: inherit; font-size: 13px; }
+
+/* Motion: content is visible at rest; only a short transform settles in */
+@media (prefers-reduced-motion: no-preference) {
+  .rise { animation: rise .6s cubic-bezier(.2,.7,.2,1) both; }
+  .rise:nth-child(2) { animation-delay: .08s; } .rise:nth-child(3) { animation-delay: .16s; }
+  @keyframes rise { from { transform: translateY(14px); } to { transform: none; } }
+}
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } .btn, .chip { transition: none; } }
+</style>
+
+<a class="skip" href="#main" data-i18n="skip">انتقل إلى المحتوى</a>
+
+<header class="top">
+  <div class="wrap">
+    <a class="logo" href="#main" aria-label="Midad Studio">
+      <b>مِداد</b><i aria-hidden="true"></i><span>MIDAD</span>
+    </a>
+    <nav class="nav" aria-label="الرئيسية" data-i18n-aria="navLabel">
+      <a href="#work" data-i18n="navWork">الأعمال</a>
+      <a href="#process" data-i18n="navProcess">المنهجية</a>
+      <a href="#services" data-i18n="navServices">الخدمات</a>
+      <a href="#contact" data-i18n="navContact">تواصل</a>
+    </nav>
+    <div class="top-actions">
+      <button class="lang" id="langToggle" type="button" aria-label="Switch to English">EN</button>
+      <a class="btn btn--primary" href="#contact" data-i18n="ctaTop">ابدأ مشروعك</a>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+  <div class="wrap hero">
+    <div class="sheet">
+      <span class="crop-b" aria-hidden="true"></span>
+      <div class="hero-grid">
+        <h1 class="rise" data-i18n-html="heroTitle">هويّات تُقرأ <em>من بعيد</em>،<br>وتبقى في الذاكرة.</h1>
+        <div class="hero-side rise">
+          <span class="eyebrow" data-i18n="heroEyebrow">استوديو تصميم · السعودية والخليج</span>
+          <p data-i18n="heroLead">نبني الهويات البصرية والشعارات والحملات لعلامات تريد أن تُعرف من النظرة الأولى، بالعربية والإنجليزية معاً.</p>
+        </div>
+        <div class="hero-cta rise">
+          <a class="btn btn--primary" href="#contact">
+            <span data-i18n="heroCta">احجز جلسة اكتشاف</span>
+            <svg class="flip" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </a>
+          <a class="btn" href="#work" data-i18n="heroCta2">شاهد الأعمال</a>
+        </div>
+      </div>
+    </div>
+    <div class="colorbar" aria-hidden="true">
+      <div style="background:#00A0E3;color:#0B1B2B">C100</div>
+      <div style="background:#E4007C;color:#FFFFFF">M100</div>
+      <div style="background:#FFED00;color:#0B1B2B">Y100</div>
+      <div style="background:#1D1D1B;color:#FFFFFF">K100</div>
+      <div style="background:#80CFF1;color:#0B1B2B">C50</div>
+      <div style="background:#F180BE;color:#0B1B2B">M50</div>
+      <div style="background:#FFF680;color:#0B1B2B">Y50</div>
+      <div style="background:#8E8E8D;color:#0B1B2B">K50</div>
+    </div>
+  </div>
+
+  <section id="work" aria-labelledby="work-h">
+    <div class="wrap">
+      <div class="sec-head">
+        <span class="eyebrow" data-i18n="workEyebrow">أعمال مختارة</span>
+        <h2 id="work-h" data-i18n="workTitle">العمل يتكلم أولاً</h2>
+        <p data-i18n="workLead">كل مشروع يبدأ بسؤال واحد: ماذا يجب أن يتذكره الناس عن هذه العلامة؟</p>
+      </div>
+      <div class="filters" role="group" aria-label="تصفية الأعمال" data-i18n-aria="filterLabel">
+        <button class="chip" type="button" data-filter="all" aria-pressed="true" data-i18n="fAll">الكل</button>
+        <button class="chip" type="button" data-filter="identity" aria-pressed="false" data-i18n="fIdentity">هوية بصرية</button>
+        <button class="chip" type="button" data-filter="logo" aria-pressed="false" data-i18n="fLogo">شعارات</button>
+        <button class="chip" type="button" data-filter="campaign" aria-pressed="false" data-i18n="fCampaign">حملات</button>
+        <button class="chip" type="button" data-filter="packaging" aria-pressed="false" data-i18n="fPackaging">تغليف</button>
+      </div>
+      <div class="work" id="workGrid">
+        <figure class="piece wide" data-cat="identity">
+          <div class="art a1" role="img" aria-label="مفهوم هوية: حرف القاف بخط كوفي على خلفية ماجنتا" data-i18n-aria="art1">
+            <span class="tag-sample" data-i18n="sample">نموذج</span>
+            <span class="glyph">ق</span><span class="word">QAHWA</span>
+          </div>
+          <figcaption><strong data-i18n="p1">قهوة · هوية بصرية</strong><span data-i18n="p1s">محمصة قهوة مختصة</span></figcaption>
+        </figure>
+        <figure class="piece" data-cat="logo">
+          <div class="art a2" role="img" aria-label="مفهوم شعار: دائرة مقسومة بالأصفر والسماوي" data-i18n-aria="art2">
+            <span class="tag-sample" data-i18n="sample">نموذج</span><span class="mark"></span>
+          </div>
+          <figcaption><strong data-i18n="p2">مدار · شعار</strong><span data-i18n="p2s">شركة تقنية مالية</span></figcaption>
+        </figure>
+        <figure class="piece" data-cat="campaign">
+          <div class="art a3" role="img" aria-label="مفهوم حملة: أشرطة عناوين على خلفية صفراء" data-i18n-aria="art3">
+            <span class="tag-sample" data-i18n="sample">نموذج</span>
+            <div class="stack"><i></i><i></i><i></i></div>
+          </div>
+          <figcaption><strong data-i18n="p3">صيف · حملة</strong><span data-i18n="p3s">مهرجان صيفي: لوحات خارجية وسوشال</span></figcaption>
+        </figure>
+        <figure class="piece" data-cat="packaging">
+          <div class="art a4" role="img" aria-label="مفهوم تغليف: علبة سماوية على شبكة" data-i18n-aria="art4">
+            <span class="tag-sample" data-i18n="sample">نموذج</span><span class="box"></span>
+          </div>
+          <figcaption><strong data-i18n="p4">نخلة · تغليف</strong><span data-i18n="p4s">علب تمور فاخرة</span></figcaption>
+        </figure>
+        <figure class="piece" data-cat="campaign identity">
+          <div class="art a5" role="img" aria-label="مفهوم ملصق: عنوان عربي كبير" data-i18n-aria="art5">
+            <span class="tag-sample" data-i18n="sample">نموذج</span>
+            <p class="poster" data-i18n-html="poster">افتتاح<br><span>قريباً</span></p>
+          </div>
+          <figcaption><strong data-i18n="p5">دار · إطلاق علامة</strong><span data-i18n="p5s">معرض تصميم داخلي</span></figcaption>
+        </figure>
+      </div>
+    </div>
+  </section>
+
+  <section id="process" aria-labelledby="process-h">
+    <div class="wrap">
+      <div class="sec-head">
+        <span class="eyebrow" data-i18n="procEyebrow">المنهجية</span>
+        <h2 id="process-h" data-i18n="procTitle">من الفكرة إلى ملف المطبعة</h2>
+        <p data-i18n="procLead">أربع مراحل واضحة، ولكل مرحلة مخرج تستلمه وتوافق عليه قبل أن ننتقل.</p>
+      </div>
+      <ol class="steps">
+        <li><span class="n">01</span><h3 data-i18n="s1">اكتشاف</h3><p data-i18n="s1d">جلسة مع فريقك، وتحليل للمنافسين والجمهور.</p><span class="out" data-i18n="s1o">المخرج: موجز إبداعي معتمد</span></li>
+        <li><span class="n">02</span><h3 data-i18n="s2">اتجاهات</h3><p data-i18n="s2d">اتجاهان أو ثلاثة مختلفة جذرياً، مع توصية صريحة بالأقوى.</p><span class="out" data-i18n="s2o">المخرج: لوحات مفاهيم</span></li>
+        <li><span class="n">03</span><h3 data-i18n="s3">تطوير</h3><p data-i18n="s3d">نبني النظام كاملاً: الشعار والخطوط العربية واللاتينية والألوان والتطبيقات.</p><span class="out" data-i18n="s3o">المخرج: نظام الهوية</span></li>
+        <li><span class="n">04</span><h3 data-i18n="s4">تسليم</h3><p data-i18n="s4d">ملفات جاهزة للطباعة والشاشة، ودليل استخدام يفهمه فريقك.</p><span class="out" data-i18n="s4o">المخرج: Brand Guidelines + ملفات</span></li>
+      </ol>
+    </div>
+  </section>
+
+  <section id="services" aria-labelledby="services-h">
+    <div class="wrap">
+      <div class="sec-head">
+        <span class="eyebrow" data-i18n="svcEyebrow">الخدمات</span>
+        <h2 id="services-h" data-i18n="svcTitle">ماذا نصمم، وماذا تستلم</h2>
+        <p data-i18n="svcLead">نحدد صيغ التسليم من البداية حتى لا تفاجئك المطبعة أو المنصة.</p>
+      </div>
+      <div class="services">
+        <div class="svc"><h3 data-i18n="v1">الهوية البصرية</h3><p data-i18n="v1d">نظام كامل يعمل بالعربية والإنجليزية: شعار، خطوط، ألوان، أنماط، وتطبيقات.</p><ul><li>AI / PDF / SVG</li><li>CMYK + RGB + Pantone</li><li>Guidelines PDF</li></ul></div>
+        <div class="svc"><h3 data-i18n="v2">الشعارات</h3><p data-i18n="v2d">علامة تُقرأ في 16 بكسل وعلى واجهة مبنى، مع نسخة عربية ولاتينية متوازنة.</p><ul><li>Primary / Secondary / Icon</li><li>Min size spec</li></ul></div>
+        <div class="svc"><h3 data-i18n="v3">الحملات الإعلانية</h3><p data-i18n="v3d">فكرة واحدة قوية تتمدد عبر اللوحات الخارجية والسوشال والمطبوعات.</p><ul><li>OOH print-ready</li><li>1080×1350 · 1080×1920</li></ul></div>
+        <div class="svc"><h3 data-i18n="v4">التغليف</h3><p data-i18n="v4d">تصميم على القالب الفعلي للمصنع، مع النزف ومناطق الأمان.</p><ul><li>Dieline</li><li>3mm bleed</li><li>300 dpi</li></ul></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="contact" id="contact" aria-labelledby="contact-h">
+    <div class="wrap">
+      <div class="contact-left">
+        <h2 id="contact-h" data-i18n-html="ctaTitle">عندك علامة<br>تستحق أن <em>تُرى</em>؟</h2>
+        <p class="lead" data-i18n="ctaLead">أخبرنا عن مشروعك في دقيقتين. نرد خلال يومي عمل بخطة مبدئية وجدول زمني.</p>
+      </div>
+      <form id="brief" novalidate>
+        <div class="field">
+          <label for="f-name" data-i18n="fName">الاسم</label>
+          <input id="f-name" name="name" autocomplete="name" required aria-describedby="e-name">
+          <span class="err" id="e-name" aria-live="polite"></span>
+        </div>
+        <div class="field">
+          <label for="f-email" data-i18n="fEmail">البريد الإلكتروني</label>
+          <input id="f-email" name="email" type="email" autocomplete="email" dir="ltr" required aria-describedby="e-email">
+          <span class="err" id="e-email" aria-live="polite"></span>
+        </div>
+        <div class="field">
+          <label for="f-type" data-i18n="fType">نوع المشروع</label>
+          <select id="f-type" name="type">
+            <option data-i18n="o1">هوية بصرية كاملة</option>
+            <option data-i18n="o2">شعار</option>
+            <option data-i18n="o3">حملة إعلانية</option>
+            <option data-i18n="o4">تغليف</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="f-msg" data-i18n="fMsg">نبذة عن المشروع</label>
+          <textarea id="f-msg" name="message"></textarea>
+        </div>
+        <button class="btn btn--primary" type="submit" data-i18n="fSend">أرسل الموجز</button>
+        <p class="note" data-i18n="fNote">هذه نسخة عرض: النموذج غير موصول بعد ببريد أو نظام CRM.</p>
+        <p class="status" id="status" role="status" hidden></p>
+      </form>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span data-i18n="foot">© مِداد للتصميم</span>
+    <span class="copy"><code id="mail">hello@midad.studio</code><button type="button" id="copyMail" data-i18n="copy">نسخ</button></span>
+  </div>
+</footer>
+
+<script>
+(function () {
+  var en = {
+    skip: "Skip to content", navLabel: "Main", navWork: "Work", navProcess: "Process", navServices: "Services", navContact: "Contact",
+    ctaTop: "Start a project",
+    heroTitle: "Identities that read <em>from afar</em><br>and stay in memory.",
+    heroEyebrow: "Design studio · Saudi Arabia & GCC",
+    heroLead: "We build visual identities, logos and campaigns for brands that want to be known at first glance, in Arabic and English together.",
+    heroCta: "Book a discovery session", heroCta2: "See the work",
+    workEyebrow: "Selected work", workTitle: "The work speaks first",
+    workLead: "Every project starts with one question: what should people remember about this brand?",
+    filterLabel: "Filter work", fAll: "All", fIdentity: "Identity", fLogo: "Logos", fCampaign: "Campaigns", fPackaging: "Packaging",
+    sample: "Sample",
+    art1: "Identity concept: Kufic letter Qaf on magenta", art2: "Logo concept: circle split in yellow and cyan",
+    art3: "Campaign concept: headline bars on yellow", art4: "Packaging concept: cyan box on a grid", art5: "Poster concept: large Arabic headline",
+    p1: "Qahwa · Identity", p1s: "Specialty coffee roaster", p2: "Madar · Logo", p2s: "Fintech company",
+    p3: "Sayf · Campaign", p3s: "Summer festival: outdoor and social", p4: "Nakhla · Packaging", p4s: "Premium date boxes",
+    p5: "Dar · Brand launch", p5s: "Interior design showroom", poster: "Opening<br><span>soon</span>",
+    procEyebrow: "Process", procTitle: "From idea to print-ready file",
+    procLead: "Four clear stages. Each ends with a deliverable you approve before we move on.",
+    s1: "Discover", s1d: "A session with your team, plus competitor and audience analysis.", s1o: "Deliverable: approved creative brief",
+    s2: "Directions", s2d: "Two or three truly different directions, with a clear recommendation.", s2o: "Deliverable: concept boards",
+    s3: "Develop", s3d: "We build the full system: logo, Arabic and Latin type, colour and applications.", s3o: "Deliverable: identity system",
+    s4: "Deliver", s4d: "Print and screen-ready files, and a guide your team can follow.", s4o: "Deliverable: Brand Guidelines + files",
+    svcEyebrow: "Services", svcTitle: "What we design, and what you get",
+    svcLead: "We agree delivery formats up front, so the printer or platform never surprises you.",
+    v1: "Visual identity", v1d: "A complete system that works in Arabic and English: logo, type, colour, patterns and applications.",
+    v2: "Logos", v2d: "A mark that reads at 16 pixels and on a building facade, with balanced Arabic and Latin versions.",
+    v3: "Campaigns", v3d: "One strong idea that stretches across outdoor, social and print.",
+    v4: "Packaging", v4d: "Designed on the factory's real dieline, with bleed and safe zones.",
+    ctaTitle: "Got a brand that<br>deserves to be <em>seen</em>?",
+    ctaLead: "Tell us about your project in two minutes. We reply within two working days with an outline plan and timeline.",
+    fName: "Name", fEmail: "Email", fType: "Project type", o1: "Full visual identity", o2: "Logo", o3: "Ad campaign", o4: "Packaging",
+    fMsg: "About the project", fSend: "Send brief", fNote: "Demo version: the form is not yet connected to email or a CRM.",
+    foot: "© Midad Design Studio", copy: "Copy",
+    errName: "Enter your name.", errEmail: "Enter a valid email, like name@company.com.",
+    ok: "Brief received in this demo. Connect the form to email or a CRM to receive real briefs.", copied: "Copied",
+    toggle: "ع", toggleLabel: "التبديل إلى العربية", navAria: "Main"
+  };
+  var ar = { errName: "اكتب اسمك.", errEmail: "اكتب بريداً صحيحاً، مثل name@company.com.",
+    ok: "استُلم الموجز في نسخة العرض. اربط النموذج ببريد أو CRM لاستقبال الطلبات فعلياً.", copied: "تم النسخ",
+    toggle: "EN", toggleLabel: "Switch to English" };
+
+  // capture the Arabic source text once
+  document.querySelectorAll("[data-i18n]").forEach(function (el) { ar[el.dataset.i18n] = el.textContent; });
+  document.querySelectorAll("[data-i18n-html]").forEach(function (el) { ar[el.dataset.i18nHtml] = el.innerHTML; });
+  document.querySelectorAll("[data-i18n-aria]").forEach(function (el) { ar[el.dataset.i18nAria] = el.getAttribute("aria-label"); });
+
+  var lang = "ar";
+  function apply(l) {
+    lang = l; var d = l === "en" ? en : ar, root = document.documentElement;
+    root.lang = l; root.dir = l === "en" ? "ltr" : "rtl";
+    document.querySelectorAll("[data-i18n]").forEach(function (el) { var v = d[el.dataset.i18n]; if (v != null) el.textContent = v; });
+    document.querySelectorAll("[data-i18n-html]").forEach(function (el) { var v = d[el.dataset.i18nHtml]; if (v != null) el.innerHTML = v; });
+    document.querySelectorAll("[data-i18n-aria]").forEach(function (el) { var v = d[el.dataset.i18nAria]; if (v != null) el.setAttribute("aria-label", v); });
+    var t = document.getElementById("langToggle"); t.textContent = d.toggle; t.setAttribute("aria-label", d.toggleLabel);
+    try { localStorage.setItem("midad-lang", l); } catch (e) {}
+  }
+  var saved = null; try { saved = localStorage.getItem("midad-lang"); } catch (e) {}
+  apply(saved === "en" ? "en" : "ar");
+  document.getElementById("langToggle").addEventListener("click", function () { apply(lang === "ar" ? "en" : "ar"); });
+
+  // work filter
+  var chips = document.querySelectorAll(".chip");
+  chips.forEach(function (c) {
+    c.addEventListener("click", function () {
+      var f = c.dataset.filter;
+      chips.forEach(function (x) { x.setAttribute("aria-pressed", String(x === c)); });
+      document.querySelectorAll("#workGrid .piece").forEach(function (p) {
+        p.hidden = !(f === "all" || p.dataset.cat.split(" ").indexOf(f) > -1);
+      });
+    });
+  });
+
+  // form: validate near each field
+  var form = document.getElementById("brief");
+  function setErr(id, msg) {
+    var input = document.getElementById("f-" + id); document.getElementById("e-" + id).textContent = msg || "";
+    input.setAttribute("aria-invalid", msg ? "true" : "false");
+  }
+  form.addEventListener("submit", function (e) {
+    e.preventDefault();
+    var d = lang === "en" ? en : ar, nameEl = document.getElementById("f-name"), mailEl = document.getElementById("f-email"), name = nameEl.value.trim(), email = mailEl.value.trim();
+    var okName = name.length > 1, okMail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    setErr("name", okName ? "" : d.errName); setErr("email", okMail ? "" : d.errEmail);
+    if (!okName) return nameEl.focus(); if (!okMail) return mailEl.focus();
+    var s = document.getElementById("status"); s.textContent = d.ok; s.hidden = false; form.reset();
+  });
+
+  // copy email
+  document.getElementById("copyMail").addEventListener("click", function () {
+    var b = this, text = document.getElementById("mail").textContent, d = lang === "en" ? en : ar;
+    function done() { var o = b.textContent; b.textContent = d.copied; setTimeout(function () { b.textContent = o; }, 1500); }
+    function fallback() { var r = document.createRange(); r.selectNodeContents(document.getElementById("mail")); var s = getSelection(); s.removeAllRanges(); s.addRange(r); }
+    try { navigator.clipboard.writeText(text).then(done, fallback); } catch (e) { fallback(); }
+  });
+})();
+</script>
