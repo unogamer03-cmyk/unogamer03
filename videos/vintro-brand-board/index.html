@@ -1,0 +1,308 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <style>
+      @font-face {
+        font-family: "Vintro Serif";
+        font-style: italic;
+        font-weight: 300;
+        src: url("assets/fonts/fraunces-latin-300-italic.woff2") format("woff2");
+      }
+      @font-face {
+        font-family: "Vintro Serif";
+        font-style: italic;
+        font-weight: 700;
+        src: url("assets/fonts/fraunces-latin-700-italic.woff2") format("woff2");
+      }
+      @font-face {
+        font-family: "Vintro Serif";
+        font-style: italic;
+        font-weight: 900;
+        src: url("assets/fonts/fraunces-latin-900-italic.woff2") format("woff2");
+      }
+      :root {
+        --ink: #1a1416;
+        --cream: #f2e9d8;
+        --vermilion: #e0482c;
+        --brass: #c7a15a;
+      }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        width: 1920px;
+        height: 1080px;
+        overflow: hidden;
+        background: var(--cream);
+      }
+      #root {
+        position: relative;
+        width: 1920px;
+        height: 1080px;
+        font-family: "Vintro Serif", serif;
+        font-style: italic;
+        color: var(--ink);
+      }
+      /* Left: primary lockup on ink */
+      #hero {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 1020px;
+        height: 1080px;
+        background: var(--ink);
+      }
+      .label {
+        font-weight: 300;
+        font-size: 22px;
+        letter-spacing: 0.08em;
+        opacity: 0.7;
+      }
+      #hero .label {
+        position: absolute;
+        left: 96px;
+        color: var(--cream);
+      }
+      #hero-top {
+        top: 88px;
+      }
+      #hero-bottom {
+        bottom: 88px;
+      }
+      #lockup {
+        position: absolute;
+        left: 96px;
+        top: 50%;
+        transform: translateY(-50%);
+        display: flex;
+        align-items: center;
+        gap: 44px;
+      }
+      .disc {
+        flex: none;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 900;
+        line-height: 1;
+      }
+      .disc span {
+        padding-right: 0.06em;
+        margin-top: -0.06em;
+      }
+      #lockup .disc {
+        width: 150px;
+        height: 150px;
+        font-size: 126px;
+        background: var(--vermilion);
+        color: var(--cream);
+      }
+      #lockup-name {
+        font-weight: 700;
+        font-size: 176px;
+        line-height: 1;
+        letter-spacing: -0.025em;
+        color: var(--cream);
+      }
+      #lockup-rule {
+        height: 3px;
+        width: 530px;
+        margin: 14px 0 0 4px;
+        background: var(--brass);
+      }
+      #lockup-sub {
+        margin: 12px 0 0 8px;
+        font-weight: 300;
+        font-size: 48px;
+        letter-spacing: 0.04em;
+        color: var(--brass);
+      }
+      /* Right: system */
+      #system {
+        position: absolute;
+        left: 1100px;
+        right: 88px;
+        top: 88px;
+        bottom: 88px;
+        display: grid;
+        grid-template-rows: auto auto auto auto;
+        row-gap: 60px;
+      }
+      h2 {
+        font-weight: 300;
+        font-size: 22px;
+        letter-spacing: 0.08em;
+        opacity: 0.7;
+        margin-bottom: 18px;
+      }
+      #type {
+        display: flex;
+        align-items: flex-end;
+        gap: 36px;
+      }
+      #type-aa {
+        font-weight: 900;
+        font-size: 168px;
+        line-height: 0.85;
+      }
+      #type-weights div {
+        font-size: 30px;
+        line-height: 1.35;
+      }
+      #palette {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 14px;
+      }
+      .sw {
+        height: 128px;
+        border-radius: 6px;
+        padding: 14px 16px;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+        font-size: 20px;
+        line-height: 1.3;
+      }
+      .sw b {
+        font-weight: 700;
+        font-size: 24px;
+      }
+      #sw-ink {
+        background: var(--ink);
+        color: var(--cream);
+      }
+      #sw-cream {
+        background: var(--cream);
+        color: var(--ink);
+        box-shadow: inset 0 0 0 1.5px rgba(26, 20, 22, 0.25);
+      }
+      #sw-vermilion {
+        background: var(--vermilion);
+        color: var(--ink);
+      }
+      #sw-brass {
+        background: var(--brass);
+        color: var(--ink);
+      }
+      #marks {
+        display: flex;
+        align-items: center;
+        gap: 36px;
+      }
+      #marks .disc {
+        width: 104px;
+        height: 104px;
+        font-size: 88px;
+      }
+      #m1 {
+        background: var(--vermilion);
+        color: var(--cream);
+      }
+      #m2 {
+        background: var(--ink);
+        color: var(--cream);
+      }
+      #m3 {
+        background: transparent;
+        color: var(--ink);
+        box-shadow: inset 0 0 0 3px var(--ink);
+      }
+      #lean-wrap {
+        display: flex;
+        align-items: center;
+        gap: 26px;
+        margin-left: 20px;
+      }
+      #lean {
+        width: 14px;
+        height: 110px;
+        background: var(--vermilion);
+        transform: skewX(-12deg);
+      }
+      #lean-copy {
+        font-size: 24px;
+        line-height: 1.35;
+      }
+      #lean-copy b {
+        font-weight: 700;
+        font-size: 30px;
+      }
+      #voice {
+        font-weight: 700;
+        font-size: 50px;
+        line-height: 1.1;
+        letter-spacing: -0.01em;
+      }
+      #voice em {
+        color: var(--vermilion);
+        font-style: italic;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-width="1920" data-height="1080" data-no-timeline>
+      <section id="hero">
+        <div id="hero-top" class="label">VINTRO DESIGNS — IDENTITY SYSTEM v1.0</div>
+        <div id="lockup">
+          <div class="disc"><span>V</span></div>
+          <div>
+            <div id="lockup-name">Vintro</div>
+            <div id="lockup-rule"></div>
+            <div id="lockup-sub">Designs</div>
+          </div>
+        </div>
+        <div id="hero-bottom" class="label">PRIMARY LOCKUP · ON INK</div>
+      </section>
+
+      <section id="system">
+        <div>
+          <h2>TYPEFACE</h2>
+          <div id="type">
+            <div id="type-aa">Aa</div>
+            <div id="type-weights">
+              <div style="font-weight: 300; opacity: 0.7">Fraunces Italic</div>
+              <div style="font-weight: 900">Black · Display</div>
+              <div style="font-weight: 700">Bold · Wordmark</div>
+              <div style="font-weight: 300">Light · Text</div>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <h2>PALETTE</h2>
+          <div id="palette">
+            <div id="sw-ink" class="sw"><b>Ink</b>#1A1416</div>
+            <div id="sw-cream" class="sw"><b>Cream</b>#F2E9D8</div>
+            <div id="sw-vermilion" class="sw"><b>Vermilion</b>#E0482C</div>
+            <div id="sw-brass" class="sw"><b>Brass</b>#C7A15A</div>
+          </div>
+        </div>
+
+        <div>
+          <h2>MONOGRAM · THE LEAN</h2>
+          <div id="marks">
+            <div id="m1" class="disc"><span>V</span></div>
+            <div id="m2" class="disc"><span>V</span></div>
+            <div id="m3" class="disc"><span>V</span></div>
+            <div id="lean-wrap">
+              <div id="lean"></div>
+              <div id="lean-copy"><b>12°</b><br />Every element leans<br />with the type.</div>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <h2>VOICE</h2>
+          <div id="voice">Design that makes an <em>entrance.</em></div>
+        </div>
+      </section>
+    </div>
+  </body>
+</html>
