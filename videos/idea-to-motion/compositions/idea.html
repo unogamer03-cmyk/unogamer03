@@ -1,0 +1,98 @@
+<template>
+  <style>
+    @font-face {
+      font-family: "Plex Arabic";
+      font-weight: 700;
+      src: url("assets/fonts/ibm-plex-sans-arabic-arabic-700-normal.woff2") format("woff2");
+      unicode-range: U+0600-06FF, U+0750-077F, U+FB50-FDFF, U+FE70-FEFF;
+    }
+    @font-face {
+      font-family: "Plex Arabic";
+      font-weight: 700;
+      src: url("assets/fonts/ibm-plex-sans-arabic-latin-700-normal.woff2") format("woff2");
+      unicode-range: U+0000-00FF;
+    }
+    #root {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+    }
+    #idea-ground {
+      position: absolute;
+      inset: 0;
+      background: var(--paper);
+    }
+    #idea-stage {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    #idea-lockup {
+      position: relative;
+      width: max-content;
+      direction: rtl;
+    }
+    #idea-title {
+      display: flex;
+      gap: 0.28em;
+      font-family: "Plex Arabic", sans-serif;
+      font-weight: 700;
+      font-size: 210px;
+      line-height: 1.35;
+      color: var(--ink);
+    }
+    #idea-title span {
+      display: inline-block;
+    }
+    #idea-line {
+      position: absolute;
+      right: 0;
+      bottom: -10px;
+      width: calc(100% + 120px);
+      height: 6px;
+      background: var(--ink);
+      transform-origin: 100% 50%;
+    }
+    #idea-dot {
+      position: absolute;
+      right: -9px;
+      bottom: -16px;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: var(--ink);
+    }
+  </style>
+  <div id="root" data-composition-id="idea" data-width="1920" data-height="1080" data-layout-allow-overflow>
+    <div id="idea-ground" class="clip" data-start="0" data-duration="4.2"></div>
+    <div id="idea-stage" class="clip" data-start="0" data-duration="4.2">
+      <div id="idea-lockup">
+        <h1 id="idea-title"><span id="idea-w1">من</span><span id="idea-w2">الفكرة</span></h1>
+        <div id="idea-line"></div>
+        <div id="idea-dot"></div>
+      </div>
+    </div>
+  </div>
+  <script>
+    const tl = gsap.timeline({ paused: true });
+    // The idea: a single dot lands.
+    tl.fromTo("#idea-dot", { scale: 0 }, { scale: 1, duration: 0.5, ease: "back.out(1.6)" }, 0.3);
+    // It draws a line right-to-left, the Arabic reading direction.
+    tl.fromTo("#idea-line", { scaleX: 0 }, { scaleX: 1, duration: 0.8, ease: "expo.out" }, 0.85);
+    // Words arrive in reading order, blurring in, no translate.
+    tl.fromTo(
+      ["#idea-w1", "#idea-w2"],
+      { opacity: 0, filter: "blur(10px)" },
+      { opacity: 1, filter: "blur(0px)", duration: 0.22, ease: "power4.out", stagger: 0.1 },
+      1.05,
+    );
+    // Exit: words blur out, the line retracts into the dot.
+    tl.to(["#idea-w1", "#idea-w2"], { opacity: 0, filter: "blur(8px)", duration: 0.18, ease: "power2.in", stagger: 0.06 }, 3.15);
+    tl.to("#idea-line", { scaleX: 0, duration: 0.35, ease: "power3.in" }, 3.2);
+    // The dot becomes the world: it grows past the frame and floods it with ink.
+    tl.to("#idea-dot", { scale: 200, duration: 0.6, ease: "power3.in" }, 3.55);
+    window.__timelines["idea"] = tl;
+  </script>
+</template>

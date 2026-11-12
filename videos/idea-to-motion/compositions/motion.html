@@ -1,0 +1,104 @@
+<template>
+  <style>
+    @font-face {
+      font-family: "Plex Arabic";
+      font-weight: 700;
+      src: url("assets/fonts/ibm-plex-sans-arabic-arabic-700-normal.woff2") format("woff2");
+      unicode-range: U+0600-06FF, U+0750-077F, U+FB50-FDFF, U+FE70-FEFF;
+    }
+    @font-face {
+      font-family: "Plex Arabic";
+      font-weight: 300;
+      src: url("assets/fonts/ibm-plex-sans-arabic-latin-300-normal.woff2") format("woff2");
+      unicode-range: U+0000-00FF;
+    }
+    #root {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+    }
+    #motion-ground {
+      position: absolute;
+      inset: 0;
+      background: var(--ink);
+    }
+    #motion-stage {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 70px;
+    }
+    #motion-title {
+      direction: rtl;
+      display: flex;
+      gap: 0.28em;
+      font-family: "Plex Arabic", sans-serif;
+      font-weight: 700;
+      font-size: 210px;
+      line-height: 1.35;
+      color: var(--paper);
+    }
+    #motion-title span {
+      display: inline-block;
+    }
+    #motion-w2 {
+      position: relative;
+      color: var(--accent);
+    }
+    #motion-line {
+      position: absolute;
+      right: 0;
+      left: 0;
+      bottom: -8px;
+      height: 6px;
+      background: var(--accent);
+      transform-origin: 100% 50%;
+    }
+    #motion-en {
+      direction: ltr;
+      display: flex;
+      gap: 0.35em;
+      font-family: "Plex Arabic", sans-serif;
+      font-weight: 300;
+      font-size: 40px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--paper);
+    }
+  </style>
+  <div id="root" data-composition-id="motion" data-width="1920" data-height="1080">
+    <div id="motion-ground" class="clip" data-start="0" data-duration="5"></div>
+    <div id="motion-stage" class="clip" data-start="0" data-duration="5">
+      <h1 id="motion-title">
+        <span id="motion-w1">إلى</span><span id="motion-w2">الحركة<i id="motion-line"></i></span>
+      </h1>
+      <p id="motion-en">
+        <span id="motion-e1">From</span><span id="motion-e2">idea</span><span id="motion-e3">to</span
+        ><span id="motion-e4">motion</span>
+      </p>
+    </div>
+  </div>
+  <script>
+    const tl = gsap.timeline({ paused: true });
+    tl.fromTo("#motion-w1", { opacity: 0, filter: "blur(10px)" }, { opacity: 1, filter: "blur(0px)", duration: 0.22, ease: "power4.out" }, 0.2);
+    // "Motion" is the one word that moves: a whip in the reading direction (right to left).
+    tl.fromTo(
+      "#motion-w2",
+      { opacity: 0, x: 260, filter: "blur(14px)" },
+      { opacity: 1, x: 0, filter: "blur(0px)", duration: 0.55, ease: "expo.out" },
+      0.38,
+    );
+    tl.fromTo("#motion-line", { scaleX: 0 }, { scaleX: 1, duration: 0.7, ease: "power4.out" }, 0.85);
+    // English line: per word from dim grey to paper, no position change.
+    tl.fromTo(
+      ["#motion-e1", "#motion-e2", "#motion-e3", "#motion-e4"],
+      { opacity: 0.12 },
+      { opacity: 0.85, duration: 0.3, ease: "power2.out", stagger: 0.09 },
+      1.35,
+    );
+    window.__timelines["motion"] = tl;
+  </script>
+</template>
