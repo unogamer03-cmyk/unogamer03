@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+    <meta name="theme-color" content="#04162e" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <title>Fish Hunting Battle</title>
+    <style>
+      html, body { margin: 0; padding: 0; width: 100%; height: 100%; background: #020a18; overflow: hidden; touch-action: none; -webkit-user-select: none; user-select: none; }
+      #game { position: fixed; inset: 0; display: flex; align-items: center; justify-content: center; }
+      #game canvas { display: block; }
+      #boot { position: fixed; inset: 0; display: flex; align-items: center; justify-content: center; color: #ffd23f; font: 700 20px system-ui, sans-serif; letter-spacing: .1em; }
+    </style>
+  </head>
+  <body>
+    <div id="boot">LOADING…</div>
+    <div id="game"></div>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>
