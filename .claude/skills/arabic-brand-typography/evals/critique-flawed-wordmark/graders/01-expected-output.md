@@ -1,7 +1,0 @@
----
-type: llm
-focus: trace
-weight: 1
----
-
-The result matches this description: Identifies the concrete errors: tracking breaks connected Arabic, kashida after non-connecting د is invalid, slanted Arabic reads as an error, Arabic smaller than Latin, construction mismatch between a geometric Kufi-ish sans (Cairo) and a high-contrast Didone (Didot), Latin placed on the right in an RTL-first Saudi context; notes sub-word structure of دار الورد; proposes specific fixes (e.g. higher-contrast Naskh or a Didone-compatible Arabic, matched size ratio, Arabic-right or stacked lockup, kashida only at valid joins).
