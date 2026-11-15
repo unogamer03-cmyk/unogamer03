@@ -1,11 +1,35 @@
 {
   "version": 2,
   "skills": {
+    "arabic-ui": {
+      "source": "jkc66/arabic-ui",
+      "sourceType": "github",
+      "skillPath": "SKILL.md",
+      "computedHash": "8dbc53d0e73d8d57cc4fab68472afc1a13689c76749a08f794549398bf288d56"
+    },
+    "brand-identity": {
+      "source": "rampstackco/claude-skills",
+      "sourceType": "github",
+      "skillPath": "skills/brand-identity/SKILL.md",
+      "computedHash": "1bcb500b1ae2099d2d6f397b163b97e2df3c2d09a0b4e4b0c2178475f3e2d4c1"
+    },
+    "brand-style-guide": {
+      "source": "rampstackco/claude-skills",
+      "sourceType": "github",
+      "skillPath": "skills/brand-style-guide/SKILL.md",
+      "computedHash": "ac81c34ed3d8dbbd8d3d94c749d884930da308c44021e8798f80e03f81cac6b8"
+    },
     "find-skills": {
       "source": "vercel-labs/skills",
       "sourceType": "github",
       "skillPath": "skills/find-skills/SKILL.md",
       "computedHash": "7bc223e2aafbdbf6e50ea243ba6ef67fe432bb069ab439fea0390795dac0bf7f"
+    },
+    "typography-expert": {
+      "source": "curiositech/some_claude_skills",
+      "sourceType": "github",
+      "skillPath": ".claude/skills/typography-expert/SKILL.md",
+      "computedHash": "1da6e6b7266d66b92ba18db18455c3bb9963ea6257dec12d4b036bab4679eb19"
     }
   }
 }
