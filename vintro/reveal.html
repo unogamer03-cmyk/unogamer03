@@ -1,0 +1,337 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Vintro Reveal</title>
+<style>
+  @font-face { font-family: "Unbounded"; src: url(node_modules/@fontsource/unbounded/files/unbounded-latin-400-normal.woff2) format("woff2"); font-weight: 400; }
+  @font-face { font-family: "InterW"; src: url(node_modules/@fontsource/inter/files/inter-latin-300-normal.woff2) format("woff2"); font-weight: 300; }
+  html, body { margin: 0; background: #080808; overflow: hidden; }
+  #out { display: block; height: 100vh; margin: 0 auto; }
+  #gl { position: absolute; left: -99999px; }
+</style>
+<script type="importmap">
+{ "imports": { "three": "./node_modules/three/build/three.module.js", "three/addons/": "./node_modules/three/examples/jsm/" } }
+</script>
+</head>
+<body>
+<canvas id="out"></canvas>
+<script type="module">
+/* VINTRO DESIGNS — brand reveal + end card. Film time 17.5s → 30.0s (local T = 0 → 12.5).
+   Beat grid 96 BPM: bar = 2.5s. Logo hit at T=2.5 (film 20.0). Every frame is a pure function of T. */
+import * as THREE from 'three';
+import { TTFLoader } from 'three/addons/loaders/TTFLoader.js';
+import { Font } from 'three/addons/loaders/FontLoader.js';
+import { Reflector } from 'three/addons/objects/Reflector.js';
+import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
+import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
+import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
+import { OutputPass } from 'three/addons/postprocessing/OutputPass.js';
+
+const P = new URLSearchParams(location.search);
+const SCALE = +(P.get('scale') || 1);
+const W = 1080 * SCALE, H = 1920 * SCALE, FPS = 24, DUR = 12.5, FILM0 = 17.5;
+const PURPLE = new THREE.Color('#8029E8');
+
+const clamp = (x, a = 0, b = 1) => Math.min(b, Math.max(a, x));
+const prog = (t, a, b) => clamp((t - a) / (b - a));
+const lerp = (a, b, k) => a + (b - a) * k;
+const E = {
+  outCubic: x => 1 - Math.pow(1 - x, 3), inCubic: x => x * x * x, outQuad: x => 1 - (1 - x) * (1 - x),
+  inOutCubic: x => x < .5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2, outExpo: x => x >= 1 ? 1 : 1 - Math.pow(2, -10 * x),
+  inExpo: x => x <= 0 ? 0 : Math.pow(2, 10 * x - 10),
+};
+function rng(seed) { return () => { seed |= 0; seed = seed + 0x6D2B79F5 | 0; let t = Math.imul(seed ^ seed >>> 15, 1 | seed); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
+
+/* ---------- renderer ---------- */
+const glc = document.createElement('canvas'); glc.id = 'gl'; document.body.appendChild(glc);
+const renderer = new THREE.WebGLRenderer({ canvas: glc, antialias: true, preserveDrawingBuffer: true });
+renderer.setPixelRatio(1); renderer.setSize(W, H, false);
+renderer.toneMapping = THREE.ACESFilmicToneMapping; renderer.toneMappingExposure = 1.05;
+renderer.outputColorSpace = THREE.SRGBColorSpace;
+const scene = new THREE.Scene(); scene.background = new THREE.Color('#080808');
+const camera = new THREE.PerspectiveCamera(36, W / H, 1, 6000);
+
+/* ---------- studio environment (reflections) ---------- */
+const pmrem = new THREE.PMREMGenerator(renderer);
+const envScene = new THREE.Scene(); envScene.background = new THREE.Color(0x000000);
+const emis = (c, s) => new THREE.MeshBasicMaterial({ color: new THREE.Color(c).multiplyScalar(s), side: THREE.DoubleSide });
+function strip(w, h, mat, x, y, z, ry = 0, rx = 0) { const m = new THREE.Mesh(new THREE.PlaneGeometry(w, h), mat); m.position.set(x, y, z); m.rotation.set(rx, ry, 0); m.lookAt(0, 0, 0); envScene.add(m); return m; }
+strip(60, 900, emis(0xffffff, 9), -520, 120, 520);            // key strip, left-front
+{ const c = document.createElement('canvas'); c.width = 4; c.height = 256; const x = c.getContext('2d');
+  const g = x.createLinearGradient(0, 0, 0, 256); g.addColorStop(0, '#ffffff'); g.addColorStop(0.35, '#b8b8c0'); g.addColorStop(0.62, '#3a3a42'); g.addColorStop(0.85, '#050505'); g.addColorStop(1, '#000000');
+  x.fillStyle = g; x.fillRect(0, 0, 4, 256); const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace;
+  const m = new THREE.MeshBasicMaterial({ map: t, side: THREE.DoubleSide }); m.color.setScalar(1.6);
+  strip(1700, 1300, m, 0, 60, 700); }                         // soft gradient card in front (face sheen)
+strip(60, 900, emis(0xffffff, 4), 560, 120, 420);           // fill strip, right-front
+strip(1400, 60, emis(0xffffff, 5), 0, 620, 250);            // top edge strip
+strip(900, 500, emis(PURPLE, 1.0), 0, 80, -700);              // purple rim panel behind
+strip(1600, 30, emis(PURPLE, 0.25), 0, -260, 500);             // low purple kicker (floor bounce)
+const sweepBar = strip(90, 1400, emis(PURPLE, 0), 0, 0, 600);  // animated light sweep
+let envRT = null, envKey = '';
+function updateEnv(sweepX, sweepI) {
+  const key = sweepI <= 0.001 ? 'static' : `${sweepX.toFixed(1)}|${sweepI.toFixed(3)}`;
+  if (key === envKey) return; envKey = key;
+  sweepBar.position.set(sweepX, 40, 560); sweepBar.lookAt(0, 0, 0);
+  sweepBar.material.color.copy(PURPLE).multiplyScalar(14 * sweepI);
+  sweepBar.visible = sweepI > 0.001;
+  if (envRT) envRT.dispose();
+  envRT = pmrem.fromScene(envScene, 0.02, 1, 5000);
+  scene.environment = envRT.texture;
+}
+
+/* ---------- wordmark ---------- */
+const fontData = new TTFLoader().parse(await (await fetch('node_modules/@fontsource/unbounded/files/unbounded-latin-600-normal.woff')).arrayBuffer());
+const font = new Font(fontData);
+const faceMat = new THREE.MeshPhysicalMaterial({ color: 0x34343c, metalness: 1, roughness: 0.2, clearcoat: 1, clearcoatRoughness: 0.06, envMapIntensity: 1.25, transparent: true });
+const sideMat = new THREE.MeshPhysicalMaterial({ color: 0xffffff, metalness: 1, roughness: 0.05, envMapIntensity: 1.6, transparent: true });
+const lineMat = new THREE.LineBasicMaterial({ color: PURPLE.clone().multiplyScalar(1.1), transparent: true, toneMapped: false });
+const wordmark = new THREE.Group(); scene.add(wordmark);
+const letters = []; // {mesh, shapes, x, y, size}
+function buildWord(str, size, tracking, depth, y, targetWidth, mats = [faceMat, sideMat]) {
+  const sc = size / fontData.resolution;
+  let x = 0; const items = [];
+  for (const ch of str) {
+    const shapes = font.generateShapes(ch, size);
+    const geo = new THREE.ExtrudeGeometry(shapes, { depth, bevelEnabled: true, bevelThickness: size * 0.03, bevelSize: size * 0.022, bevelSegments: 4, curveSegments: 14 });
+    items.push({ ch, shapes, geo, x, bt: size * 0.03, depth });
+    x += fontData.glyphs[ch].ha * sc + tracking;
+  }
+  let width = x - tracking;
+  if (targetWidth) { // re-track to match a target width (lockup)
+    const extra = (targetWidth - width) / (str.length - 1); x = 0;
+    items.forEach((it, i) => { it.x = x; x += fontData.glyphs[it.ch].ha * sc + tracking + extra; });
+    width = targetWidth;
+  }
+  for (const it of items) {
+    const g = new THREE.Group();
+    const mesh = new THREE.Mesh(it.geo, mats);
+    g.add(mesh);
+    for (const s of it.shapes) for (const path of [s, ...s.holes]) {
+      const pts = path.getPoints(24).map(p => new THREE.Vector3(p.x, p.y, it.depth + it.bt + 0.15));
+      g.add(new THREE.LineLoop(new THREE.BufferGeometry().setFromPoints(pts), lineMat));
+    }
+    g.position.set(it.x - width / 2, y, 0);
+    wordmark.add(g); letters.push({ g, mesh, ...it });
+  }
+  return width;
+}
+const CAP = 100;
+const w1 = buildWord('VINTRO', 135, 6, 26, 0);
+buildWord('DESIGNS', 135 * 0.45, 0, 12, -112, w1, [sideMat, sideMat]);
+// vertical center of lockup
+const bb = new THREE.Box3().setFromObject(wordmark); const cy = (bb.max.y + bb.min.y) / 2;
+wordmark.position.y = -cy;
+const WM_W = bb.max.x - bb.min.x, WM_BOTTOM = bb.min.y - cy;
+const vTop = (() => { const l = letters[0]; const b = new THREE.Box3().setFromObject(l.mesh); return new THREE.Vector3(b.min.x + 4, b.max.y - 2, 30); })();
+
+/* ---------- floor: black glass ---------- */
+const floorY = WM_BOTTOM - 46;
+const mirror = new Reflector(new THREE.PlaneGeometry(6000, 6000), { textureWidth: W, textureHeight: H, color: 0x3a3a44 });
+mirror.rotation.x = -Math.PI / 2; mirror.position.y = floorY; scene.add(mirror);
+const fadeMat = new THREE.ShaderMaterial({
+  transparent: true, depthWrite: false,
+  uniforms: { uCol: { value: new THREE.Color('#080808') } },
+  vertexShader: `varying vec2 vP; void main(){ vP = position.xy; gl_Position = projectionMatrix*modelViewMatrix*vec4(position,1.); }`,
+  fragmentShader: `uniform vec3 uCol; varying vec2 vP; void main(){ float d = length(vP*vec2(0.55,1.0)); float a = smoothstep(80.,520.,d); gl_FragColor = vec4(uCol, mix(0.42, 1.0, a)); }`,
+});
+const fade = new THREE.Mesh(new THREE.PlaneGeometry(6000, 6000), fadeMat);
+fade.rotation.x = -Math.PI / 2; fade.position.y = floorY + 0.5; scene.add(fade);
+
+/* ---------- atmosphere: purple haze behind + dust ---------- */
+function radialTex(inner, outer) {
+  const c = document.createElement('canvas'); c.width = c.height = 256; const x = c.getContext('2d');
+  const g = x.createRadialGradient(128, 128, 0, 128, 128, 128); g.addColorStop(0, inner); g.addColorStop(1, outer);
+  x.fillStyle = g; x.fillRect(0, 0, 256, 256); const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace; return t;
+}
+const hazeMat = new THREE.MeshBasicMaterial({ map: radialTex('rgba(128,41,232,0.55)', 'rgba(128,41,232,0)'), transparent: true, depthWrite: false, blending: THREE.AdditiveBlending });
+const haze = new THREE.Mesh(new THREE.PlaneGeometry(1300, 560), hazeMat); haze.position.set(0, 150, -320); scene.add(haze);
+const dustN = 700, dR = rng(5), dPos = new Float32Array(dustN * 3), dSeed = new Float32Array(dustN);
+for (let i = 0; i < dustN; i++) { dPos[i * 3] = (dR() - .5) * 1400; dPos[i * 3 + 1] = floorY + dR() * 700; dPos[i * 3 + 2] = (dR() - .5) * 900 - 100; dSeed[i] = dR(); }
+const dustGeo = new THREE.BufferGeometry(); dustGeo.setAttribute('position', new THREE.BufferAttribute(dPos, 3)); dustGeo.setAttribute('aSeed', new THREE.BufferAttribute(dSeed, 1));
+const dustMat = new THREE.ShaderMaterial({
+  transparent: true, depthWrite: false, blending: THREE.AdditiveBlending, uniforms: { uT: { value: 0 }, uS: { value: SCALE } },
+  vertexShader: `attribute float aSeed; uniform float uT, uS; varying float vA;
+    void main(){ vec3 p = position; p.y += uT*6.0*(0.4+aSeed); p.x += sin(uT*0.4+aSeed*40.)*12.;
+      vec4 mv = modelViewMatrix*vec4(p,1.); gl_Position = projectionMatrix*mv;
+      gl_PointSize = uS*(1.2+aSeed*2.2)*(900./-mv.z); vA = 0.10+0.25*aSeed; }`,
+  fragmentShader: `varying float vA; void main(){ float d = length(gl_PointCoord-.5); gl_FragColor = vec4(vec3(0.9,0.85,1.0), vA*smoothstep(.5,.0,d)); }`,
+});
+scene.add(new THREE.Points(dustGeo, dustMat));
+
+/* ---------- particles that build the logo ---------- */
+function sampleFaces(n) {
+  // area-weighted samples on the front caps of all letters (world space, wordmark-local)
+  const tris = []; let total = 0;
+  wordmark.updateMatrixWorld(true);
+  for (const l of letters) {
+    const g = l.geo, pos = g.attributes.position, idx = g.index, grp = g.groups.find(gr => gr.materialIndex === 0);
+    const m = l.g.matrix; const a = new THREE.Vector3(), b = new THREE.Vector3(), c = new THREE.Vector3();
+    for (let i = grp.start; i < grp.start + grp.count; i += 3) {
+      const ia = idx ? idx.getX(i) : i, ib = idx ? idx.getX(i + 1) : i + 1, ic = idx ? idx.getX(i + 2) : i + 2;
+      a.fromBufferAttribute(pos, ia); if (a.z < l.depth * 0.5) continue; // front cap only
+      b.fromBufferAttribute(pos, ib); c.fromBufferAttribute(pos, ic);
+      a.applyMatrix4(m); b.applyMatrix4(m); c.applyMatrix4(m);
+      const ar = new THREE.Vector3().subVectors(b, a).cross(new THREE.Vector3().subVectors(c, a)).length() / 2;
+      total += ar; tris.push([a.clone(), b.clone(), c.clone(), total]);
+    }
+  }
+  const R = rng(11), out = new Float32Array(n * 3);
+  for (let i = 0; i < n; i++) {
+    const r = R() * total; let lo = 0, hi = tris.length - 1; while (lo < hi) { const mid = (lo + hi) >> 1; if (tris[mid][3] < r) lo = mid + 1; else hi = mid; }
+    const [a, b, c] = tris[lo]; let u = R(), v = R(); if (u + v > 1) { u = 1 - u; v = 1 - v; }
+    out[i * 3] = a.x + (b.x - a.x) * u + (c.x - a.x) * v; out[i * 3 + 1] = a.y + (b.y - a.y) * u + (c.y - a.y) * v + wordmark.position.y; out[i * 3 + 2] = a.z + 1;
+  }
+  return out;
+}
+const PN = 26000, PR = rng(21);
+const pTarget = sampleFaces(PN), pStart = new Float32Array(PN * 3), pData = new Float32Array(PN * 4);
+for (let i = 0; i < PN; i++) {
+  const ang = PR() * Math.PI * 2, rad = 380 + Math.pow(PR(), 0.7) * 900;
+  pStart[i * 3] = Math.cos(ang) * rad; pStart[i * 3 + 1] = Math.sin(ang) * rad * 0.9 + 40; pStart[i * 3 + 2] = (PR() - 0.35) * 900;
+  pData[i * 4] = PR() * 0.55;               // delay
+  pData[i * 4 + 1] = 1.4 + PR() * 2.2;      // swirl turns
+  pData[i * 4 + 2] = PR();                  // seed
+  pData[i * 4 + 3] = PR() < 0.18 ? 1 : 0;   // white spark
+}
+const pGeo = new THREE.BufferGeometry();
+pGeo.setAttribute('position', new THREE.BufferAttribute(pTarget, 3));
+pGeo.setAttribute('aStart', new THREE.BufferAttribute(pStart, 3));
+pGeo.setAttribute('aData', new THREE.BufferAttribute(pData, 4));
+const pMat = new THREE.ShaderMaterial({
+  transparent: true, depthWrite: false, blending: THREE.AdditiveBlending, toneMapped: false,
+  uniforms: { uT: { value: 0 }, uS: { value: SCALE }, uCol: { value: PURPLE.clone() } },
+  vertexShader: `attribute vec3 aStart; attribute vec4 aData; uniform float uT, uS; varying float vA; varying float vW;
+    vec3 rotZ(vec3 p, float a){ float c=cos(a), s=sin(a); return vec3(c*p.x-s*p.y, s*p.x+c*p.y, p.z); }
+    void main(){
+      float k = clamp((uT + 0.35 - aData.x) / 2.25, 0., 1.);
+      float e = k<.5 ? 4.*k*k*k : 1.-pow(-2.*k+2.,3.)/2.;
+      vec3 s = rotZ(aStart, (1.-e)*aData.y*1.6);
+      vec3 p = mix(s, position, e);
+      p += vec3(sin(uT*3.+aData.z*50.), cos(uT*2.6+aData.z*31.), 0.) * 14. * (1.-e);
+      // after the hit: tiny outward breath, then fade
+      float post = clamp((uT-2.5)/0.55, 0., 1.);
+      p += normalize(p - vec3(0., 0., -60.)) * post * 40. * aData.z;
+      vec4 mv = modelViewMatrix*vec4(p,1.); gl_Position = projectionMatrix*mv;
+      gl_PointSize = uS * mix(3.4, 2.1, e) * (2400./-mv.z) * (1.0 + aData.w*0.6);
+      float appear = smoothstep(-0.6, 0.2, uT - aData.x*0.4);
+      vA = appear * (1.-post) * mix(0.7, 0.55, e); vW = aData.w;
+    }`,
+  fragmentShader: `uniform vec3 uCol; varying float vA; varying float vW;
+    void main(){ float d = length(gl_PointCoord-.5); float a = smoothstep(.5,.0,d); vec3 c = mix(uCol*1.8, vec3(1.6), vW*0.8 + a*a*0.25); gl_FragColor = vec4(c, vA*a); }`,
+});
+const particles = new THREE.Points(pGeo, pMat); particles.frustumCulled = false; scene.add(particles);
+
+/* ---------- post ---------- */
+const composer = new EffectComposer(renderer);
+composer.setPixelRatio(1); composer.setSize(W, H);
+composer.addPass(new RenderPass(scene, camera));
+const bloom = new UnrealBloomPass(new THREE.Vector2(W / 2, H / 2), 0.35, 0.55, 0.82);
+composer.addPass(bloom);
+composer.addPass(new OutputPass());
+
+/* ---------- camera choreography ---------- */
+const target = new THREE.Vector3();
+function cameraAt(T) {
+  const fovH = 2 * Math.atan(Math.tan(THREE.MathUtils.degToRad(camera.fov / 2)) * camera.aspect);
+  const Dfinal = (WM_W / 0.80) / 2 / Math.tan(fovH / 2);
+  const D0 = Dfinal / 0.88;
+  // 0–2.5 pull back; 2.5–9.5 orbit settles to frontal; 7.5–11.1 push-in 12%
+  let dist = lerp(D0 * 0.62, D0, E.outCubic(prog(T, 0, 2.6)));
+  dist = lerp(dist, Dfinal, E.outCubic(prog(T, 7.5, 11.1)));
+  const az = THREE.MathUtils.degToRad(lerp(-52, -36, prog(T, 0, 2.5)) + 36 * E.outQuad(prog(T, 2.5, 9.6)));
+  const el = THREE.MathUtils.degToRad(lerp(14, 5, E.inOutCubic(prog(T, 0, 6))) + 1.0 * Math.sin(T * 0.6));
+  // keep the wordmark at ~44% of frame height (slogan sits under it)
+  target.set(0, -0.11 * dist * Math.tan(THREE.MathUtils.degToRad(camera.fov / 2)) * 2 * 0.5 * 1.2, 0);
+  camera.position.set(Math.sin(az) * Math.cos(el) * dist, target.y + Math.sin(el) * dist, Math.cos(az) * Math.cos(el) * dist);
+  camera.lookAt(target);
+  camera.updateMatrixWorld();
+}
+
+/* ---------- per-frame state ---------- */
+function setState(T) {
+  cameraAt(T);
+  // letters solidify on the hit (T = 2.5 → film 20.0)
+  const solid = E.outCubic(prog(T, 2.32, 2.5));
+  faceMat.opacity = sideMat.opacity = solid; faceMat.transparent = sideMat.transparent = solid < 1;
+  wordmark.visible = solid > 0;
+  lineMat.opacity = solid * (0.55 + 0.45 * Math.exp(-Math.max(0, T - 2.5) * 2.5));
+  // per-letter micro settle after the hit
+  letters.forEach((l, i) => { const d = Math.max(0, T - 2.5 - i * 0.02); l.g.position.z = -18 * Math.exp(-d * 9) * Math.cos(d * 22) * (T > 2.5 ? 1 : 0) - (1 - solid) * 30; });
+  pMat.uniforms.uT.value = T; dustMat.uniforms.uT.value = T;
+  hazeMat.opacity = 0.3 * lerp(0.6, 1, prog(T, 2, 3)) * (0.9 + 0.1 * Math.sin(T * 1.3));
+  // bloom: restrained, spikes on hit
+  const hit = T >= 2.5 ? Math.exp(-(T - 2.5) * 5) : E.inExpo(prog(T, 2.0, 2.5)) * 0.4;
+  bloom.strength = 0.32 + 1.1 * hit; bloom.radius = 0.55;
+  // light sweep 8.1 → 9.1 (film 25.6 → 26.6)
+  const sw = prog(T, 7.95, 9.25);
+  updateEnv(lerp(-900, 900, E.inOutCubic(sw)), Math.sin(Math.PI * sw));
+  renderer.toneMappingExposure = 1.05 + 0.35 * hit;
+}
+
+/* ---------- 2D compositor: type, glint, grain, vignette ---------- */
+const out = document.getElementById('out'); out.width = W; out.height = H;
+const o = out.getContext('2d');
+const grain = []; { const R = rng(9); for (let g = 0; g < 4; g++) { const c = document.createElement('canvas'); c.width = W / 2; c.height = H / 2; const x = c.getContext('2d'); const id = x.createImageData(c.width, c.height); for (let i = 0; i < id.data.length; i += 4) { const v = R() * 255; id.data[i] = id.data[i + 1] = id.data[i + 2] = v; id.data[i + 3] = 20; } x.putImageData(id, 0, 0); grain.push(c); } }
+function project(v) { const p = v.clone(); p.y += wordmark.position.y; p.project(camera); return [(p.x * .5 + .5) * W, (1 - (p.y * .5 + .5)) * H]; }
+function typeLayer(T) {
+  const s = SCALE;
+  const [, by] = project(new THREE.Vector3(0, WM_BOTTOM - wordmark.position.y, 20));
+  const y0 = by + 150 * s;
+  // slogan @ film 26.2 → T 8.7 : fade + 12px rise over 18 frames
+  const k1 = E.outCubic(prog(T, 8.7, 8.7 + 18 / FPS));
+  if (k1 > 0) {
+    o.save(); o.globalAlpha = k1; o.fillStyle = '#FFFFFF'; o.textAlign = 'center'; o.textBaseline = 'alphabetic';
+    o.font = `400 ${34 * s}px Unbounded`; o.letterSpacing = `${0.06 * 34 * s}px`;
+    o.fillText('Vintro Designs — Think Design', W / 2, y0 + (1 - k1) * 12 * s); o.restore();
+  }
+  // CTA @ film 27.6 → T 10.1 : fade over 14 frames
+  const k2 = E.outCubic(prog(T, 10.1, 10.1 + 14 / FPS));
+  if (k2 > 0) {
+    o.save(); o.globalAlpha = 0.7 * k2; o.fillStyle = '#FFFFFF'; o.textAlign = 'center';
+    o.font = `300 ${27 * s}px InterW`; o.letterSpacing = `${0.08 * 27 * s}px`;
+    o.fillText('Bring Your Vision to Life.', W / 2, y0 + 64 * s); o.restore();
+  }
+}
+function glint(T) { // white star glint on the V at film 29.2 → T 11.7
+  const k = prog(T, 11.62, 12.15); if (k <= 0 || k >= 1) return;
+  const a = Math.sin(Math.PI * k), [x, y] = project(vTop), s = SCALE;
+  o.save(); o.globalCompositeOperation = 'lighter'; o.translate(x, y); o.rotate(k * 0.6);
+  const g = o.createRadialGradient(0, 0, 0, 0, 0, 26 * s); g.addColorStop(0, `rgba(255,255,255,${a})`); g.addColorStop(1, 'rgba(255,255,255,0)');
+  o.fillStyle = g; o.beginPath(); o.arc(0, 0, 26 * s, 0, Math.PI * 2); o.fill();
+  o.fillStyle = `rgba(255,255,255,${a * 0.9})`;
+  for (let r = 0; r < 2; r++) { o.rotate(Math.PI / 2); o.beginPath(); o.moveTo(-90 * s * a, 0); o.lineTo(0, 1.6 * s); o.lineTo(90 * s * a, 0); o.lineTo(0, -1.6 * s); o.closePath(); o.fill(); }
+  o.restore();
+}
+function finish(T) {
+  // chromatic aberration only on the logo hit (2 frames)
+  if (T >= 2.5 && T < 2.5 + 2 / FPS) {
+    const off = Math.round(6 * SCALE), id = o.getImageData(0, 0, W, H), d = id.data, c = new Uint8ClampedArray(d);
+    for (let y = 0; y < H; y++) { const row = y * W * 4; for (let x = 0; x < W; x++) { const i = row + x * 4; c[i] = d[row + Math.min(W - 1, x + off) * 4]; c[i + 2] = d[row + Math.max(0, x - off) * 4 + 2]; } }
+    o.putImageData(new ImageData(c, W, H), 0, 0);
+  }
+  const v = o.createRadialGradient(W / 2, H * 0.45, H * 0.25, W / 2, H * 0.45, H * 0.75);
+  v.addColorStop(0, 'rgba(0,0,0,0)'); v.addColorStop(1, 'rgba(0,0,0,0.5)'); o.fillStyle = v; o.fillRect(0, 0, W, H);
+  o.globalCompositeOperation = 'overlay'; o.drawImage(grain[Math.floor(T * FPS) % 4], 0, 0, W, H); o.globalCompositeOperation = 'source-over';
+  // lift: deepest black reads #080808
+  o.globalCompositeOperation = 'lighten'; o.fillStyle = '#080808'; o.fillRect(0, 0, W, H); o.globalCompositeOperation = 'source-over';
+}
+
+function renderFrame(T, sub = 1) {
+  const span = 0.5 / FPS; // 180° shutter
+  for (let i = 0; i < sub; i++) {
+    const ts = sub > 1 ? T + (i / (sub - 1) - 0.5) * span : T;
+    setState(Math.max(0, ts)); composer.render();
+    o.globalAlpha = 1 / (i + 1); o.drawImage(glc, 0, 0);
+  }
+  o.globalAlpha = 1; setState(T);
+  typeLayer(T); glint(T); finish(T);
+  return out;
+}
+window.renderFrame = (T) => renderFrame(T, T < 3.3 ? 3 : 1);
+await document.fonts.load(`400 34px Unbounded`); await document.fonts.load(`300 27px InterW`);
+window.ready = true;
+if (!P.has('render')) { const t0 = performance.now(); const loop = () => { renderFrame(((performance.now() - t0) / 1000) % DUR); requestAnimationFrame(loop); }; loop(); }
+</script>
+</body>
+</html>
