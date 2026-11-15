@@ -1,0 +1,9 @@
+[1:a]atrim=0:15,asetpts=PTS-STARTPTS,afade=t=in:d=0.4,afade=t=out:st=13.6:d=1.4,volume=0.38[mus];
+[2:a]adelay=450|450[v1];[3:a]adelay=2550|2550[v2];[4:a]adelay=5100|5100[v3];[5:a]adelay=9200|9200[v4];[6:a]adelay=12250|12250[v5];
+[v1][v2][v3][v4][v5]amix=inputs=5:normalize=0,highpass=f=90,acompressor=threshold=-20dB:ratio=3:attack=5:release=80,volume=2.2,asplit=2[vo][vokey];
+[7:a]asplit=3[g1][g2][g3];[g1]adelay=2937|2937[ga];[g2]adelay=3437|3437[gb];[g3]adelay=3937|3937[gc];
+[8:a]asplit=3[w1][w2][w3];[w1]adelay=2945|2945[wa];[w2]adelay=3445|3445[wb];[w3]adelay=3945|3945[wc];
+[ga][gb][gc]amix=inputs=3:normalize=0,volume=0.45[ring];[wa][wb][wc]amix=inputs=3:normalize=0,volume=0.6[thud];
+[9:a]atrim=2:4,asetpts=PTS-STARTPTS,afade=t=in:d=0.25,afade=t=out:st=1.3:d=0.7,volume=0.35,adelay=6350|6350[pour];
+[mus][vokey]sidechaincompress=threshold=0.02:ratio=10:attack=10:release=250:makeup=1[duck];
+[duck][vo][ring][thud][pour]amix=inputs=5:normalize=0,apad=whole_dur=15,atrim=0:15[pre]
