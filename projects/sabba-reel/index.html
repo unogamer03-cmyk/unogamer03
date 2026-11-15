@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <!-- «صبّة» is a PLACEHOLDER brand name — replace before any real use. -->
+    <script src="gsap.min.js"></script>
+    <style>
+      @font-face { font-family: "Kufi"; src: url("assets/ReemKufi-700.woff2") format("woff2"); font-weight: 700; font-display: block; }
+      @font-face { font-family: "Kufi"; src: url("assets/ReemKufi-la-700.woff2") format("woff2"); font-weight: 700; font-display: block; unicode-range: U+0000-00FF, U+2000-206F; }
+      @font-face { font-family: "Plex"; src: url("assets/Plex-ar-500.woff2") format("woff2"); font-weight: 500; font-display: block; }
+      @font-face { font-family: "Plex"; src: url("assets/Plex-la-500.woff2") format("woff2"); font-weight: 500; font-display: block; unicode-range: U+0000-00FF, U+2000-206F; }
+      @font-face { font-family: "Plex"; src: url("assets/Plex-la-400.woff2") format("woff2"); font-weight: 400; font-display: block; unicode-range: U+0000-00FF, U+2000-206F; }
+
+      :root {
+        --cream: #F3ECDF;   /* cardamom cream */
+        --ink: #2A1B12;     /* deep roast */
+        --qahwa: #C8913A;   /* golden Saudi qahwa (light roast + cardamom) */
+        --bean: #7E8A5A;    /* green coffee bean */
+        --muted: #8A7663;
+        --saffron: #B5542B;
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: var(--cream); }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: var(--cream); }
+      .layer { position: absolute; inset: 0; }
+      svg.layer { width: 1080px; height: 1920px; display: block; }
+      .word {
+        position: absolute; left: 0; width: 1080px; text-align: center;
+        font-family: "Kufi", sans-serif; font-weight: 700; color: var(--ink);
+        line-height: 1.3; opacity: 0; white-space: nowrap;
+      }
+      #w1 { top: 640px; font-size: 230px; filter: url(#heat); }
+      #w2 { top: 640px; font-size: 230px; }
+      #w3 { top: 400px; font-size: 200px; }
+      #w4wrap { position: absolute; top: 600px; left: 0; width: 1080px; display: flex; justify-content: center; align-items: flex-end; direction: rtl; opacity: 0; }
+      #w4 { font-family: "Kufi", sans-serif; font-weight: 700; font-size: 420px; line-height: 1.2; color: var(--ink); }
+      #drop { width: 78px; height: 78px; border-radius: 50%; background: var(--qahwa); margin-bottom: 128px; margin-inline-start: 18px; }
+      #sub4 { position: absolute; top: 1260px; left: 0; width: 1080px; text-align: center; font-family: "Plex", sans-serif; font-weight: 500; font-size: 54px; color: var(--muted); opacity: 0; }
+
+      #wipe { position: absolute; left: 0; bottom: 0; width: 1080px; height: 1920px; background: var(--qahwa); transform-origin: 50% 100%; }
+      #lockup { position: absolute; inset: 0; opacity: 0; }
+      #brand { position: absolute; top: 560px; left: 0; width: 1080px; text-align: center; font-family: "Kufi", sans-serif; font-weight: 700; font-size: 280px; line-height: 1.3; color: var(--ink); }
+      #tag { position: absolute; top: 990px; left: 0; width: 1080px; text-align: center; font-family: "Plex", sans-serif; font-weight: 500; font-size: 52px; color: var(--ink); }
+      #cta { position: absolute; top: 1190px; left: 50%; transform: translateX(-50%); padding: 26px 74px 32px; border-radius: 999px; background: var(--ink); color: var(--cream); font-family: "Plex", sans-serif; font-weight: 500; font-size: 50px; white-space: nowrap; }
+      #handle { position: absolute; top: 1380px; left: 0; width: 1080px; text-align: center; font-family: "Plex", sans-serif; font-weight: 400; font-size: 42px; color: var(--ink); direction: ltr; letter-spacing: 1px; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="15" data-width="1080" data-height="1920">
+      <section id="scene" class="clip" data-start="0" data-duration="15" data-track-index="1">
+        <svg width="0" height="0" style="position:absolute">
+          <defs>
+            <filter id="heat" x="-10%" y="-30%" width="120%" height="160%">
+              <feTurbulence id="heatTurb" type="fractalNoise" baseFrequency="0.012 0.045" numOctaves="2" seed="3" result="n"/>
+              <feDisplacementMap id="heatMap" in="SourceGraphic" in2="n" scale="26" xChannelSelector="R" yChannelSelector="G"/>
+            </filter>
+          </defs>
+        </svg>
+
+        <!-- 1 · roast -->
+        <div id="w1" class="word">حمّصناه</div>
+        <!-- 2 · grind -->
+        <div id="w2" class="word">طحنّاه</div>
+        <svg class="layer" viewBox="0 0 1080 1920"><g id="grains" opacity="0"></g></svg>
+        <!-- 3 · pour -->
+        <div id="w3" class="word">صبّيناه</div>
+        <svg id="pour" class="layer" viewBox="0 0 1080 1920">
+          <defs>
+            <clipPath id="cupClip">
+              <path d="M 382 1180 C 392 1345, 450 1405, 540 1405 C 630 1405, 688 1345, 698 1180 Z"/>
+            </clipPath>
+          </defs>
+          <rect id="fill" clip-path="url(#cupClip)" x="360" y="1410" width="360" height="260" fill="var(--qahwa)"/>
+          <path id="stream" d="M 540 690 C 546 820, 534 960, 541 1100 C 543 1150, 540 1190, 540 1250" fill="none" stroke="var(--qahwa)" stroke-width="16" stroke-linecap="round"/>
+          <path id="cup" d="M 382 1180 C 392 1345, 450 1405, 540 1405 C 630 1405, 688 1345, 698 1180" fill="none" stroke="var(--ink)" stroke-width="9" stroke-linecap="round"/>
+          <path id="rim" d="M 368 1180 L 712 1180" fill="none" stroke="var(--ink)" stroke-width="9" stroke-linecap="round"/>
+          <g id="steam" fill="none" stroke="var(--muted)" stroke-width="6" stroke-linecap="round" opacity="0.7">
+            <path class="st" d="M 480 1140 C 460 1100, 500 1070, 480 1030 C 462 995, 492 970, 482 940"/>
+            <path class="st" d="M 540 1130 C 520 1085, 562 1055, 540 1010 C 522 975, 552 945, 542 905"/>
+            <path class="st" d="M 600 1140 C 580 1100, 620 1070, 600 1030 C 582 995, 612 970, 602 940"/>
+          </g>
+        </svg>
+        <!-- 4 · for you -->
+        <div id="w4wrap"><span id="w4">لك</span><span id="drop"></span></div>
+        <div id="sub4">من أول حبّة.. لآخر صبّة</div>
+        <!-- 5 · lockup -->
+        <div id="wipe"></div>
+        <div id="lockup">
+          <div id="brand">صبّة</div>
+          <div id="tag">قهوة سعودية · محمّصة بعناية</div>
+          <div id="cta">اطلبها الآن</div>
+          <div id="handle">@sabba.coffee</div>
+        </div>
+      </section>
+    </div>
+
+    <script>
+      window.__timelines = window.__timelines || {};
+      ["700 230px Kufi", "500 54px Plex", "400 42px Plex"].forEach(function (f) { if (document.fonts) document.fonts.load(f, "حمّصناه @"); });
+
+      var tl = gsap.timeline({ paused: true });
+      var NS = "http://www.w3.org/2000/svg";
+
+      // seeded RNG → identical frames on every render
+      function rng(seed) { return function () { seed |= 0; seed = seed + 0x6D2B79F5 | 0; var t = Math.imul(seed ^ seed >>> 15, 1 | seed); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
+      // dash gap padded past the round cap so an undrawn line leaves no dot; returns the "hidden" offset
+      function drawable(el) { var L = el.getTotalLength(), H = L + 20; el.style.strokeDasharray = L + " " + (L + 40); el.style.strokeDashoffset = H; return H; }
+
+      // ── 1 · حمّصناه — green bean warms to roast, heat shimmer settles (0.2 → 2.6)
+      tl.fromTo("#w1", { opacity: 0, scale: 0.94, color: "#7E8A5A" }, { opacity: 1, scale: 1, duration: 0.5, ease: "power2.out" }, 0.2);
+      tl.to("#w1", { color: "#C8913A", duration: 0.8, ease: "none" }, 0.5);
+      tl.to("#w1", { color: "#2A1B12", duration: 0.7, ease: "none" }, 1.3);
+      tl.fromTo("#heatMap", { attr: { scale: 26 } }, { attr: { scale: 0 }, duration: 1.7, ease: "power1.out" }, 0.3);
+      tl.to("#w1", { opacity: 0, y: -40, duration: 0.35, ease: "power2.in" }, 2.3);
+
+      // ── 2 · طحنّاه — the word breaks into grains that fall (2.6 → 5.0)
+      tl.fromTo("#w2", { opacity: 0, scale: 1.08 }, { opacity: 1, scale: 1, duration: 0.4, ease: "power2.out" }, 2.65);
+      tl.fromTo("#grains", { opacity: 0 }, { opacity: 1, duration: 0.2 }, 3.55);
+      tl.to("#grains", { opacity: 0, duration: 0.35 }, 4.65);
+      tl.to("#w2", { opacity: 0, filter: "blur(10px)", duration: 0.45, ease: "power1.in" }, 3.55);
+      var r = rng(7), gSvg = document.getElementById("grains");
+      for (var i = 0; i < 150; i++) {
+        var c = document.createElementNS(NS, "circle");
+        var x0 = 300 + r() * 480, y0 = 760 + r() * 150;
+        c.setAttribute("r", (3 + r() * 6).toFixed(1));
+        c.setAttribute("fill", r() < 0.55 ? "#2A1B12" : (r() < 0.6 ? "#C8913A" : "#8A7663"));
+        gSvg.appendChild(c);
+        var d = r() * 0.3;
+        c.setAttribute("cx", x0.toFixed(1)); c.setAttribute("cy", y0.toFixed(1));
+        tl.fromTo(c, { attr: { cx: x0, cy: y0 } }, { attr: { cx: x0 + (r() - 0.5) * 260, cy: 1240 + (r() - 0.5) * 40 }, duration: 0.85 + r() * 0.3, ease: "power2.in" }, 3.6 + d);
+      }
+
+      // ── 3 · صبّيناه — kashida stretches like a pour, qahwa fills the finjan (5.0 → 9.1)
+      var w3 = document.getElementById("w3"), k = { n: 0 };
+      function setK() { w3.textContent = "ص" + "ـ".repeat(Math.round(k.n)) + "بّيناه"; }
+      setK();
+      tl.fromTo("#w3", { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.45, ease: "power2.out" }, 5.0);
+      tl.fromTo(k, { n: 0 }, { n: 7, duration: 1.0, ease: "power2.inOut", onUpdate: setK }, 5.35);
+      var RL = drawable(document.getElementById("rim")), CL = drawable(document.getElementById("cup"));
+      tl.fromTo("#rim", { strokeDashoffset: RL }, { strokeDashoffset: 0, duration: 0.6, ease: "power2.inOut" }, 5.3);
+      tl.fromTo("#cup", { strokeDashoffset: CL }, { strokeDashoffset: 0, duration: 0.7, ease: "power2.inOut" }, 5.55);
+      var st = document.getElementById("stream"), SL = drawable(st);
+      tl.fromTo(st, { strokeDashoffset: SL }, { strokeDashoffset: 0, duration: 0.6, ease: "power1.in" }, 6.35);
+      tl.fromTo("#fill", { attr: { y: 1410 } }, { attr: { y: 1212 }, duration: 1.3, ease: "power1.out" }, 6.8);
+      tl.to(st, { strokeDashoffset: -SL, duration: 0.5, ease: "power1.in" }, 8.0);
+      document.querySelectorAll(".st").forEach(function (p, j) {
+        var L = drawable(p);
+        tl.fromTo(p, { strokeDashoffset: L }, { strokeDashoffset: 0, duration: 0.8, ease: "power1.out" }, 8.05 + j * 0.12);
+      });
+      tl.to("#w3", { opacity: 0, y: -30, duration: 0.4, ease: "power2.in" }, 8.6);
+      tl.to("#pour", { opacity: 0, duration: 0.4 }, 8.75);
+
+      // ── 4 · لك. — the full stop is the last drop (9.1 → 11.8)
+      tl.set("#w4wrap", { opacity: 1 }, 9.1);
+      tl.fromTo("#w4", { opacity: 0, scale: 0.9 }, { opacity: 1, scale: 1, duration: 0.45, ease: "back.out(1.6)" }, 9.15);
+      tl.fromTo("#drop", { y: -900, scaleY: 1.35 }, { y: 0, scaleY: 1, duration: 0.55, ease: "power2.in" }, 9.5);
+      tl.to("#drop", { scaleY: 0.72, scaleX: 1.25, duration: 0.09, ease: "power1.out" }, 10.05);
+      tl.to("#drop", { scaleY: 1, scaleX: 1, duration: 0.35, ease: "elastic.out(1, 0.45)" }, 10.14);
+      tl.fromTo("#sub4", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.5, ease: "power2.out" }, 10.4);
+
+      // ── 5 · lockup — qahwa rises and fills the frame (11.8 → 15)
+      tl.fromTo("#wipe", { scaleY: 0 }, { scaleY: 1, duration: 0.6, ease: "power3.inOut" }, 11.8);
+      tl.to(["#w4wrap", "#sub4"], { opacity: 0, duration: 0.2 }, 12.2);
+      tl.set("#lockup", { opacity: 1 }, 12.35);
+      tl.fromTo("#brand", { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 0.55, ease: "power3.out" }, 12.4);
+      tl.fromTo("#tag", { opacity: 0 }, { opacity: 1, duration: 0.45 }, 12.8);
+      tl.fromTo("#cta", { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.45, ease: "power2.out" }, 13.05);
+      tl.fromTo("#handle", { opacity: 0 }, { opacity: 1, duration: 0.4 }, 13.3);
+      tl.set({}, {}, 15);
+
+      window.__timelines["main"] = tl;
+    </script>
+  </body>
+</html>
