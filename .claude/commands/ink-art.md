@@ -3,6 +3,8 @@ description: Hand-drawn ink-on-white doodle animation — a character that draws
 argument-hint: [what to animate]
 ---
 
+> **Location:** OpenMontage lives in the `openmontage/` git submodule at the project root. Run every command from inside `openmontage/` and resolve every path below relative to it (e.g. `skills/...` means `openmontage/skills/...`). Use `openmontage/.venv/bin/python` as the Python interpreter. If `openmontage/` is empty, run `git submodule update --init` then `make setup` inside it first.
+
 Read `skills/creative/ink-theater.md` (the metaphor method, color grammar, mined archetypes) and `ink-theater/README.md` (engine API, determinism, the SVG-text font gotcha), then build the piece described below.
 
 - Use the **Ink Theater** engine (`ink-theater/ink-theater.js`): variable-width ink strokes, seek-safe boil, closed-form spring eases, FABRIK IK, the contraption grammar.

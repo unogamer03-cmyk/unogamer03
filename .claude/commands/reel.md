@@ -3,6 +3,8 @@ description: Produce or work on a video using the OpenMontage skills and pipelin
 argument-hint: <what you want made or worked on>
 ---
 
+> **Location:** OpenMontage lives in the `openmontage/` git submodule at the project root. Run every command from inside `openmontage/` and resolve every path below relative to it (e.g. `skills/...` means `openmontage/skills/...`). Use `openmontage/.venv/bin/python` as the Python interpreter. If `openmontage/` is empty, run `git submodule update --init` then `make setup` inside it first.
+
 Treat the following as a full OpenMontage production/work request and handle it using this repo's skills — do not improvise outside of them:
 
 **Request:** $ARGUMENTS
