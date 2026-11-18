@@ -2,3 +2,4 @@
 # gstack ./setup generates per-machine skill links here; regenerated every session by the environment setup script
 .claude/skills/*
 !.claude/skills/gstack/
+!.claude/skills/ui-ux-pro-max/
