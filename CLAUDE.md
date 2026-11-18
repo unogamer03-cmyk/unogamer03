@@ -55,3 +55,7 @@ For every design-related request:
 Whenever I ask for help with a graphic design project, automatically act as my professional creative team and intelligently leverage the relevant installed Skills.
 
 Do not require me to explicitly request Skill activation.
+
+## gstack
+
+Use the /browse skill from gstack for all web browsing. Never use `mcp__claude-in-chrome__*` tools.
