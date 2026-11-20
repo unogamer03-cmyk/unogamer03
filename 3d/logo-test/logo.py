@@ -1,13 +1,14 @@
 # Test 3D logo "بوابة | BAWABA" — pointed-arch gateway mark.
 # Usage: blender -b --python logo.py -- <out.png> <res> <samples>
-import bpy, math, sys
+import bpy, math, sys, os
 from mathutils import Vector
-import os
 
 argv = sys.argv[sys.argv.index("--")+1:] if "--" in sys.argv else []
 OUT = argv[0] if argv else "/tmp/logo.png"
 RES = int(argv[1]) if len(argv) > 1 else 1080
 SAMPLES = int(argv[2]) if len(argv) > 2 else 160
+ENGINE = os.environ.get("ENGINE", "CYCLES")          # CYCLES | EEVEE
+TURN = int(os.environ.get("TURNTABLE_FRAMES", "0"))  # >0 = render an N-frame 360° loop
 
 bpy.ops.wm.read_factory_settings(use_empty=True)
 sc = bpy.context.scene
@@ -106,12 +107,12 @@ text("BAWABA", "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf", 0.08, -0.
 pivot = bpy.data.objects.new("Pivot", None); sc.collection.objects.link(pivot)
 for o in list(sc.collection.objects):
     if o.type in {'CURVE', 'FONT', 'MESH'} and o is not pivot: o.parent = pivot
-pivot.rotation_euler = (math.radians(6), math.radians(-16), 0)
+pivot.rotation_euler = (0, 0, 0) if TURN else (math.radians(6), math.radians(-16), 0)
 pivot.location.y = -0.28
 
 # ---------- stage ----------
 # Logo is built in the XY plane facing +Z; backdrop is a flat wall behind it.
-bpy.ops.mesh.primitive_plane_add(size=40, location=(0, 0, -0.30))
+bpy.ops.mesh.primitive_plane_add(size=80, location=(0, 0, -2.5 if TURN else -0.30))
 bpy.context.object.data.materials.append(STAGE)
 
 # ---------- lights ----------
@@ -132,11 +133,40 @@ cd = bpy.data.cameras.new("Cam"); cd.lens = 85
 cam = bpy.data.objects.new("Cam", cd); sc.collection.objects.link(cam); sc.camera = cam
 cam.location = (0, 0.06, 7.2); cam.rotation_euler = (0, 0, 0)
 
+# ---------- turntable ----------
+# Only the mark spins; the wordmark stays facing camera so it is always legible.
+if TURN:
+    spin = bpy.data.objects.new("Spin", None); sc.collection.objects.link(spin); spin.parent = pivot
+    for o in mark: o.parent = spin
+    sc.frame_start, sc.frame_end = 1, TURN
+    sc.render.fps = 30
+    spin.rotation_euler.y = 0
+    spin.keyframe_insert("rotation_euler", index=1, frame=1)
+    spin.rotation_euler.y = math.radians(360)
+    spin.keyframe_insert("rotation_euler", index=1, frame=TURN + 1)   # frame N+1 == frame 1 -> seamless loop
+    for fc in spin.animation_data.action.fcurves:
+        for k in fc.keyframe_points: k.interpolation = 'LINEAR'
+
 # ---------- render ----------
-r = sc.render; r.engine = 'CYCLES'; r.resolution_x = r.resolution_y = RES
+r = sc.render; r.engine = 'BLENDER_EEVEE' if ENGINE == 'EEVEE' else 'CYCLES'; r.resolution_x = r.resolution_y = RES
 r.filepath = OUT; r.image_settings.file_format = 'PNG'
 sc.cycles.device = 'CPU'; sc.cycles.samples = SAMPLES; sc.cycles.use_denoising = False
 sc.cycles.sample_clamp_indirect = 3.0; sc.cycles.blur_glossy = 1.0
 sc.view_settings.view_transform = 'AgX' if 'AgX' in [i.identifier for i in sc.view_settings.bl_rna.properties['view_transform'].enum_items] else 'Filmic'
 sc.view_settings.look = 'None'
-bpy.ops.render.render(write_still=True)
+if r.engine == 'BLENDER_EEVEE':
+    e = sc.eevee
+    e.taa_render_samples = SAMPLES
+    e.use_ssr = True; e.use_ssr_refraction = False; e.ssr_quality = 1.0; e.ssr_thickness = 0.1
+    e.use_gtao = True; e.gtao_distance = 0.4
+    e.use_bloom = True; e.bloom_intensity = 0.04; e.bloom_threshold = 1.2
+    e.use_soft_shadows = True; e.shadow_cube_size = '2048'; e.shadow_cascade_size = '2048'
+    for L in bpy.data.lights: L.shadow_soft_size = L.size if hasattr(L, "size") else 0.25
+if TURN:
+    frame = os.environ.get("ONLY_FRAME")
+    if frame:  # single test frame
+        sc.frame_set(int(frame)); bpy.ops.render.render(write_still=True)
+    else:
+        r.filepath = OUT.rstrip("/") + "/f_"; bpy.ops.render.render(animation=True)
+else:
+    bpy.ops.render.render(write_still=True)
