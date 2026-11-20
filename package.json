@@ -1,0 +1,23 @@
+{
+  "name": "unogamer03",
+  "version": "1.0.0",
+  "description": "",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/unogamer03-cmyk/unogamer03.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/unogamer03-cmyk/unogamer03/issues"
+  },
+  "homepage": "https://github.com/unogamer03-cmyk/unogamer03#readme",
+  "dependencies": {
+    "three": "^0.187.0"
+  }
+}
